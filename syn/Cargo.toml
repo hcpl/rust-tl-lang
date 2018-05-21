@@ -1,0 +1,20 @@
+[package]
+name = "tl-lang-syn"
+version = "0.0.1"
+description = "Nom parser for TL language schema"
+authors = ["Nguyen Duc My <hcpl.prog@gmail.com>"]
+license = "MIT/Apache-2.0"
+readme = "README.md"
+documentation = "https://docs.rs/tl-lang-syn"
+repository = "https://github.com/hcpl/tl-lang/syn"
+keywords = ["parse", "parser", "telegram"]
+categories = ["parser-implementations"]
+
+[badges]
+travis-ci = { repository = "hcpl/tl-lang" }
+
+[dependencies]
+nom = "4"
+
+[build-dependencies]
+version_check = "0.1"
