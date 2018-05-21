@@ -1,5 +1,7 @@
 //! Tokens representing TL language punctuation, keywords, and delimiters.
 
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
@@ -31,7 +33,7 @@ macro_rules! token_punct_def {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        pub struct $name;
+        pub struct $name(pub Span);
 
         impl ::std::fmt::Debug for $name {
             fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
@@ -52,7 +54,15 @@ macro_rules! token_punct_def {
 macro_rules! token_punct_parser {
     ($punct:tt pub struct $name:ident) => {
         impl Synom for $name {
-            named!(parse_str(&str) -> $name, map!(tag!($punct), |_| $name));
+            named!(parse_str(&str) -> $name, map!(tag!($punct), |_| {
+                $name(Span::empty())
+            }));
+        }
+
+        impl Spanned for $name {
+            fn span(&self) -> Span {
+                self.0
+            }
         }
     }
 }
@@ -65,7 +75,7 @@ macro_rules! token_delimiter {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        pub struct $name;
+        pub struct $name(pub Span);
 
         impl ::std::fmt::Debug for $name {
             fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
@@ -98,7 +108,13 @@ macro_rules! token_delimiter {
 
                 // FIXME: Handle nesting (low-priority)
                 let (rest, res) = delimited!(s, char!(left), call!(f), char!(right))?;
-                Ok((rest, ($name, res)))
+                Ok((rest, ($name(Span::empty()), res)))
+            }
+        }
+
+        impl Spanned for $name {
+            fn span(&self) -> Span {
+                self.0
             }
         }
     }
@@ -112,7 +128,7 @@ macro_rules! token_keyword {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        pub struct $name;
+        pub struct $name(pub Span);
 
         impl ::std::fmt::Debug for $name {
             fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
@@ -129,7 +145,15 @@ macro_rules! token_keyword {
         }
 
         impl Synom for $name {
-            named!(parse_str(&str) -> $name, map!(tag!($keyword), |_| $name));
+            named!(parse_str(&str) -> $name, map!(tag!($keyword), |_| {
+                $name(Span::empty())
+            }));
+        }
+
+        impl Spanned for $name {
+            fn span(&self) -> Span {
+                self.0
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ use std::vec;
 
 use nom;
 
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
@@ -148,6 +150,16 @@ where
 
 fn parse_error<O, E>(input: &str, error: E) -> nom::IResult<&str, O, E> {
     Err(nom::Err::Error(nom::Context::Code(input, nom::ErrorKind::Custom(error))))
+}
+
+impl<T, P> Spanned for Punctuated<T, P>
+where
+    T: Spanned,
+    P: Spanned,
+{
+    fn span(&self) -> Span {
+        unimplemented!()
+    }
 }
 
 

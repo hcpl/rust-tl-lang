@@ -1,4 +1,6 @@
 use super::{Ident, SafeParameterizedPath};
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
@@ -60,4 +62,34 @@ impl Synom for TypeTypeParameter {
         ident: tlsyn!(Ident) >>
         (TypeTypeParameter { excl_token, ident })
     ));
+}
+
+
+impl Spanned for Type {
+    fn span(&self) -> Span {
+        match *self {
+            Type::Int(ref t) => t.span(),
+            Type::ParameterizedPath(ref t) => t.span(),
+            Type::TypeParameter(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for TypeInt {
+    fn span(&self) -> Span {
+        self.hash_token.span()
+    }
+}
+
+impl Spanned for TypeParameterizedPath {
+    fn span(&self) -> Span {
+        self.safe_parameterized_path.span()
+    }
+}
+
+impl Spanned for TypeTypeParameter {
+    fn span(&self) -> Span {
+        self.excl_token.span()
+            .to(self.ident.span())
+    }
 }

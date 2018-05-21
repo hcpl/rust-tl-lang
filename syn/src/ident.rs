@@ -1,16 +1,20 @@
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
 /// An identifier: `channels`, `SendMessageAction`.
 #[derive(Debug)]
 pub struct Ident {
+    span: Span,
     string: String,
 }
 
 impl Ident {
-    pub fn new(s: &str) -> Option<Ident> {
+    pub fn new(span: Span, s: &str) -> Option<Ident> {
         if is_valid_ident(s) {
             Some(Ident {
+                span,
                 string: s.to_owned(),
             })
         } else {
@@ -43,8 +47,15 @@ impl Synom for Ident {
 
         (Ident {
             string: s.to_owned(),
+            span: Span::empty(),
         })
     ));
+}
+
+impl Spanned for Ident {
+    fn span(&self) -> Span {
+        self.span
+    }
 }
 
 

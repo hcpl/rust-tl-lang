@@ -1,4 +1,6 @@
 use super::{BitIndex, Comment, Id, Ident, ParameterizedPath, Path, Type};
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 use token::{Brace, Bracket, Paren};
 use utils::is_decimal_digit;
@@ -31,11 +33,15 @@ pub enum Delimiter {
 
 /// A `---types---` delimiter.
 #[derive(Debug)]
-pub struct DelimiterTypes;
+pub struct DelimiterTypes {
+    pub span: Span,
+}
 
 /// A `---functions---` delimiter.
 #[derive(Debug)]
-pub struct DelimiterFunctions;
+pub struct DelimiterFunctions {
+    pub span: Span,
+}
 
 #[derive(Debug)]
 pub struct ItemCombinator {
@@ -126,6 +132,7 @@ pub struct ParamTypeOnly {
 
 #[derive(Debug)]
 pub struct ItemLayer {
+    pub span: Span,
     pub layer: u32,
 }
 
@@ -168,7 +175,7 @@ impl Synom for Delimiter {
 impl Synom for DelimiterTypes {
     named!(parse_str(&str) -> DelimiterTypes, do_parse!(
         tag!("---types---") >>
-        (DelimiterTypes)
+        (DelimiterTypes { span: Span::empty() })
     ));
 }
 
@@ -176,7 +183,7 @@ impl Synom for DelimiterTypes {
 impl Synom for DelimiterFunctions {
     named!(parse_str(&str) -> DelimiterFunctions, do_parse!(
         tag!("---functions---") >>
-        (DelimiterFunctions)
+        (DelimiterFunctions { span: Span::empty() })
     ));
 }
 
@@ -328,6 +335,158 @@ impl Synom for ItemLayer {
         tag!("LAYER") >>
         layer: map_res!(take_while!(is_decimal_digit), str::parse) >>
 
-        (ItemLayer { layer })
+        (ItemLayer { span: Span::empty(), layer })
     )));
+}
+
+
+impl Spanned for Item {
+    fn span(&self) -> Span {
+        match *self {
+            Item::Comment(ref t) => t.span(),
+            Item::Delimiter(ref t) => t.span(),
+            Item::Combinator(ref t) => t.span(),
+            Item::Layer(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for ItemComment {
+    fn span(&self) -> Span {
+        self.comment.span()
+    }
+}
+
+impl Spanned for ItemDelimiter {
+    fn span(&self) -> Span {
+        self.delimiter.span()
+    }
+}
+
+impl Spanned for Delimiter {
+    fn span(&self) -> Span {
+        match *self {
+            Delimiter::Types(ref t) => t.span(),
+            Delimiter::Functions(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for DelimiterTypes {
+    fn span(&self) -> Span {
+        self.span
+    }
+}
+
+impl Spanned for DelimiterFunctions {
+    fn span(&self) -> Span {
+        self.span
+    }
+}
+
+impl Spanned for ItemCombinator {
+    fn span(&self) -> Span {
+        self.name.span()
+            .to(self.combinator_id.span())
+            .to(self.opt_params.span())
+            .to(self.params.span())
+            .to(self.equals_token.span())
+            .to(self.result_type.span())
+            .to(self.semicolon_token.span())
+    }
+}
+
+impl Spanned for CombinatorId {
+    fn span(&self) -> Span {
+        self.hash_token.span()
+            .to(self.id.span())
+    }
+}
+
+impl Spanned for OptParam {
+    fn span(&self) -> Span {
+        self.brace_token.span()
+            .to(self.var_idents.span())
+            .to(self.colon_token.span())
+            .to(self.ty.span())
+    }
+}
+
+impl Spanned for Param {
+    fn span(&self) -> Span {
+        match *self {
+            Param::Conditional(ref t) => t.span(),
+            Param::Repeated(ref t) => t.span(),
+            Param::WithParen(ref t) => t.span(),
+            Param::TypeOnly(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for ParamConditional {
+    fn span(&self) -> Span {
+        self.var_ident.span()
+            .to(self.colon_token.span())
+            .to(self.conditional_param_def.span())
+            .to(self.ty.span())
+    }
+}
+
+impl Spanned for ConditionalParamDef {
+    fn span(&self) -> Span {
+        self.var_ident.span()
+            .to(self.bit_selector.span())
+            .to(self.question_token.span())
+    }
+}
+
+impl Spanned for BitSelector {
+    fn span(&self) -> Span {
+        self.dot_token.span()
+            .to(self.bit_index.span())
+    }
+}
+
+impl Spanned for ParamRepeated {
+    fn span(&self) -> Span {
+        self.param_repeated_ident.span()
+            .to(self.multiplicity.span())
+            .to(self.bracket_token.span())
+            .to(self.params.span())
+    }
+}
+
+impl Spanned for ParamRepeatedIdent {
+    fn span(&self) -> Span {
+        self.var_ident.span()
+            .to(self.colon_token.span())
+    }
+}
+
+impl Spanned for Multiplicity {
+    fn span(&self) -> Span {
+        self.term.span()
+            .to(self.asterisk_token.span())
+    }
+}
+
+impl Spanned for ParamWithParen {
+    fn span(&self) -> Span {
+        self.paren_token.span()
+            .to(self.var_idents.span())
+            .to(self.colon_token.span())
+            .to(self.ty.span())
+    }
+}
+
+impl Spanned for ParamTypeOnly {
+    fn span(&self) -> Span {
+        self.ty.span()
+    }
+}
+
+impl Spanned for ItemLayer {
+    fn span(&self) -> Span {
+        self.span
+    }
 }

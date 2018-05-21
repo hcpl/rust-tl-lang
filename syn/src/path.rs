@@ -1,5 +1,7 @@
 use super::Ident;
 use punctuated::{Count, Punctuated, TrailingPunctuation, Whitespace};
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 use token::Paren;
 
@@ -140,4 +142,64 @@ impl Synom for SafeParameterizedPathParenthesized {
             parameterized_path: parameterized_path.1,
         })
     ));
+}
+
+
+impl Spanned for Path {
+    fn span(&self) -> Span {
+        self.segments.span()
+    }
+}
+
+impl Spanned for ParameterizedPath {
+    fn span(&self) -> Span {
+        self.path.span()
+            .to(self.args.span())
+    }
+}
+
+impl Spanned for GenericArguments {
+    fn span(&self) -> Span {
+        match *self {
+            GenericArguments::AngleBracketed(ref t) => t.span(),
+            GenericArguments::SpaceSeparated(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for AngleBracketedGenericArguments {
+    fn span(&self) -> Span {
+        self.langle_token.span()
+            .to(self.args.span())
+            .to(self.rangle_token.span())
+    }
+}
+
+impl Spanned for SpaceSeparatedGenericArguments {
+    fn span(&self) -> Span {
+        self.args.span()
+    }
+}
+
+impl Spanned for SafeParameterizedPath {
+    fn span(&self) -> Span {
+        match *self {
+            SafeParameterizedPath::SpaceImmune(ref t) => t.span(),
+            SafeParameterizedPath::Parenthesized(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for SafeParameterizedPathSpaceImmune {
+    fn span(&self) -> Span {
+        self.path.span()
+            .to(self.args.span())
+    }
+}
+
+impl Spanned for SafeParameterizedPathParenthesized {
+    fn span(&self) -> Span {
+        self.paren_token.span()
+            .to(self.parameterized_path.span())
+    }
 }

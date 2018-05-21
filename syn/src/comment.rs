@@ -1,5 +1,7 @@
 use nom;
 
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
@@ -13,12 +15,14 @@ pub enum Comment {
 /// A `//...` comment spanning a single line.
 #[derive(Debug)]
 pub struct CommentSingleLine {
+    span: Span,
     content: String,
 }
 
 /// A `/*...*/` comment spanning multiple lines.
 #[derive(Debug)]
 pub struct CommentMultiLine {
+    span: Span,
     content: String,
 }
 
@@ -37,6 +41,7 @@ impl Synom for CommentSingleLine {
         content: call!(nom::not_line_ending) >>
 
         (CommentSingleLine {
+            span: Span::empty(),
             content: content.to_owned(),
         })
     ));
@@ -49,7 +54,30 @@ impl Synom for CommentMultiLine {
         tag!("*/") >>
 
         (CommentMultiLine {
+            span: Span::empty(),
             content: content.to_owned(),
         })
     ));
+}
+
+
+impl Spanned for Comment {
+    fn span(&self) -> Span {
+        match *self {
+            Comment::SingleLine(ref t) => t.span(),
+            Comment::MultiLine(ref t) => t.span(),
+        }
+    }
+}
+
+impl Spanned for CommentSingleLine {
+    fn span(&self) -> Span {
+        self.span
+    }
+}
+
+impl Spanned for CommentMultiLine {
+    fn span(&self) -> Span {
+        self.span
+    }
 }

@@ -1,6 +1,8 @@
 use nom;
 
 use super::Item;
+use span::Span;
+use spanned::Spanned;
 use synom::Synom;
 
 
@@ -20,4 +22,10 @@ impl Synom for File {
 
         (File { items })
     ));
+}
+
+impl Spanned for File {
+    fn span(&self) -> Span {
+        self.items.span()
+    }
 }
