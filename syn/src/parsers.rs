@@ -35,6 +35,12 @@ macro_rules! parens {
     };
 }
 
+macro_rules! slash_asterisks {
+    ($i:expr,) => {
+        $crate::token::SlashAsterisk::parse($i, |i| take_until!(i, "*/"))
+    };
+}
+
 
 named!(pub space(&str) -> &str, eat_separator!(" \t"));
 

@@ -3,11 +3,13 @@
 use nom;
 
 
+/// Parsing interface implemented by all types that can be parsed in a default way from a string.
 pub trait Synom: Sized {
     fn parse_str(input: &str) -> nom::IResult<&str, Self>;
 }
 
 
+/// Parser that can parse TL language schema string into a particular syntax tree node.
 pub trait Parser: Sized {
     type Output;
 

@@ -1,6 +1,7 @@
 use std::cmp;
 
 
+/// A region of source text.
 #[derive(Clone, Copy, Debug)]
 pub struct Span {
     start: u32,

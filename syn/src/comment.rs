@@ -3,6 +3,7 @@ use nom;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
+use token::{SlashAsterisk, SlashSlash};
 
 
 /// A single-line or multiline comment.
@@ -15,15 +16,17 @@ pub enum Comment {
 /// A `//...` comment spanning a single line.
 #[derive(Debug)]
 pub struct CommentSingleLine {
-    span: Span,
-    content: String,
+    pub slash_slash_token: SlashSlash,
+    pub content_span: Span,
+    pub content: String,
 }
 
 /// A `/*...*/` comment spanning multiple lines.
 #[derive(Debug)]
 pub struct CommentMultiLine {
-    span: Span,
-    content: String,
+    pub slash_asterisk_token: SlashAsterisk,
+    pub content_span: Span,
+    pub content: String,
 }
 
 
@@ -37,11 +40,12 @@ impl Synom for Comment {
 
 impl Synom for CommentSingleLine {
     named!(parse_str(&str) -> CommentSingleLine, do_parse!(
-        tag!("//") >>
+        slash_slash_token: tlsyn!(SlashSlash) >>
         content: call!(nom::not_line_ending) >>
 
         (CommentSingleLine {
-            span: Span::empty(),
+            slash_slash_token,
+            content_span: Span::empty(),
             content: content.to_owned(),
         })
     ));
@@ -49,13 +53,12 @@ impl Synom for CommentSingleLine {
 
 impl Synom for CommentMultiLine {
     named!(parse_str(&str) -> CommentMultiLine, do_parse!(
-        tag!("/*") >>
-        content: take_until!("*/") >>
-        tag!("*/") >>
+        content: slash_asterisks!() >>
 
         (CommentMultiLine {
-            span: Span::empty(),
-            content: content.to_owned(),
+            slash_asterisk_token: content.0,
+            content_span: Span::empty(),
+            content: content.1.to_owned(),
         })
     ));
 }
@@ -72,12 +75,14 @@ impl Spanned for Comment {
 
 impl Spanned for CommentSingleLine {
     fn span(&self) -> Span {
-        self.span
+        self.slash_slash_token.span()
+            .to(self.content_span)
     }
 }
 
 impl Spanned for CommentMultiLine {
     fn span(&self) -> Span {
-        self.span
+        self.slash_asterisk_token.span()
+            .to(self.content_span)
     }
 }

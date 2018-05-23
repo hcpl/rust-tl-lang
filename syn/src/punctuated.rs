@@ -194,19 +194,19 @@ impl<T, P> ExactSizeIterator for IntoPairs<T, P> {
 }
 
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TrailingPunctuation {
     None,
     Optional,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Count {
     ZeroOrMore,
     OneOrMore,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Whitespace {
     None,
     Present,

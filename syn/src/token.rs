@@ -8,7 +8,7 @@ use synom::Synom;
 macro_rules! tokens {
     (
         punct: {
-            $($punct:tt pub struct $punct_name:ident/$len:tt #[$punct_doc:meta])*
+            $($punct:tt pub struct $punct_name:ident #[$punct_doc:meta])*
         }
         delimiter: {
             $($delimiter:tt pub struct $delimiter_name:ident #[$delimiter_doc:meta])*
@@ -17,7 +17,7 @@ macro_rules! tokens {
             $($keyword:tt pub struct $keyword_name:ident #[$keyword_doc:meta])*
         }
     ) => (
-        $(token_punct_def! { #[$punct_doc] $punct pub struct $punct_name/$len })*
+        $(token_punct_def! { #[$punct_doc] $punct pub struct $punct_name })*
         $(token_punct_parser! { $punct pub struct $punct_name })*
         $(token_delimiter! { #[$delimiter_doc] $delimiter pub struct $delimiter_name })*
         $(token_keyword! { #[$keyword_doc] $keyword pub struct $keyword_name })*
@@ -25,7 +25,7 @@ macro_rules! tokens {
 }
 
 macro_rules! token_punct_def {
-    (#[$doc:meta] $punct:tt pub struct $name:ident/$len:tt) => {
+    (#[$doc:meta] $punct:tt pub struct $name:ident) => {
         #[derive(Clone)]
         #[$doc]
         ///
@@ -92,22 +92,23 @@ macro_rules! token_delimiter {
         }
 
         impl $name {
-            pub fn parse<F, R>(
-                s: &str,
+            pub fn parse<'a, F, R>(
+                s: &'a str,
                 f: F,
-            ) -> $crate::nom::IResult<&str, ($name, R)>
+            ) -> $crate::nom::IResult<&'a str, ($name, R)>
             where
-                F: FnOnce(&str) -> $crate::nom::IResult<&str, R>,
+                F: FnOnce(&'a str) -> $crate::nom::IResult<&'a str, R>,
             {
                 let (left, right) = match $delimiter {
-                    "{" => ('{', '}'),
-                    "[" => ('[', ']'),
-                    "(" => ('(', ')'),
+                    "{"  => ("{", "}"),
+                    "["  => ("[", "]"),
+                    "("  => ("(", ")"),
+                    "/*" => ("/*", "*/"),
                     _ => unreachable!(),
                 };
 
                 // FIXME: Handle nesting (low-priority)
-                let (rest, res) = delimited!(s, char!(left), call!(f), char!(right))?;
+                let (rest, res) = delimited!(s, tag!(left), call!(f), tag!(right))?;
                 Ok((rest, ($name(Span::empty()), res)))
             }
         }
@@ -160,29 +161,31 @@ macro_rules! token_keyword {
 
 tokens! {
     punct: {
-        "*"      pub struct Asterisk/1    /// `!`
-        ","      pub struct Comma/1       /// `,`
-        ":"      pub struct Colon/1       /// `:`
-        "."      pub struct Dot/1         /// `.`
-        "="      pub struct Equals/1      /// `=`
-        "!"      pub struct Excl/1        /// `!`
-        "#"      pub struct Hash/1        /// `#`
-        "<"      pub struct LAngle/1      /// `<`
-        "%"      pub struct Percent/1     /// `%`
-        "+"      pub struct Plus/1        /// `+`
-        "?"      pub struct Question/1    /// `?`
-        ">"      pub struct RAngle/1      /// `>`
-        ";"      pub struct Semicolon/1   /// `;`
+        "*"      pub struct Asterisk      /// `!`
+        ","      pub struct Comma         /// `,`
+        ":"      pub struct Colon         /// `:`
+        "."      pub struct Dot           /// `.`
+        "="      pub struct Equals        /// `=`
+        "!"      pub struct Excl          /// `!`
+        "#"      pub struct Hash          /// `#`
+        "<"      pub struct LAngle        /// `<`
+        "%"      pub struct Percent       /// `%`
+        "+"      pub struct Plus          /// `+`
+        "?"      pub struct Question      /// `?`
+        ">"      pub struct RAngle        /// `>`
+        ";"      pub struct Semicolon     /// `;`
+        "//"     pub struct SlashSlash    /// `//`
     }
     delimiter: {
-        "{"      pub struct Brace         /// `{...}`
-        "["      pub struct Bracket       /// `[...]`
-        "("      pub struct Paren         /// `(...)`
+        "{"      pub struct Brace           /// `{...}`
+        "["      pub struct Bracket         /// `[...]`
+        "("      pub struct Paren           /// `(...)`
+        "/*"     pub struct SlashAsterisk   /// `/*...*/`
     }
     keyword: {
-        "Empty"  pub struct Empty         /// `Empty`
-        "Final"  pub struct Final         /// `Final`
-        "New"    pub struct New           /// `New`
+        "Empty"  pub struct Empty           /// `Empty`
+        "Final"  pub struct Final           /// `Final`
+        "New"    pub struct New             /// `New`
     }
 }
 
@@ -201,6 +204,9 @@ macro_rules! tlpunct {
     ($i:expr, ?) => { call!($i, <$crate::token::Question as $crate::synom::Synom>::parse_str) };
     ($i:expr, >) => { call!($i, <$crate::token::RAngle as $crate::synom::Synom>::parse_str) };
     ($i:expr, ;) => { call!($i, <$crate::token::Semicolon as $crate::synom::Synom>::parse_str) };
+    // No `($i:expr, //) => { call!($i, <$crate::token::SlashSlash as $crate::synom::Synom>::parse_str) };`
+    // because you can't write `//` in Rust code without being interpreted as the start of a
+    // single-line comment
 }
 
 
@@ -218,4 +224,6 @@ macro_rules! TLToken {
     (?) => { $crate::token::Question };
     (>) => { $crate::token::RAngle };
     (;) => { $crate::token::Semicolon };
+    // No `(//) => { $crate::token::SlashSlash };` because you can't write `//` in Rust code
+    // without being interpreted as the start of a single-line comment
 }

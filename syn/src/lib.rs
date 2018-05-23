@@ -1,3 +1,6 @@
+//! A parsing library for parsing a string of TL language schema into a syntax tree of TL language
+//! source text.
+
 #[macro_use]
 extern crate nom;
 
@@ -58,7 +61,7 @@ pub fn parse_str<T: Synom>(s: &str) -> Result<T, nom::Err<&str>> {
 /// Parse the content of a file of TL language schema.
 pub fn parse_file(mut content: &str) -> Result<File, nom::Err<&str>> {
     // Strip the BOM if it is present
-    const BOM: &'static str = "\u{feff}";
+    const BOM: &str = "\u{feff}";
     if content.starts_with(BOM) {
         content = &content[BOM.len()..];
     }

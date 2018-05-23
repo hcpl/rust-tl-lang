@@ -4,7 +4,7 @@ use spanned::Spanned;
 use utils::is_decimal_digit;
 
 
-const BIT_INDEX_MASK: u8 = 0b00011111;
+const BIT_INDEX_MASK: u8 = 0b0001_1111;
 
 /// An index pointing to the n-th bit of a `#` value (or, an `u32` value).
 #[derive(Debug)]
