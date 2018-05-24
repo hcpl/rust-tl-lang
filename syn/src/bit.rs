@@ -1,5 +1,6 @@
 use std::fmt;
 
+use print::Print;
 use synom::Synom;
 use span::Span;
 use spanned::Spanned;
@@ -30,8 +31,8 @@ impl Spanned for BitIndex {
     }
 }
 
-impl fmt::Display for BitIndex {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for BitIndex {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Display::fmt(&self.index, f)
     }
 }

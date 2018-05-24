@@ -2,6 +2,7 @@
 
 use std::fmt;
 
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -67,9 +68,9 @@ macro_rules! token_punct_parser {
             }
         }
 
-        impl fmt::Display for $name {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                fmt::Display::fmt($punct, f)
+        impl Print for $name {
+            fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.write_str($punct)
             }
         }
     }
@@ -171,9 +172,9 @@ macro_rules! token_keyword {
             }
         }
 
-        impl fmt::Display for $name {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                fmt::Display::fmt($keyword, f)
+        impl Print for $name {
+            fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.write_str($keyword)
             }
         }
     }

@@ -1,5 +1,6 @@
 use std::fmt;
 
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -60,8 +61,8 @@ impl Spanned for Ident {
     }
 }
 
-impl fmt::Display for Ident {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Ident {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Display::fmt(&self.string, f)
     }
 }

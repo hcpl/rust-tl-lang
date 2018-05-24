@@ -2,6 +2,7 @@ use std::fmt;
 
 use nom;
 
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -90,26 +91,26 @@ impl Spanned for CommentMultiLine {
 }
 
 
-impl fmt::Display for Comment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Comment {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Comment::SingleLine(ref t) => fmt::Display::fmt(t, f),
-            Comment::MultiLine(ref t) => fmt::Display::fmt(t, f),
+            Comment::SingleLine(ref t) => t.print(f),
+            Comment::MultiLine(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for CommentSingleLine {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt("//", f)?;
+impl Print for CommentSingleLine {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("//")?;
         fmt::Display::fmt(&self.content, f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for CommentMultiLine {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for CommentMultiLine {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         SlashAsterisk::print(f, |f| {
             fmt::Display::fmt(&self.content, f)
         })

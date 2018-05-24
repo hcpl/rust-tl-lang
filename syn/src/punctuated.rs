@@ -6,6 +6,7 @@ use std::vec;
 
 use nom;
 
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -155,28 +156,34 @@ fn parse_error<O, E>(input: &str, error: E) -> nom::IResult<&str, O, E> {
 
 impl<T, P> Punctuated<T, P>
 where
-    T: fmt::Display,
-    P: fmt::Display,
+    T: Print,
+    P: Print,
 {
     pub fn print(
         &self,
         f: &mut fmt::Formatter,
+        count: Count,
         whitespace: Whitespace,
     ) -> fmt::Result {
-        self.print_with(f, fmt::Display::fmt, whitespace)
+        self.print_with(f, Print::print, count, whitespace)
     }
 }
 
 impl<T, P> Punctuated<T, P>
 where
-    P: fmt::Display,
+    P: Print,
 {
     fn print_with(
         &self,
         f: &mut fmt::Formatter,
         print: fn(&T, &mut fmt::Formatter) -> fmt::Result,
+        count: Count,
         whitespace: Whitespace,
     ) -> fmt::Result {
+        if count == Count::OneOrMore && self.is_empty() {
+            panic!("The must be at least one element in this `Punctuated`!");
+        }
+
         let maybe_space = match whitespace {
             Whitespace::None => "",
             Whitespace::Present => " ",
@@ -185,7 +192,7 @@ where
         for &(ref t, ref p) in &self.inner {
             print(t, f)?;
             f.write_str(maybe_space)?;
-            fmt::Display::fmt(p, f)?;
+            p.print(f)?;
             f.write_str(maybe_space)?;
         }
 

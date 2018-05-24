@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::{BitIndex, Comment, Id, Ident, ParameterizedPath, Path, Type};
+use print::{Print, print_slice_with_separator};
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -494,147 +495,137 @@ impl Spanned for ItemLayer {
 }
 
 
-impl fmt::Display for Item {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Item {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Item::Comment(ref t) => fmt::Display::fmt(t, f),
-            Item::Delimiter(ref t) => fmt::Display::fmt(t, f),
-            Item::Combinator(ref t) => fmt::Display::fmt(t, f),
-            Item::Layer(ref t) => fmt::Display::fmt(t, f),
+            Item::Comment(ref t) => t.print(f),
+            Item::Delimiter(ref t) => t.print(f),
+            Item::Combinator(ref t) => t.print(f),
+            Item::Layer(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for ItemComment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.comment, f)
+impl Print for ItemComment {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.comment.print(f)
     }
 }
 
-impl fmt::Display for ItemDelimiter {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.delimiter, f)
+impl Print for ItemDelimiter {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.delimiter.print(f)
     }
 }
 
-impl fmt::Display for Delimiter {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Delimiter {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Delimiter::Types(ref t) => fmt::Display::fmt(t, f),
-            Delimiter::Functions(ref t) => fmt::Display::fmt(t, f),
+            Delimiter::Types(ref t) => t.print(f),
+            Delimiter::Functions(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for DelimiterTypes {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt("---types---", f)
+impl Print for DelimiterTypes {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("---types---")
     }
 }
 
-impl fmt::Display for DelimiterFunctions {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt("---functions---", f)
+impl Print for DelimiterFunctions {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("---functions---")
     }
 }
 
-impl fmt::Display for ItemCombinator {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.name, f)?;
-        if let Some(ref combinator_id) = self.combinator_id {
-            fmt::Display::fmt(combinator_id, f)?;
+impl Print for ItemCombinator {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.name.print(f)?;
+        self.combinator_id.print(f)?;
+        f.write_str(" ")?;
+        if let Some(()) = print_slice_with_separator(&self.opt_params, " ", f)? {
+            f.write_str(" ")?;
         }
-        fmt::Display::fmt(" ", f)?;
-        if let Some(()) = fmt_slice_spaced(&self.opt_params, f)? {
-            fmt::Display::fmt(" ", f)?;
+        if let Some(()) = print_slice_with_separator(&self.params, " ", f)? {
+            f.write_str(" ")?;
         }
-        if let Some(()) = fmt_slice_spaced(&self.params, f)? {
-            fmt::Display::fmt(" ", f)?;
-        }
-        fmt::Display::fmt(&self.equals_token, f)?;
-        fmt::Display::fmt(" ", f)?;
-        fmt::Display::fmt(&self.result_type, f)?;
-        fmt::Display::fmt(&self.semicolon_token, f)?;
+        self.equals_token.print(f)?;
+        f.write_str(" ")?;
+        self.result_type.print(f)?;
+        self.semicolon_token.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for CombinatorId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.hash_token, f)?;
-        fmt::Display::fmt(&self.id, f)?;
+impl Print for CombinatorId {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.hash_token.print(f)?;
+        self.id.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for OptParam {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for OptParam {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Brace::print(f, |f| {
-            fmt_slice_spaced(&self.var_idents, f)?;
-            fmt::Display::fmt(&self.colon_token, f)?;
-            fmt::Display::fmt(&self.ty, f)?;
+            print_slice_with_separator(&self.var_idents, " ", f)?;
+            self.colon_token.print(f)?;
+            self.ty.print(f)?;
             Ok(())
         })
     }
 }
 
-impl fmt::Display for Param {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Param {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Param::Conditional(ref t) => fmt::Display::fmt(t, f),
-            Param::Repeated(ref t) => fmt::Display::fmt(t, f),
-            Param::WithParen(ref t) => fmt::Display::fmt(t, f),
-            Param::TypeOnly(ref t) => fmt::Display::fmt(t, f),
+            Param::Conditional(ref t) => t.print(f),
+            Param::Repeated(ref t) => t.print(f),
+            Param::WithParen(ref t) => t.print(f),
+            Param::TypeOnly(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for ParamConditional {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.var_ident, f)?;
-        fmt::Display::fmt(&self.colon_token, f)?;
-        if let Some(ref conditional_param_def) = self.conditional_param_def {
-            fmt::Display::fmt(conditional_param_def, f)?;
-        }
-        fmt::Display::fmt(&self.ty, f)?;
+impl Print for ParamConditional {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.var_ident.print(f)?;
+        self.colon_token.print(f)?;
+        self.conditional_param_def.print(f)?;
+        self.ty.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for ConditionalParamDef {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.var_ident, f)?;
-        if let Some(ref bit_selector) = self.bit_selector {
-            fmt::Display::fmt(bit_selector, f)?;
-        }
-        fmt::Display::fmt(&self.question_token, f)?;
+impl Print for ConditionalParamDef {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.var_ident.print(f)?;
+        self.bit_selector.print(f)?;
+        self.question_token.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for BitSelector {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.dot_token, f)?;
-        fmt::Display::fmt(&self.bit_index, f)?;
+impl Print for BitSelector {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.dot_token.print(f)?;
+        self.bit_index.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for ParamRepeated {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if let Some(ref param_repeated_ident) = self.param_repeated_ident {
-            fmt::Display::fmt(param_repeated_ident, f)?;
-        }
-        if let Some(ref multiplicity) = self.multiplicity {
-            fmt::Display::fmt(multiplicity, f)?;
-        }
+impl Print for ParamRepeated {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.param_repeated_ident.print(f)?;
+        self.multiplicity.print(f)?;
         Brace::print(f, |f| {
-            fmt_slice_spaced(&self.params, f)?;
+            print_slice_with_separator(&self.params, " ", f)?;
             Ok(())
         })?;
 
@@ -642,30 +633,30 @@ impl fmt::Display for ParamRepeated {
     }
 }
 
-impl fmt::Display for ParamRepeatedIdent {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.var_ident, f)?;
-        fmt::Display::fmt(&self.colon_token, f)?;
+impl Print for ParamRepeatedIdent {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.var_ident.print(f)?;
+        self.colon_token.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for Multiplicity {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.term, f)?;
-        fmt::Display::fmt(&self.asterisk_token, f)?;
+impl Print for Multiplicity {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.term.print(f)?;
+        self.asterisk_token.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for ParamWithParen {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for ParamWithParen {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Paren::print(f, |f| {
-            fmt_slice_spaced(&self.var_idents, f)?;
-            fmt::Display::fmt(&self.colon_token, f)?;
-            fmt::Display::fmt(&self.ty, f)?;
+            print_slice_with_separator(&self.var_idents, " ", f)?;
+            self.colon_token.print(f)?;
+            self.ty.print(f)?;
             Ok(())
         })?;
 
@@ -673,40 +664,19 @@ impl fmt::Display for ParamWithParen {
     }
 }
 
-impl fmt::Display for ParamTypeOnly {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.ty, f)
+impl Print for ParamTypeOnly {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.ty.print(f)
     }
 }
 
-impl fmt::Display for ItemLayer {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt("//", f)?;
-        fmt::Display::fmt(" ", f)?;
-        fmt::Display::fmt("LAYER", f)?;
+impl Print for ItemLayer {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("//")?;
+        f.write_str(" ")?;
+        f.write_str("LAYER")?;
         fmt::Display::fmt(&self.layer, f)?;
 
         Ok(())
-    }
-}
-
-fn fmt_slice_spaced<T>(slice: &[T], f: &mut fmt::Formatter) -> Result<Option<()>, fmt::Error>
-where
-    T: fmt::Display,
-{
-    let mut iter = slice.iter();
-
-    match iter.next() {
-        None => Ok(None),
-        Some(ref first) => {
-            fmt::Display::fmt(first, f)?;
-
-            for other in iter {
-                fmt::Display::fmt(" ", f)?;
-                fmt::Display::fmt(other, f)?;
-            }
-
-            Ok(Some(()))
-        },
     }
 }

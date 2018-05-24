@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::Ident;
+use print::Print;
 use punctuated::{Count, Punctuated, TrailingPunctuation, Whitespace};
 use span::Span;
 use spanned::Spanned;
@@ -207,82 +208,77 @@ impl Spanned for SafeParameterizedPathParenthesized {
 }
 
 
-impl fmt::Display for Path {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.segments.print(f, Whitespace::None)
+impl Print for Path {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.segments.print(f, Count::OneOrMore, Whitespace::None)
     }
 }
 
-impl fmt::Display for ParameterizedPath {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.path, f)?;
-        if let Some(ref args) = self.args {
-            fmt::Display::fmt(args, f)?;
-        }
+impl Print for ParameterizedPath {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.path.print(f)?;
+        self.args.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for GenericArguments {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for GenericArguments {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            GenericArguments::AngleBracketed(ref t) => fmt::Display::fmt(t, f),
-            GenericArguments::SpaceSeparated(ref t) => fmt::Display::fmt(t, f),
+            GenericArguments::AngleBracketed(ref t) => t.print(f),
+            GenericArguments::SpaceSeparated(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for AngleBracketedGenericArguments {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.langle_token, f)?;
-        self.args.print(f, Whitespace::Present)?;
-        fmt::Display::fmt(&self.rangle_token, f)?;
+impl Print for AngleBracketedGenericArguments {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.langle_token.print(f)?;
+        self.args.print(f, Count::OneOrMore, Whitespace::Present)?;
+        self.rangle_token.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for SpaceSeparatedGenericArguments {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut args_iter = self.args.iter();
+impl Print for SpaceSeparatedGenericArguments {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let (first, rest) = self.args.split_first().unwrap();  // There must be at least one argument
 
-        let first_arg = args_iter.next().unwrap();
-        fmt::Display::fmt(first_arg, f)?;
+        first.print(f)?;
 
-        for other_arg in args_iter {
-            fmt::Display::fmt(" ", f)?;
-            fmt::Display::fmt(other_arg, f)?;
+        for other in rest {
+            f.write_str(" ")?;
+            other.print(f)?;
         }
 
         Ok(())
     }
 }
 
-impl fmt::Display for SafeParameterizedPath {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for SafeParameterizedPath {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            SafeParameterizedPath::SpaceImmune(ref t) => fmt::Display::fmt(t, f),
-            SafeParameterizedPath::Parenthesized(ref t) => fmt::Display::fmt(t, f),
+            SafeParameterizedPath::SpaceImmune(ref t) => t.print(f),
+            SafeParameterizedPath::Parenthesized(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for SafeParameterizedPathSpaceImmune {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.path, f)?;
-        if let Some(ref args) = self.args {
-            fmt::Display::fmt(args, f)?;
-        }
+impl Print for SafeParameterizedPathSpaceImmune {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.path.print(f)?;
+        self.args.print(f)?;
 
         Ok(())
     }
 }
 
-impl fmt::Display for SafeParameterizedPathParenthesized {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for SafeParameterizedPathParenthesized {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Paren::print(f, |f| {
-            fmt::Display::fmt(&self.parameterized_path, f)
+            self.parameterized_path.print(f)
         })
     }
 }

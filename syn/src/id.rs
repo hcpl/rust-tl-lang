@@ -1,5 +1,6 @@
 use std::fmt;
 
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -35,8 +36,8 @@ impl Spanned for Id {
     }
 }
 
-impl fmt::Display for Id {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Id {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::LowerHex::fmt(&self.id, f)
     }
 }

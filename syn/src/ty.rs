@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::{Ident, SafeParameterizedPath};
+use print::Print;
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -97,32 +98,32 @@ impl Spanned for TypeTypeParameter {
 }
 
 
-impl fmt::Display for Type {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Print for Type {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Type::Int(ref t) => fmt::Display::fmt(t, f),
-            Type::ParameterizedPath(ref t) => fmt::Display::fmt(t, f),
-            Type::TypeParameter(ref t) => fmt::Display::fmt(t, f),
+            Type::Int(ref t) => t.print(f),
+            Type::ParameterizedPath(ref t) => t.print(f),
+            Type::TypeParameter(ref t) => t.print(f),
         }
     }
 }
 
-impl fmt::Display for TypeInt {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.hash_token, f)
+impl Print for TypeInt {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.hash_token.print(f)
     }
 }
 
-impl fmt::Display for TypeParameterizedPath {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.safe_parameterized_path, f)
+impl Print for TypeParameterizedPath {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.safe_parameterized_path.print(f)
     }
 }
 
-impl fmt::Display for TypeTypeParameter {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.excl_token, f)?;
-        fmt::Display::fmt(&self.ident, f)?;
+impl Print for TypeTypeParameter {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.excl_token.print(f)?;
+        self.ident.print(f)?;
 
         Ok(())
     }

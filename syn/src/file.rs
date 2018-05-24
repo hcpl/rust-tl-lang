@@ -3,6 +3,7 @@ use std::fmt;
 use nom;
 
 use super::Item;
+use print::{Print, print_slice_with_separator};
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -32,22 +33,8 @@ impl Spanned for File {
     }
 }
 
-impl fmt::Display for File {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut iter_items = self.items.iter();
-
-        match iter_items.next() {
-            None => (),
-            Some(ref first) => {
-                fmt::Display::fmt(first, f)?;
-
-                for other in iter_items {
-                    fmt::Display::fmt("\n", f)?;
-                    fmt::Display::fmt(other, f)?;
-                }
-            },
-        }
-
-        Ok(())
+impl Print for File {
+    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        print_slice_with_separator(&self.items, "\n", f).map(|_| ())
     }
 }

@@ -8,6 +8,8 @@ use std::io::{self, Read, Write};
 use std::path::Path;
 use std::process;
 
+use tl_lang_syn::print::Print;
+
 
 #[derive(Clone, Copy, Debug)]
 enum PrintMode {
@@ -58,7 +60,7 @@ where
 
         match print_mode {
             PrintMode::SyntaxTree => write!(output_file, "{:#?}", scheme)?,
-            PrintMode::Schema => write!(output_file, "{}", scheme)?,
+            PrintMode::Schema => write!(output_file, "{}", scheme.display_wrapper())?,
         }
     }
 
