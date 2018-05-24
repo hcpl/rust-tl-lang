@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::{Ident, SafeParameterizedPath};
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -36,7 +37,7 @@ pub struct TypeTypeParameter {
 
 
 impl Synom for Type {
-    named!(parse_str(&str) -> Type, alt_complete!(
+    named!(parse_cursor(Cursor) -> Type, alt_complete!(
         tlsyn!(TypeInt) => { Type::Int }
         |
         tlsyn!(TypeParameterizedPath) => { Type::ParameterizedPath }
@@ -46,21 +47,21 @@ impl Synom for Type {
 }
 
 impl Synom for TypeInt {
-    named!(parse_str(&str) -> TypeInt, do_parse!(
+    named!(parse_cursor(Cursor) -> TypeInt, do_parse!(
         hash_token: tlpunct!(#) >>
         (TypeInt { hash_token })
     ));
 }
 
 impl Synom for TypeParameterizedPath {
-    named!(parse_str(&str) -> TypeParameterizedPath, do_parse!(
+    named!(parse_cursor(Cursor) -> TypeParameterizedPath, do_parse!(
         safe_parameterized_path: tlsyn!(SafeParameterizedPath) >>
         (TypeParameterizedPath { safe_parameterized_path })
     ));
 }
 
 impl Synom for TypeTypeParameter {
-    named!(parse_str(&str) -> TypeTypeParameter, do_parse!(
+    named!(parse_cursor(Cursor) -> TypeTypeParameter, do_parse!(
         excl_token: tlpunct!(!) >>
         ident: tlsyn!(Ident) >>
         (TypeTypeParameter { excl_token, ident })

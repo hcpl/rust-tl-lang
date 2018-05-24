@@ -1,11 +1,19 @@
 //! Parsing interface for parsing a token stream into a syntax tree node.
 
-use nom;
+use nom::{self, AtEof};
+
+use cursor::Cursor;
 
 
 /// Parsing interface implemented by all types that can be parsed in a default way from a string.
 pub trait Synom: Sized {
-    fn parse_str(input: &str) -> nom::IResult<&str, Self>;
+    fn parse_cursor<'a>(input: Cursor<'a>) -> nom::IResult<Cursor<'a>, Self>;
+
+    fn parse_str(input: &str) -> nom::IResult<&str, Self> {
+        Self::parse_cursor(Cursor::new(input))
+            .map(|(cursor, res)| (cursor.to_str(), res))
+            .map_err(nom_err_to_str)
+    }
 }
 
 
@@ -13,28 +21,49 @@ pub trait Synom: Sized {
 pub trait Parser: Sized {
     type Output;
 
-    fn parse_str(self, s: &str) -> Result<Self::Output, nom::Err<&str>>;
+    fn parse_cursor<'a>(self, input: Cursor<'a>) -> Result<Self::Output, nom::Err<Cursor<'a>>>;
+
+    fn parse_str(self, input: &str) -> Result<Self::Output, nom::Err<&str>> {
+        self.parse_cursor(Cursor::new(input)).map_err(nom_err_to_str)
+    }
 }
+
 
 impl<F, T> Parser for F
 where
-    F: FnOnce(&str) -> nom::IResult<&str, T>,
+    F: for<'a> FnOnce(Cursor<'a>) -> nom::IResult<Cursor<'a>, T>,
 {
     type Output = T;
 
-    fn parse_str(self, s: &str) -> Result<T, nom::Err<&str>> {
-        let (rest, t) = self(s)?;
-        if rest.is_empty() {
-            Ok(t)
-        } else if rest == s {
+    fn parse_cursor<'a>(self, input: Cursor<'a>) -> Result<Self::Output, nom::Err<Cursor<'a>>> {
+        let (rest, value) = self(input)?;
+
+        if rest.at_eof() {
+            Ok(value)
+        } else if rest.to_str() == input.to_str() {
             // parsed nothing
-            parse_error(s, 100000)
+            parse_error(input, 100000)
         } else {
-            parse_error(s, 200000)
+            parse_error(input, 200000)
         }
     }
 }
 
-fn parse_error<O, E>(input: &str, error: E) -> Result<O, nom::Err<&str, E>> {
+
+fn nom_err_to_str<'a, E>(error: nom::Err<Cursor<'a>, E>) -> nom::Err<&'a str, E> {
+    fn nom_context_to_str<'a, E>(context: nom::Context<Cursor<'a>, E>) -> nom::Context<&'a str, E> {
+        match context {
+            nom::Context::Code(input, kind) => nom::Context::Code(input.to_str(), kind),
+        }
+    }
+
+    match error {
+        nom::Err::Incomplete(needed) => nom::Err::Incomplete(needed),
+        nom::Err::Error(context)     => nom::Err::Error(nom_context_to_str(context)),
+        nom::Err::Failure(context)   => nom::Err::Failure(nom_context_to_str(context)),
+    }
+}
+
+fn parse_error<'a, O, E>(input: Cursor<'a>, error: E) -> Result<O, nom::Err<Cursor<'a>, E>> {
     Err(nom::Err::Error(nom::Context::Code(input, nom::ErrorKind::Custom(error))))
 }

@@ -1,6 +1,9 @@
+use cursor::Cursor;
+
+
 macro_rules! tlsyn {
     ($i:expr, $t:ty) => {
-        <$t as $crate::synom::Synom>::parse_str($i)
+        <$t as $crate::synom::Synom>::parse_cursor($i)
     };
 }
 
@@ -42,7 +45,7 @@ macro_rules! slash_asterisks {
 }
 
 
-named!(pub space(&str) -> &str, eat_separator!(" \t"));
+named!(pub space(Cursor) -> Cursor, eat_separator!(" \t"));
 
 macro_rules! sp {
     ($i:expr, $($args:tt)*) => {

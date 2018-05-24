@@ -2,6 +2,7 @@ use std::fmt;
 
 use nom;
 
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -34,7 +35,7 @@ pub struct CommentMultiLine {
 
 
 impl Synom for Comment {
-    named!(parse_str(&str) -> Comment, alt_complete!(
+    named!(parse_cursor(Cursor) -> Comment, alt_complete!(
         tlsyn!(CommentSingleLine) => { Comment::SingleLine }
         |
         tlsyn!(CommentMultiLine) => { Comment::MultiLine }
@@ -42,26 +43,26 @@ impl Synom for Comment {
 }
 
 impl Synom for CommentSingleLine {
-    named!(parse_str(&str) -> CommentSingleLine, do_parse!(
+    named!(parse_cursor(Cursor) -> CommentSingleLine, do_parse!(
         slash_slash_token: tlsyn!(SlashSlash) >>
         content: call!(nom::not_line_ending) >>
 
         (CommentSingleLine {
             slash_slash_token,
-            content_span: Span::empty(),
-            content: content.to_owned(),
+            content_span: content.span(),
+            content: content.to_str().to_owned(),
         })
     ));
 }
 
 impl Synom for CommentMultiLine {
-    named!(parse_str(&str) -> CommentMultiLine, do_parse!(
+    named!(parse_cursor(Cursor) -> CommentMultiLine, do_parse!(
         content: slash_asterisks!() >>
 
         (CommentMultiLine {
             slash_asterisk_token: content.0,
-            content_span: Span::empty(),
-            content: content.1.to_owned(),
+            content_span: content.1.span(),
+            content: content.1.to_str().to_owned(),
         })
     ));
 }

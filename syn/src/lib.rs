@@ -9,6 +9,7 @@ extern crate nom;
 mod parsers;
 mod utils;
 
+pub mod cursor;
 pub mod print;
 pub mod punctuated;
 pub mod span;
@@ -55,7 +56,7 @@ use synom::{Parser, Synom};
 
 /// Parse a string of TL language schema into the chosen syntax tree node.
 pub fn parse_str<T: Synom>(s: &str) -> Result<T, nom::Err<&str>> {
-    let parser = T::parse_str;
+    let parser = T::parse_cursor;
     parser.parse_str(s)
 }
 

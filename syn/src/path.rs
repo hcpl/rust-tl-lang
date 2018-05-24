@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::Ident;
+use cursor::Cursor;
 use print::Print;
 use punctuated::{Count, Punctuated, TrailingPunctuation, Whitespace};
 use span::Span;
@@ -67,7 +68,7 @@ pub struct SafeParameterizedPathParenthesized {
 
 
 impl Synom for Path {
-    named!(parse_str(&str) -> Path, do_parse!(
+    named!(parse_cursor(Cursor) -> Path, do_parse!(
         segments: call!(|s| Punctuated::parse(
             s,
             TrailingPunctuation::None,
@@ -80,7 +81,7 @@ impl Synom for Path {
 }
 
 impl Synom for ParameterizedPath {
-    named!(parse_str(&str) -> ParameterizedPath, do_parse!(
+    named!(parse_cursor(Cursor) -> ParameterizedPath, do_parse!(
         path: tlsyn!(Path) >>
         args: opt!(tlsyn!(GenericArguments)) >>
 
@@ -89,7 +90,7 @@ impl Synom for ParameterizedPath {
 }
 
 impl Synom for GenericArguments {
-    named!(parse_str(&str) -> GenericArguments, alt_complete!(
+    named!(parse_cursor(Cursor) -> GenericArguments, alt_complete!(
         tlsyn!(AngleBracketedGenericArguments) => { GenericArguments::AngleBracketed }
         |
         tlsyn!(SpaceSeparatedGenericArguments) => { GenericArguments::SpaceSeparated }
@@ -97,7 +98,7 @@ impl Synom for GenericArguments {
 }
 
 impl Synom for AngleBracketedGenericArguments {
-    named!(parse_str(&str) -> AngleBracketedGenericArguments, do_parse!(
+    named!(parse_cursor(Cursor) -> AngleBracketedGenericArguments, do_parse!(
         langle_token: tlpunct!(<) >>
         args: call!(|s| Punctuated::<ParameterizedPath, TLToken![,]>::parse(
             s,
@@ -112,7 +113,7 @@ impl Synom for AngleBracketedGenericArguments {
 }
 
 impl Synom for SpaceSeparatedGenericArguments {
-    named!(parse_str(&str) -> SpaceSeparatedGenericArguments, do_parse!(
+    named!(parse_cursor(Cursor) -> SpaceSeparatedGenericArguments, do_parse!(
         args: sp!(many1!(tlsyn!(ParameterizedPath))) >>
 
         (SpaceSeparatedGenericArguments { args })
@@ -120,7 +121,7 @@ impl Synom for SpaceSeparatedGenericArguments {
 }
 
 impl Synom for SafeParameterizedPath {
-    named!(parse_str(&str) -> SafeParameterizedPath, alt_complete!(
+    named!(parse_cursor(Cursor) -> SafeParameterizedPath, alt_complete!(
         tlsyn!(SafeParameterizedPathSpaceImmune) => { SafeParameterizedPath::SpaceImmune }
         |
         tlsyn!(SafeParameterizedPathParenthesized) => { SafeParameterizedPath::Parenthesized }
@@ -128,7 +129,7 @@ impl Synom for SafeParameterizedPath {
 }
 
 impl Synom for SafeParameterizedPathSpaceImmune {
-    named!(parse_str(&str) -> SafeParameterizedPathSpaceImmune, do_parse!(
+    named!(parse_cursor(Cursor) -> SafeParameterizedPathSpaceImmune, do_parse!(
         path: tlsyn!(Path) >>
         args: opt!(tlsyn!(AngleBracketedGenericArguments)) >>
 
@@ -137,7 +138,7 @@ impl Synom for SafeParameterizedPathSpaceImmune {
 }
 
 impl Synom for SafeParameterizedPathParenthesized {
-    named!(parse_str(&str) -> SafeParameterizedPathParenthesized, do_parse!(
+    named!(parse_cursor(Cursor) -> SafeParameterizedPathParenthesized, do_parse!(
         parameterized_path: parens!(tlsyn!(ParameterizedPath)) >>
 
         (SafeParameterizedPathParenthesized {

@@ -2,6 +2,7 @@
 
 use std::fmt;
 
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -29,20 +30,14 @@ macro_rules! tokens {
 
 macro_rules! token_punct_def {
     (#[$doc:meta] $punct:tt pub struct $name:ident) => {
-        #[derive(Clone)]
         #[$doc]
         ///
         /// Don't try to remember the name of this type -- use the [`TLToken!`]
         /// macro instead.
         ///
         /// [`Token!`]: index.html
+        #[derive(Clone, Debug)]
         pub struct $name(pub Span);
-
-        impl ::std::fmt::Debug for $name {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                f.write_str(stringify!($name))
-            }
-        }
 
         impl ::std::cmp::Eq for $name {}
 
@@ -57,8 +52,8 @@ macro_rules! token_punct_def {
 macro_rules! token_punct_parser {
     ($punct:tt pub struct $name:ident) => {
         impl Synom for $name {
-            named!(parse_str(&str) -> $name, map!(tag!($punct), |_| {
-                $name(Span::empty())
+            named!(parse_cursor(Cursor) -> $name, map!(tag!($punct), |cursor| {
+                $name(cursor.span())
             }));
         }
 
@@ -84,13 +79,8 @@ macro_rules! token_delimiter {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
+        #[derive(Clone, Debug)]
         pub struct $name(pub Span);
-
-        impl ::std::fmt::Debug for $name {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                f.write_str(stringify!($name))
-            }
-        }
 
         impl ::std::cmp::Eq for $name {}
 
@@ -102,15 +92,21 @@ macro_rules! token_delimiter {
 
         impl $name {
             pub fn parse<'a, F, R>(
-                s: &'a str,
+                input: Cursor<'a>,
                 f: F,
-            ) -> $crate::nom::IResult<&'a str, ($name, R)>
+            ) -> $crate::nom::IResult<Cursor<'a>, ($name, R)>
             where
-                F: FnOnce(&'a str) -> $crate::nom::IResult<&'a str, R>,
+                F: FnOnce(Cursor<'a>) -> $crate::nom::IResult<Cursor<'a>, R>,
             {
                 // FIXME: Handle nesting (low-priority)
-                let (rest, res) = delimited!(s, tag!($delimiter_left), call!(f), tag!($delimiter_right))?;
-                Ok((rest, ($name(Span::empty()), res)))
+                let (rest, res_cursor) =
+                    delimited!(input, tag!($delimiter_left), call!(f), tag!($delimiter_right))?;
+
+                let begin = input.offset();
+                let end = rest.offset();
+                let span = Span::new(begin as u32, end as u32);
+
+                Ok((rest, ($name(span), res_cursor)))
             }
 
             pub fn print<F>(
@@ -144,13 +140,8 @@ macro_rules! token_keyword {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
+        #[derive(Clone, Debug)]
         pub struct $name(pub Span);
-
-        impl ::std::fmt::Debug for $name {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                f.write_str(stringify!($name))
-            }
-        }
 
         impl ::std::cmp::Eq for $name {}
 
@@ -161,8 +152,8 @@ macro_rules! token_keyword {
         }
 
         impl Synom for $name {
-            named!(parse_str(&str) -> $name, map!(tag!($keyword), |_| {
-                $name(Span::empty())
+            named!(parse_cursor(Cursor) -> $name, map!(tag!($keyword), |cursor| {
+                $name(cursor.span())
             }));
         }
 
@@ -212,20 +203,20 @@ tokens! {
 
 
 macro_rules! tlpunct {
-    ($i:expr, *) => { call!($i, <$crate::token::Asterisk as $crate::synom::Synom>::parse_str) };
-    ($i:expr, ,) => { call!($i, <$crate::token::Comma as $crate::synom::Synom>::parse_str) };
-    ($i:expr, :) => { call!($i, <$crate::token::Colon as $crate::synom::Synom>::parse_str) };
-    ($i:expr, .) => { call!($i, <$crate::token::Dot as $crate::synom::Synom>::parse_str) };
-    ($i:expr, =) => { call!($i, <$crate::token::Equals as $crate::synom::Synom>::parse_str) };
-    ($i:expr, !) => { call!($i, <$crate::token::Excl as $crate::synom::Synom>::parse_str) };
-    ($i:expr, #) => { call!($i, <$crate::token::Hash as $crate::synom::Synom>::parse_str) };
-    ($i:expr, <) => { call!($i, <$crate::token::LAngle as $crate::synom::Synom>::parse_str) };
-    ($i:expr, %) => { call!($i, <$crate::token::Percent as $crate::synom::Synom>::parse_str) };
-    ($i:expr, +) => { call!($i, <$crate::token::Plus as $crate::synom::Synom>::parse_str) };
-    ($i:expr, ?) => { call!($i, <$crate::token::Question as $crate::synom::Synom>::parse_str) };
-    ($i:expr, >) => { call!($i, <$crate::token::RAngle as $crate::synom::Synom>::parse_str) };
-    ($i:expr, ;) => { call!($i, <$crate::token::Semicolon as $crate::synom::Synom>::parse_str) };
-    // No `($i:expr, //) => { call!($i, <$crate::token::SlashSlash as $crate::synom::Synom>::parse_str) };`
+    ($i:expr, *) => { call!($i, <$crate::token::Asterisk as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, ,) => { call!($i, <$crate::token::Comma as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, :) => { call!($i, <$crate::token::Colon as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, .) => { call!($i, <$crate::token::Dot as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, =) => { call!($i, <$crate::token::Equals as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, !) => { call!($i, <$crate::token::Excl as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, #) => { call!($i, <$crate::token::Hash as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, <) => { call!($i, <$crate::token::LAngle as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, %) => { call!($i, <$crate::token::Percent as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, +) => { call!($i, <$crate::token::Plus as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, ?) => { call!($i, <$crate::token::Question as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, >) => { call!($i, <$crate::token::RAngle as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, ;) => { call!($i, <$crate::token::Semicolon as $crate::synom::Synom>::parse_cursor) };
+    // No `($i:expr, //) => { call!($i, <$crate::token::SlashSlash as $crate::synom::Synom>::parse_cursor) };`
     // because you can't write `//` in Rust code without being interpreted as the start of a
     // single-line comment
 }

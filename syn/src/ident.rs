@@ -1,5 +1,6 @@
 use std::fmt;
 
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -45,12 +46,13 @@ impl Ident {
 }
 
 impl Synom for Ident {
-    named!(parse_str(&str) -> Ident, do_parse!(
-        s: verify!(take_while!(is_ident_char), is_valid_ident) >>
+    named!(parse_cursor(Cursor) -> Ident, do_parse!(
+        ident_str_cursor: take_while!(is_ident_char) >>
+        ident_str: verify!(value!(ident_str_cursor.to_str()), is_valid_ident) >>
 
         (Ident {
-            string: s.to_owned(),
-            span: Span::empty(),
+            span: ident_str_cursor.span(),
+            string: ident_str.to_owned(),
         })
     ));
 }

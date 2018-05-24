@@ -1,5 +1,6 @@
 use std::fmt;
 
+use cursor::Cursor;
 use print::Print;
 use synom::Synom;
 use span::Span;
@@ -17,11 +18,13 @@ pub struct BitIndex {
 }
 
 impl Synom for BitIndex {
-    named!(parse_str(&str) -> BitIndex, do_parse!(
-        index_u8: map_res!(take_while!(is_decimal_digit), str::parse) >>
-        index: verify!(value!(index_u8), is_valid_nat_bit_index) >>
+    named!(parse_cursor(Cursor) -> BitIndex, do_parse!(
+        index_str_cursor: take_while!(is_decimal_digit) >>
+        index_raw: map_res!(value!(index_str_cursor.to_str()), str::parse) >>
+        index: verify!(value!(index_raw), is_valid_nat_bit_index) >>
+        span: value!(index_str_cursor.span()) >>
 
-        (BitIndex { span: Span::empty(), index })
+        (BitIndex { span, index })
     ));
 }
 

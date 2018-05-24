@@ -1,6 +1,7 @@
 use std::fmt;
 
 use super::{BitIndex, Comment, Id, Ident, ParameterizedPath, Path, Type};
+use cursor::Cursor;
 use print::{Print, print_slice_with_separator};
 use span::Span;
 use spanned::Spanned;
@@ -141,7 +142,7 @@ pub struct ItemLayer {
 
 
 impl Synom for Item {
-    named!(parse_str(&str) -> Item, alt_complete!(
+    named!(parse_cursor(Cursor) -> Item, alt_complete!(
         tlsyn!(ItemComment) => { Item::Comment }
         |
         tlsyn!(ItemDelimiter) => { Item::Delimiter }
@@ -153,21 +154,21 @@ impl Synom for Item {
 }
 
 impl Synom for ItemComment {
-    named!(parse_str(&str) -> ItemComment, do_parse!(
+    named!(parse_cursor(Cursor) -> ItemComment, do_parse!(
         comment: tlsyn!(Comment) >>
         (ItemComment { comment })
     ));
 }
 
 impl Synom for ItemDelimiter {
-    named!(parse_str(&str) -> ItemDelimiter, do_parse!(
+    named!(parse_cursor(Cursor) -> ItemDelimiter, do_parse!(
         delimiter: tlsyn!(Delimiter) >>
         (ItemDelimiter { delimiter })
     ));
 }
 
 impl Synom for Delimiter {
-    named!(parse_str(&str) -> Delimiter, alt_complete!(
+    named!(parse_cursor(Cursor) -> Delimiter, alt_complete!(
         tlsyn!(DelimiterTypes) => { Delimiter::Types }
         |
         tlsyn!(DelimiterFunctions) => { Delimiter::Functions }
@@ -176,22 +177,26 @@ impl Synom for Delimiter {
 
 // FIXME: Spanning
 impl Synom for DelimiterTypes {
-    named!(parse_str(&str) -> DelimiterTypes, do_parse!(
-        tag!("---types---") >>
-        (DelimiterTypes { span: Span::empty() })
+    named!(parse_cursor(Cursor) -> DelimiterTypes, do_parse!(
+        types_cursor: tag!("---types---") >>
+        span: value!(types_cursor.span()) >>
+
+        (DelimiterTypes { span })
     ));
 }
 
 // FIXME: Spanning
 impl Synom for DelimiterFunctions {
-    named!(parse_str(&str) -> DelimiterFunctions, do_parse!(
-        tag!("---functions---") >>
-        (DelimiterFunctions { span: Span::empty() })
+    named!(parse_cursor(Cursor) -> DelimiterFunctions, do_parse!(
+        functions_cursor: tag!("---functions---") >>
+        span: value!(functions_cursor.span()) >>
+
+        (DelimiterFunctions { span })
     ));
 }
 
 impl Synom for ItemCombinator {
-    named!(parse_str(&str) -> ItemCombinator, sp!(do_parse!(
+    named!(parse_cursor(Cursor) -> ItemCombinator, sp!(do_parse!(
         name: tlsyn!(Path) >>
         combinator_id: opt!(tlsyn!(CombinatorId)) >>
         opt_params: sp!(many0!(tlsyn!(OptParam))) >>
@@ -207,7 +212,7 @@ impl Synom for ItemCombinator {
 }
 
 impl Synom for CombinatorId {
-    named!(parse_str(&str) -> CombinatorId, do_parse!(
+    named!(parse_cursor(Cursor) -> CombinatorId, do_parse!(
         hash_token: tlpunct!(#) >>
         id: tlsyn!(Id) >>
         (CombinatorId { hash_token, id })
@@ -215,7 +220,7 @@ impl Synom for CombinatorId {
 }
 
 impl Synom for OptParam {
-    named!(parse_str(&str) -> OptParam, do_parse!(
+    named!(parse_cursor(Cursor) -> OptParam, do_parse!(
         opt_param: braces!(tuple!(
             sp!(many1!(tlsyn!(Ident))),
             tlpunct!(:),
@@ -232,7 +237,7 @@ impl Synom for OptParam {
 }
 
 impl Synom for Param {
-    named!(parse_str(&str) -> Param , alt_complete!(
+    named!(parse_cursor(Cursor) -> Param , alt_complete!(
         tlsyn!(ParamConditional) => { Param::Conditional }
         |
         tlsyn!(ParamRepeated) => { Param::Repeated }
@@ -244,7 +249,7 @@ impl Synom for Param {
 }
 
 impl Synom for ParamConditional {
-    named!(parse_str(&str) -> ParamConditional, do_parse!(
+    named!(parse_cursor(Cursor) -> ParamConditional, do_parse!(
         var_ident: tlsyn!(Ident) >>
         colon_token: tlpunct!(:) >>
         conditional_param_def: opt!(tlsyn!(ConditionalParamDef)) >>
@@ -255,7 +260,7 @@ impl Synom for ParamConditional {
 }
 
 impl Synom for ConditionalParamDef {
-    named!(parse_str(&str) -> ConditionalParamDef, do_parse!(
+    named!(parse_cursor(Cursor) -> ConditionalParamDef, do_parse!(
         var_ident: tlsyn!(Ident) >>
         bit_selector: opt!(tlsyn!(BitSelector)) >>
         question_token: tlpunct!(?) >>
@@ -265,7 +270,7 @@ impl Synom for ConditionalParamDef {
 }
 
 impl Synom for BitSelector {
-    named!(parse_str(&str) -> BitSelector, do_parse!(
+    named!(parse_cursor(Cursor) -> BitSelector, do_parse!(
         dot_token: tlpunct!(.) >>
         bit_index: tlsyn!(BitIndex) >>
 
@@ -274,7 +279,7 @@ impl Synom for BitSelector {
 }
 
 impl Synom for ParamRepeated {
-    named!(parse_str(&str) -> ParamRepeated, do_parse!(
+    named!(parse_cursor(Cursor) -> ParamRepeated, do_parse!(
         param_repeated_ident: opt!(tlsyn!(ParamRepeatedIdent)) >>
         multiplicity: opt!(tlsyn!(Multiplicity)) >>
         params: brackets!(sp!(many0!(tlsyn!(Param)))) >>
@@ -289,7 +294,7 @@ impl Synom for ParamRepeated {
 }
 
 impl Synom for ParamRepeatedIdent {
-    named!(parse_str(&str) -> ParamRepeatedIdent, do_parse!(
+    named!(parse_cursor(Cursor) -> ParamRepeatedIdent, do_parse!(
         var_ident: tlsyn!(Ident) >>
         colon_token: tlpunct!(:) >>
 
@@ -298,7 +303,7 @@ impl Synom for ParamRepeatedIdent {
 }
 
 impl Synom for Multiplicity {
-    named!(parse_str(&str) -> Multiplicity, do_parse!(
+    named!(parse_cursor(Cursor) -> Multiplicity, do_parse!(
         term: tlsyn!(Ident) >>
         asterisk_token: tlpunct!(*) >>
 
@@ -307,7 +312,7 @@ impl Synom for Multiplicity {
 }
 
 impl Synom for ParamWithParen {
-    named!(parse_str(&str) -> ParamWithParen, do_parse!(
+    named!(parse_cursor(Cursor) -> ParamWithParen, do_parse!(
         param: parens!(tuple!(
             sp!(many1!(tlsyn!(Ident))),
             tlpunct!(:),
@@ -324,7 +329,7 @@ impl Synom for ParamWithParen {
 }
 
 impl Synom for ParamTypeOnly {
-    named!(parse_str(&str) -> ParamTypeOnly, do_parse!(
+    named!(parse_cursor(Cursor) -> ParamTypeOnly, do_parse!(
         ty: tlsyn!(Type) >>
 
         (ParamTypeOnly { ty })
@@ -333,12 +338,14 @@ impl Synom for ParamTypeOnly {
 
 // FIXME: Spanning
 impl Synom for ItemLayer {
-    named!(parse_str(&str) -> ItemLayer, sp!(do_parse!(
+    named!(parse_cursor(Cursor) -> ItemLayer, sp!(do_parse!(
         tag!("//") >>
         tag!("LAYER") >>
-        layer: map_res!(take_while!(is_decimal_digit), str::parse) >>
+        layer_cursor: take_while!(is_decimal_digit) >>
+        layer: map_res!(value!(layer_cursor.to_str()), str::parse) >>
+        span: value!(layer_cursor.span()) >>
 
-        (ItemLayer { span: Span::empty(), layer })
+        (ItemLayer { span, layer })
     )));
 }
 

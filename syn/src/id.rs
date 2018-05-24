@@ -1,5 +1,6 @@
 use std::fmt;
 
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -21,12 +22,16 @@ impl Id {
 }
 
 impl Synom for Id {
-    named!(parse_str(&str) -> Id, do_parse!(
-        // Doesn't work for `storage.fileJpeg#7efe0e = storage.FileType;`
-        //id: map_res!(take_while_m_n!(8, 8, is_hex_digit), u32_from_hex_str) >>
-        id: map_res!(take_while!(is_hex_digit), u32_from_hex_str) >>
+    named!(parse_cursor(Cursor) -> Id, do_parse!(
+        // (8, 8) doesn't work for `storage.fileJpeg#7efe0e = storage.FileType;`
+        //id_cursor: take_while_m_n!(8, 8, is_hex_digit) >>
+        // Cap at 8 hex digits, because ids are 32-bit numbers, but the must be
+        // at least one
+        id_cursor: take_while_m_n!(1, 8, is_hex_digit) >>
+        id: map_res!(value!(id_cursor.to_str()), u32_from_hex_str) >>
+        span: value!(id_cursor.span()) >>
 
-        (Id { span: Span::empty(), id })
+        (Id { span, id })
     ));
 }
 

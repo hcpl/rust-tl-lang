@@ -3,6 +3,7 @@ use std::fmt;
 use nom;
 
 use super::Item;
+use cursor::Cursor;
 use print::{Print, print_slice_with_separator};
 use span::Span;
 use spanned::Spanned;
@@ -15,7 +16,7 @@ pub struct File {
 }
 
 impl Synom for File {
-    named!(parse_str(&str) -> File, do_parse!(
+    named!(parse_cursor(Cursor) -> File, do_parse!(
         items: many0!(do_parse!(
             complete!(take_while!(char::is_whitespace)) >>
             item: tlsyn!(Item) >>

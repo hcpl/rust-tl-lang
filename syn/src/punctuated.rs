@@ -6,6 +6,7 @@ use std::vec;
 
 use nom;
 
+use cursor::Cursor;
 use print::Print;
 use span::Span;
 use spanned::Spanned;
@@ -74,13 +75,13 @@ where
     T: Synom,
     P: Synom,
 {
-    pub fn parse(
-        input: &str,
+    pub fn parse<'a>(
+        input: Cursor<'a>,
         trailing_punct: TrailingPunctuation,
         count: Count,
         whitespace: Whitespace,
-    ) -> nom::IResult<&str, Self> {
-        Self::parse_with(input, T::parse_str, trailing_punct, count, whitespace)
+    ) -> nom::IResult<Cursor<'a>, Self> {
+        Self::parse_with(input, T::parse_cursor, trailing_punct, count, whitespace)
     }
 }
 
@@ -88,13 +89,13 @@ impl<T, P> Punctuated<T, P>
 where
     P: Synom,
 {
-    fn parse_with(
-        mut input: &str,
-        parse: fn(&str) -> nom::IResult<&str, T>,
+    fn parse_with<'a>(
+        mut input: Cursor<'a>,
+        parse: fn(Cursor) -> nom::IResult<Cursor, T>,
         trailing_punct: TrailingPunctuation,
         count: Count,
         whitespace: Whitespace,
-    ) -> nom::IResult<&str, Self> {
+    ) -> nom::IResult<Cursor<'a>, Self> {
         let actual_parse = |s| match whitespace {
             Whitespace::None => parse(s),
             Whitespace::Present => sp!(s, parse),
@@ -106,21 +107,21 @@ where
         let (rest, res) = match actual_parse(input) {
             Err(_) => (input, res),
             Ok((i, o)) => {
-                if i == input {
+                if i.to_str() == input.to_str() {
                     return parse_error(input, 0);
                 }
                 input = i;
                 res.push_value(o);
 
                 // get the separator first
-                while let Ok((i2, s)) = P::parse_str(input) {
-                    if i2 == input {
+                while let Ok((i2, s)) = P::parse_cursor(input) {
+                    if i2.to_str() == input.to_str() {
                         break;
                     }
 
                     // get the element next
                     if let Ok((i3, o3)) = actual_parse(i2) {
-                        if i3 == i2 {
+                        if i3.to_str() == i2.to_str() {
                             break;
                         }
                         res.push_punct(s);
@@ -131,7 +132,7 @@ where
                     }
                 }
                 if let TrailingPunctuation::Optional = trailing_punct {
-                    if let Ok((after, sep)) = P::parse_str(input) {
+                    if let Ok((after, sep)) = P::parse_cursor(input) {
                         res.push_punct(sep);
                         input = after;
                     }
@@ -150,7 +151,7 @@ where
     }
 }
 
-fn parse_error<O, E>(input: &str, error: E) -> nom::IResult<&str, O, E> {
+fn parse_error<'a, O, E>(input: Cursor<'a>, error: E) -> nom::IResult<Cursor<'a>, O, E> {
     Err(nom::Err::Error(nom::Context::Code(input, nom::ErrorKind::Custom(error))))
 }
 
