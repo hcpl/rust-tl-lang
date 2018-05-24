@@ -104,7 +104,7 @@ macro_rules! token_delimiter {
 
                 let begin = input.offset();
                 let end = rest.offset();
-                let span = Span::new(begin as u32, end as u32);
+                let span = Span::new(begin, end);
 
                 Ok((rest, ($name(span), res_cursor)))
             }

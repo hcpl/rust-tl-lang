@@ -18,8 +18,8 @@ impl<'a> Cursor<'a> {
     }
 
     pub fn span(self) -> Span {
-        let start = self.offset as u32;
-        let end = (self.offset + self.remaining.len()) as u32;
+        let start = self.offset;
+        let end = self.offset + self.remaining.len();
 
         Span::new(start, end)
     }

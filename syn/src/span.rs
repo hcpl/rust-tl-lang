@@ -4,8 +4,8 @@ use std::cmp;
 /// A region of source text.
 #[derive(Clone, Copy, Debug)]
 pub struct Span {
-    start: u32,
-    end: u32,
+    start: usize,
+    end: usize,
 }
 
 impl Span {
@@ -13,7 +13,7 @@ impl Span {
         Span { start: 0, end: 0 }
     }
 
-    pub fn new(start: u32, end: u32) -> Span {
+    pub fn new(start: usize, end: usize) -> Span {
         let (start, end) = if start == 0 || end == 0 {
             (0, 0)
         } else if start <= end {
