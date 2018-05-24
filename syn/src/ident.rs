@@ -1,3 +1,5 @@
+use std::fmt;
+
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -55,6 +57,12 @@ impl Synom for Ident {
 impl Spanned for Ident {
     fn span(&self) -> Span {
         self.span
+    }
+}
+
+impl fmt::Display for Ident {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.string, f)
     }
 }
 

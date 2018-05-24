@@ -6,7 +6,7 @@ authors = ["Nguyen Duc My <hcpl.prog@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
 documentation = "https://docs.rs/tl-lang-syn"
-repository = "https://github.com/hcpl/tl-lang/syn"
+repository = "https://github.com/hcpl/tl-lang"
 keywords = ["parse", "parser", "telegram"]
 categories = ["parser-implementations"]
 

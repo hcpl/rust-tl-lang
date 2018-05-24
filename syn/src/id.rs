@@ -1,3 +1,5 @@
+use std::fmt;
+
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -30,5 +32,11 @@ impl Synom for Id {
 impl Spanned for Id {
     fn span(&self) -> Span {
         self.span
+    }
+}
+
+impl fmt::Display for Id {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::LowerHex::fmt(&self.id, f)
     }
 }

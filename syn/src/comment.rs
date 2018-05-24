@@ -1,3 +1,5 @@
+use std::fmt;
+
 use nom;
 
 use span::Span;
@@ -84,5 +86,32 @@ impl Spanned for CommentMultiLine {
     fn span(&self) -> Span {
         self.slash_asterisk_token.span()
             .to(self.content_span)
+    }
+}
+
+
+impl fmt::Display for Comment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Comment::SingleLine(ref t) => fmt::Display::fmt(t, f),
+            Comment::MultiLine(ref t) => fmt::Display::fmt(t, f),
+        }
+    }
+}
+
+impl fmt::Display for CommentSingleLine {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt("//", f)?;
+        fmt::Display::fmt(&self.content, f)?;
+
+        Ok(())
+    }
+}
+
+impl fmt::Display for CommentMultiLine {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        SlashAsterisk::print(f, |f| {
+            fmt::Display::fmt(&self.content, f)
+        })
     }
 }

@@ -1,5 +1,7 @@
 //! Tokens representing TL language punctuation, keywords, and delimiters.
 
+use std::fmt;
+
 use span::Span;
 use spanned::Spanned;
 use synom::Synom;
@@ -11,7 +13,7 @@ macro_rules! tokens {
             $($punct:tt pub struct $punct_name:ident #[$punct_doc:meta])*
         }
         delimiter: {
-            $($delimiter:tt pub struct $delimiter_name:ident #[$delimiter_doc:meta])*
+            $($delimiter_left:tt $delimiter_right:tt pub struct $delimiter_name:ident #[$delimiter_doc:meta])*
         }
         keyword: {
             $($keyword:tt pub struct $keyword_name:ident #[$keyword_doc:meta])*
@@ -19,7 +21,7 @@ macro_rules! tokens {
     ) => (
         $(token_punct_def! { #[$punct_doc] $punct pub struct $punct_name })*
         $(token_punct_parser! { $punct pub struct $punct_name })*
-        $(token_delimiter! { #[$delimiter_doc] $delimiter pub struct $delimiter_name })*
+        $(token_delimiter! { #[$delimiter_doc] $delimiter_left $delimiter_right pub struct $delimiter_name })*
         $(token_keyword! { #[$keyword_doc] $keyword pub struct $keyword_name })*
     )
 }
@@ -64,11 +66,17 @@ macro_rules! token_punct_parser {
                 self.0
             }
         }
+
+        impl fmt::Display for $name {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                fmt::Display::fmt($punct, f)
+            }
+        }
     }
 }
 
 macro_rules! token_delimiter {
-    (#[$doc:meta] $delimiter:tt pub struct $name:ident) => {
+    (#[$doc:meta] $delimiter_left:tt $delimiter_right:tt pub struct $name:ident) => {
         #[$doc]
         ///
         /// Don't try to remember the name of this type -- use the [`TLToken!`]
@@ -99,17 +107,23 @@ macro_rules! token_delimiter {
             where
                 F: FnOnce(&'a str) -> $crate::nom::IResult<&'a str, R>,
             {
-                let (left, right) = match $delimiter {
-                    "{"  => ("{", "}"),
-                    "["  => ("[", "]"),
-                    "("  => ("(", ")"),
-                    "/*" => ("/*", "*/"),
-                    _ => unreachable!(),
-                };
-
                 // FIXME: Handle nesting (low-priority)
-                let (rest, res) = delimited!(s, tag!(left), call!(f), tag!(right))?;
+                let (rest, res) = delimited!(s, tag!($delimiter_left), call!(f), tag!($delimiter_right))?;
                 Ok((rest, ($name(Span::empty()), res)))
+            }
+
+            pub fn print<F>(
+                fmtr: &mut fmt::Formatter,
+                f: F,
+            ) -> fmt::Result
+            where
+                F: FnOnce(&mut fmt::Formatter) -> fmt::Result
+            {
+                fmtr.write_str($delimiter_left)?;
+                f(fmtr)?;
+                fmtr.write_str($delimiter_right)?;
+
+                Ok(())
             }
         }
 
@@ -156,36 +170,42 @@ macro_rules! token_keyword {
                 self.0
             }
         }
+
+        impl fmt::Display for $name {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                fmt::Display::fmt($keyword, f)
+            }
+        }
     }
 }
 
 tokens! {
     punct: {
-        "*"      pub struct Asterisk      /// `!`
-        ","      pub struct Comma         /// `,`
-        ":"      pub struct Colon         /// `:`
-        "."      pub struct Dot           /// `.`
-        "="      pub struct Equals        /// `=`
-        "!"      pub struct Excl          /// `!`
-        "#"      pub struct Hash          /// `#`
-        "<"      pub struct LAngle        /// `<`
-        "%"      pub struct Percent       /// `%`
-        "+"      pub struct Plus          /// `+`
-        "?"      pub struct Question      /// `?`
-        ">"      pub struct RAngle        /// `>`
-        ";"      pub struct Semicolon     /// `;`
-        "//"     pub struct SlashSlash    /// `//`
+        "*"        pub struct Asterisk        /// `!`
+        ","        pub struct Comma           /// `,`
+        ":"        pub struct Colon           /// `:`
+        "."        pub struct Dot             /// `.`
+        "="        pub struct Equals          /// `=`
+        "!"        pub struct Excl            /// `!`
+        "#"        pub struct Hash            /// `#`
+        "<"        pub struct LAngle          /// `<`
+        "%"        pub struct Percent         /// `%`
+        "+"        pub struct Plus            /// `+`
+        "?"        pub struct Question        /// `?`
+        ">"        pub struct RAngle          /// `>`
+        ";"        pub struct Semicolon       /// `;`
+        "//"       pub struct SlashSlash      /// `//`
     }
     delimiter: {
-        "{"      pub struct Brace           /// `{...}`
-        "["      pub struct Bracket         /// `[...]`
-        "("      pub struct Paren           /// `(...)`
-        "/*"     pub struct SlashAsterisk   /// `/*...*/`
+        "{"   "}"  pub struct Brace           /// `{...}`
+        "["   "]"  pub struct Bracket         /// `[...]`
+        "("   ")"  pub struct Paren           /// `(...)`
+        "/*" "*/"  pub struct SlashAsterisk   /// `/*...*/`
     }
     keyword: {
-        "Empty"  pub struct Empty           /// `Empty`
-        "Final"  pub struct Final           /// `Final`
-        "New"    pub struct New             /// `New`
+        "Empty"    pub struct Empty           /// `Empty`
+        "Final"    pub struct Final           /// `Final`
+        "New"      pub struct New             /// `New`
     }
 }
 

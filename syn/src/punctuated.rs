@@ -1,5 +1,6 @@
 //! A punctuated sequence of syntax tree nodes separated by punctuation.
 
+use std::fmt;
 use std::option;
 use std::vec;
 
@@ -152,13 +153,61 @@ fn parse_error<O, E>(input: &str, error: E) -> nom::IResult<&str, O, E> {
     Err(nom::Err::Error(nom::Context::Code(input, nom::ErrorKind::Custom(error))))
 }
 
+impl<T, P> Punctuated<T, P>
+where
+    T: fmt::Display,
+    P: fmt::Display,
+{
+    pub fn print(
+        &self,
+        f: &mut fmt::Formatter,
+        whitespace: Whitespace,
+    ) -> fmt::Result {
+        self.print_with(f, fmt::Display::fmt, whitespace)
+    }
+}
+
+impl<T, P> Punctuated<T, P>
+where
+    P: fmt::Display,
+{
+    fn print_with(
+        &self,
+        f: &mut fmt::Formatter,
+        print: fn(&T, &mut fmt::Formatter) -> fmt::Result,
+        whitespace: Whitespace,
+    ) -> fmt::Result {
+        let maybe_space = match whitespace {
+            Whitespace::None => "",
+            Whitespace::Present => " ",
+        };
+
+        for &(ref t, ref p) in &self.inner {
+            print(t, f)?;
+            f.write_str(maybe_space)?;
+            fmt::Display::fmt(p, f)?;
+            f.write_str(maybe_space)?;
+        }
+
+        if let Some(ref last) = self.last {
+            print(last, f)?;
+        }
+
+        Ok(())
+    }
+}
+
 impl<T, P> Spanned for Punctuated<T, P>
 where
     T: Spanned,
     P: Spanned,
 {
     fn span(&self) -> Span {
-        unimplemented!()
+        let spans_iter = self.inner
+            .iter()
+            .map(|&(ref t, ref p)| t.span().to(p.span()));
+
+        Span::union(spans_iter).to(self.last.span())
     }
 }
 

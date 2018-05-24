@@ -1,3 +1,5 @@
+use std::fmt;
+
 use synom::Synom;
 use span::Span;
 use spanned::Spanned;
@@ -25,6 +27,12 @@ impl Synom for BitIndex {
 impl Spanned for BitIndex {
     fn span(&self) -> Span {
         self.span
+    }
+}
+
+impl fmt::Display for BitIndex {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.index, f)
     }
 }
 

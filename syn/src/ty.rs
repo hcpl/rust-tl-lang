@@ -1,3 +1,5 @@
+use std::fmt;
+
 use super::{Ident, SafeParameterizedPath};
 use span::Span;
 use spanned::Spanned;
@@ -91,5 +93,37 @@ impl Spanned for TypeTypeParameter {
     fn span(&self) -> Span {
         self.excl_token.span()
             .to(self.ident.span())
+    }
+}
+
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Type::Int(ref t) => fmt::Display::fmt(t, f),
+            Type::ParameterizedPath(ref t) => fmt::Display::fmt(t, f),
+            Type::TypeParameter(ref t) => fmt::Display::fmt(t, f),
+        }
+    }
+}
+
+impl fmt::Display for TypeInt {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.hash_token, f)
+    }
+}
+
+impl fmt::Display for TypeParameterizedPath {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.safe_parameterized_path, f)
+    }
+}
+
+impl fmt::Display for TypeTypeParameter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.excl_token, f)?;
+        fmt::Display::fmt(&self.ident, f)?;
+
+        Ok(())
     }
 }

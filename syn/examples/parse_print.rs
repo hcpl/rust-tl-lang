@@ -9,18 +9,34 @@ use std::path::Path;
 use std::process;
 
 
+#[derive(Clone, Copy, Debug)]
+enum PrintMode {
+    SyntaxTree,
+    Schema,
+}
+
+
 fn main() {
     let args = env::args().collect::<Vec<_>>();
 
-    if args.len() != 3 {
-        eprintln!("Usage: {} <INPUT_FILE> <OUTPUT_FILE>", args[0]);
+    if args.len() != 4 {
+        eprintln!("Usage: {} <DUMP_MODE> <INPUT_FILE> <OUTPUT_FILE>", args[0]);
         process::exit(1);
     }
 
-    dump_syntax_tree(&args[1], &args[2]).unwrap();
+    let print_mode = match args[1].as_str() {
+        "syntax-tree" | "syntax_tree" => PrintMode::SyntaxTree,
+        "schema" => PrintMode::Schema,
+        other => {
+            eprintln!("Invalid print mode: {}", other);
+            process::exit(1);
+        },
+    };
+
+    parse_print(print_mode, &args[2], &args[3]).unwrap();
 }
 
-fn dump_syntax_tree<P1, P2>(input_path: P1, output_path: P2) -> io::Result<()>
+fn parse_print<P1, P2>(print_mode: PrintMode, input_path: P1, output_path: P2) -> io::Result<()>
 where
     P1: AsRef<Path>,
     P2: AsRef<Path>,
@@ -39,7 +55,11 @@ where
 
     {
         let mut output_file = File::create(output_path)?;
-        write!(output_file, "{:#?}", scheme)?;
+
+        match print_mode {
+            PrintMode::SyntaxTree => write!(output_file, "{:#?}", scheme)?,
+            PrintMode::Schema => write!(output_file, "{}", scheme)?,
+        }
     }
 
     Ok(())

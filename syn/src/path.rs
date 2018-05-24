@@ -1,3 +1,5 @@
+use std::fmt;
+
 use super::Ident;
 use punctuated::{Count, Punctuated, TrailingPunctuation, Whitespace};
 use span::Span;
@@ -201,5 +203,86 @@ impl Spanned for SafeParameterizedPathParenthesized {
     fn span(&self) -> Span {
         self.paren_token.span()
             .to(self.parameterized_path.span())
+    }
+}
+
+
+impl fmt::Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.segments.print(f, Whitespace::None)
+    }
+}
+
+impl fmt::Display for ParameterizedPath {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.path, f)?;
+        if let Some(ref args) = self.args {
+            fmt::Display::fmt(args, f)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl fmt::Display for GenericArguments {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GenericArguments::AngleBracketed(ref t) => fmt::Display::fmt(t, f),
+            GenericArguments::SpaceSeparated(ref t) => fmt::Display::fmt(t, f),
+        }
+    }
+}
+
+impl fmt::Display for AngleBracketedGenericArguments {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.langle_token, f)?;
+        self.args.print(f, Whitespace::Present)?;
+        fmt::Display::fmt(&self.rangle_token, f)?;
+
+        Ok(())
+    }
+}
+
+impl fmt::Display for SpaceSeparatedGenericArguments {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut args_iter = self.args.iter();
+
+        let first_arg = args_iter.next().unwrap();
+        fmt::Display::fmt(first_arg, f)?;
+
+        for other_arg in args_iter {
+            fmt::Display::fmt(" ", f)?;
+            fmt::Display::fmt(other_arg, f)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl fmt::Display for SafeParameterizedPath {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SafeParameterizedPath::SpaceImmune(ref t) => fmt::Display::fmt(t, f),
+            SafeParameterizedPath::Parenthesized(ref t) => fmt::Display::fmt(t, f),
+        }
+    }
+}
+
+impl fmt::Display for SafeParameterizedPathSpaceImmune {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(&self.path, f)?;
+        if let Some(ref args) = self.args {
+            fmt::Display::fmt(args, f)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl fmt::Display for SafeParameterizedPathParenthesized {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Paren::print(f, |f| {
+            fmt::Display::fmt(&self.parameterized_path, f)
+        })
     }
 }
