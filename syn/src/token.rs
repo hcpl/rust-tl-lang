@@ -218,6 +218,9 @@ tokens! {
         "Empty"    pub struct Empty           /// `Empty`
         "Final"    pub struct Final           /// `Final`
         "New"      pub struct New             /// `New`
+        // Technically not a keyword since it is a usual ident in source text,
+        // but it has a special meaning in single-line comments
+        "LAYER"    pub struct Layer           /// `LAYER`
     }
 }
 
@@ -242,6 +245,14 @@ macro_rules! tlpunct {
     // single-line comment
 }
 
+#[cfg(feature = "parsing")]
+macro_rules! tlkeyword {
+    ($i:expr, empty) => { call!($i, <$crate::token::Empty as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, final) => { call!($i, <$crate::token::Final as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, new) => { call!($i, <$crate::token::New as $crate::synom::Synom>::parse_cursor) };
+    ($i:expr, LAYER) => { call!($i, <$crate::token::Layer as $crate::synom::Synom>::parse_cursor) };
+}
+
 
 macro_rules! TLToken {
     (*) => { $crate::token::Asterisk };
@@ -259,4 +270,9 @@ macro_rules! TLToken {
     (;) => { $crate::token::Semicolon };
     // No `(//) => { $crate::token::SlashSlash };` because you can't write `//` in Rust code
     // without being interpreted as the start of a single-line comment
+
+    (Empty) => { $crate::token::Empty };
+    (Final) => { $crate::token::Final };
+    (New) => { $crate::token::New };
+    (LAYER) => { $crate::token::Layer };
 }

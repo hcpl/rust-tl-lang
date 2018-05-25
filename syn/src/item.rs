@@ -10,7 +10,7 @@ use span::Span;
 use spanned::Spanned;
 #[cfg(feature = "parsing")]
 use synom::Synom;
-use token::{Brace, Bracket, Paren};
+use token::{Brace, Bracket, Paren, SlashSlash};
 #[cfg(feature = "parsing")]
 use utils::is_decimal_digit;
 
@@ -19,10 +19,10 @@ use utils::is_decimal_digit;
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum Item {
-    Comment(ItemComment),
-    Delimiter(ItemDelimiter),
     Combinator(ItemCombinator),
+    Delimiter(ItemDelimiter),
     Layer(ItemLayer),
+    Comment(ItemComment),
 }
 
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
@@ -176,7 +176,9 @@ pub struct ParamTypeOnly {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct ItemLayer {
-    pub span: Span,
+    pub slash_slash_token: SlashSlash,
+    pub layer_token: TLToken![LAYER],
+    pub layer_span: Span,
     pub layer: u32,
 }
 
@@ -214,13 +216,13 @@ impl PartialEq for ItemLayer {
 #[cfg(feature = "parsing")]
 impl Synom for Item {
     named!(parse_cursor(Cursor) -> Item, alt_complete!(
-        tlsyn!(ItemComment) => { Item::Comment }
+        tlsyn!(ItemCombinator) => { Item::Combinator }
         |
         tlsyn!(ItemDelimiter) => { Item::Delimiter }
         |
-        tlsyn!(ItemCombinator) => { Item::Combinator }
-        |
         tlsyn!(ItemLayer) => { Item::Layer }
+        |
+        tlsyn!(ItemComment) => { Item::Comment }
     ));
 }
 
@@ -425,13 +427,13 @@ impl Synom for ParamTypeOnly {
 #[cfg(feature = "parsing")]
 impl Synom for ItemLayer {
     named!(parse_cursor(Cursor) -> ItemLayer, sp!(do_parse!(
-        tag!("//") >>
-        tag!("LAYER") >>
+        slash_slash_token: tlsyn!(SlashSlash) >>
+        layer_token: tlkeyword!(LAYER) >>
         layer_cursor: take_while!(is_decimal_digit) >>
+        layer_span: value!(layer_cursor.span()) >>
         layer: map_res!(value!(layer_cursor.to_str()), str::parse) >>
-        span: value!(layer_cursor.span()) >>
 
-        (ItemLayer { span, layer })
+        (ItemLayer { slash_slash_token, layer_token, layer_span, layer })
     )));
 }
 
@@ -439,10 +441,10 @@ impl Synom for ItemLayer {
 impl Spanned for Item {
     fn span(&self) -> Span {
         match *self {
-            Item::Comment(ref t) => t.span(),
-            Item::Delimiter(ref t) => t.span(),
             Item::Combinator(ref t) => t.span(),
+            Item::Delimiter(ref t) => t.span(),
             Item::Layer(ref t) => t.span(),
+            Item::Comment(ref t) => t.span(),
         }
     }
 }
@@ -583,7 +585,9 @@ impl Spanned for ParamTypeOnly {
 
 impl Spanned for ItemLayer {
     fn span(&self) -> Span {
-        self.span
+        self.slash_slash_token.span()
+            .to(self.layer_token.span())
+            .to(self.layer_span)
     }
 }
 
