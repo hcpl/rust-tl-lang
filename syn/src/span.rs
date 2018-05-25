@@ -38,8 +38,7 @@ impl Span {
         Span { begin, end }
     }
 
-    #[cfg(feature = "parsing")]
-    pub(crate) unsafe fn new_unchecked(begin: usize, end: usize) -> Span {
+    pub unsafe fn new_unchecked(begin: usize, end: usize) -> Span {
         Span { begin, end }
     }
 

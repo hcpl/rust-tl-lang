@@ -1,14 +1,4 @@
-#[cfg(feature = "printing")]
-use std::fmt;
-
-#[cfg(feature = "parsing")]
-use cursor::Cursor;
-#[cfg(feature = "printing")]
-use print::Print;
 use span::Span;
-use spanned::Spanned;
-#[cfg(feature = "parsing")]
-use synom::Synom;
 
 
 /// An identifier: `channels`, `SendMessageAction`.
@@ -67,29 +57,47 @@ impl PartialEq for Ident {
     }
 }
 
-#[cfg(feature = "parsing")]
-impl Synom for Ident {
-    named!(parse_cursor(Cursor) -> Ident, do_parse!(
-        ident_str_cursor: take_while!(is_ident_char) >>
-        ident_str: verify!(value!(ident_str_cursor.to_str()), is_valid_ident) >>
+mod spanned {
+    use super::*;
+    use spanned::Spanned;
 
-        (Ident {
-            span: ident_str_cursor.span(),
-            string: ident_str.to_owned(),
-        })
-    ));
+    impl Spanned for Ident {
+        fn span(&self) -> Span {
+            self.span
+        }
+    }
 }
 
-impl Spanned for Ident {
-    fn span(&self) -> Span {
-        self.span
+#[cfg(feature = "parsing")]
+mod parsing {
+    use super::*;
+    use cursor::Cursor;
+    use synom::Synom;
+
+    impl Synom for Ident {
+        named!(parse_cursor(Cursor) -> Ident, do_parse!(
+            ident_str_cursor: take_while!(is_ident_char) >>
+            ident_str: verify!(value!(ident_str_cursor.to_str()), is_valid_ident) >>
+
+            (Ident {
+                span: ident_str_cursor.span(),
+                string: ident_str.to_owned(),
+            })
+        ));
     }
 }
 
 #[cfg(feature = "printing")]
-impl Print for Ident {
-    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.string, f)
+mod printing {
+    use std::fmt;
+
+    use super::*;
+    use print::Print;
+
+    impl Print for Ident {
+        fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            fmt::Display::fmt(&self.string, f)
+        }
     }
 }
 

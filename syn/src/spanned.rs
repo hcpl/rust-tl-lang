@@ -20,7 +20,6 @@ impl<T: Spanned + ?Sized> Spanned for Box<T> {
     }
 }
 
-// FIXME: Use correct initial spanning
 impl<T: Spanned> Spanned for Option<T> {
     fn span(&self) -> Span {
         match *self {

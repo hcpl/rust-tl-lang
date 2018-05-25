@@ -1,16 +1,4 @@
-#[cfg(feature = "printing")]
-use std::fmt;
-
-#[cfg(feature = "parsing")]
-use cursor::Cursor;
-#[cfg(feature = "printing")]
-use print::Print;
-#[cfg(feature = "parsing")]
-use synom::Synom;
 use span::Span;
-use spanned::Spanned;
-#[cfg(feature = "parsing")]
-use utils::is_decimal_digit;
 
 
 /// An index pointing to the n-th bit of a `#` value (or, an `u32` value).
@@ -55,27 +43,46 @@ impl PartialEq for BitIndex {
     }
 }
 
-#[cfg(feature = "parsing")]
-impl Synom for BitIndex {
-    named!(parse_cursor(Cursor) -> BitIndex, do_parse!(
-        index_str_cursor: take_while!(is_decimal_digit) >>
-        index_raw: map_res!(value!(index_str_cursor.to_str()), str::parse) >>
-        index: verify!(value!(index_raw), is_valid_nat_bit_index) >>
-        span: value!(index_str_cursor.span()) >>
+mod spanned {
+    use super::*;
+    use spanned::Spanned;
 
-        (BitIndex { span, index })
-    ));
+    impl Spanned for BitIndex {
+        fn span(&self) -> Span {
+            self.span
+        }
+    }
 }
 
-impl Spanned for BitIndex {
-    fn span(&self) -> Span {
-        self.span
+#[cfg(feature = "parsing")]
+mod parsing {
+    use super::*;
+    use cursor::Cursor;
+    use synom::Synom;
+    use utils::is_decimal_digit;
+
+    impl Synom for BitIndex {
+        named!(parse_cursor(Cursor) -> BitIndex, do_parse!(
+            index_str_cursor: take_while!(is_decimal_digit) >>
+            index_raw: map_res!(value!(index_str_cursor.to_str()), str::parse) >>
+            index: verify!(value!(index_raw), is_valid_nat_bit_index) >>
+            span: value!(index_str_cursor.span()) >>
+
+            (BitIndex { span, index })
+        ));
     }
 }
 
 #[cfg(feature = "printing")]
-impl Print for BitIndex {
-    fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.index, f)
+mod printing {
+    use std::fmt;
+
+    use super::*;
+    use print::Print;
+
+    impl Print for BitIndex {
+        fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            fmt::Display::fmt(&self.index, f)
+        }
     }
 }
