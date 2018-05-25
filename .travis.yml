@@ -25,3 +25,29 @@ script:
 
   - cargo test --verbose --manifest-path syn/Cargo.toml
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
+
+matrix:
+  include:
+    # Host documentation on <https://hcpl.github.com/rust-tl-lang>
+    - rust: nightly
+      env: DOC_UPLOAD  # Just a marker visible from Travis logs
+      install:
+        - cargo install cargo-update || echo "cargo-update already installed"
+        - cargo install cargo-travis || echo "cargo-travis already installed"
+        - cargo install-update cargo-travis
+      script:
+        - cargo doc --manifest-path syn/Cargo.toml
+        - git clone --depth=1 --branch gh-pages "https://github.com/${TRAVIS_REPO_SLUG}" target/gh-pages
+        - |
+          if [ -e "target/gh-pages/${TRAVIS_BRANCH}/index.html" ]; then
+              rm -f target/doc/index.html
+          else
+              # FIXME: redirect to `tl_lang` when it becomes more or less ready
+              # (do that for root `index.html` in `gh-pages` branch too)
+              echo '<!DOCTYPE html>' > target/doc/index.html
+              echo '<meta http-equiv="refresh" content="0; url=tl_lang_syn/">' >> target/doc/index.html
+              echo '<a href="tl_lang_syn/">Redirect</a>' >> target/doc/index.html
+          fi
+        - rm -rf target/gh-pages
+      after_success:
+        - cargo doc-upload
