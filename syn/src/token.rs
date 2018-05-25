@@ -1,11 +1,15 @@
 //! Tokens representing TL language punctuation, keywords, and delimiters.
 
+#[cfg(feature = "printing")]
 use std::fmt;
 
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 
 
@@ -36,11 +40,14 @@ macro_rules! token_punct_def {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        #[derive(Clone, Debug)]
+        #[cfg_attr(feature = "clone-impls", derive(Clone))]
+        #[cfg_attr(feature = "debug-impls", derive(Debug))]
         pub struct $name(pub Span);
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::Eq for $name {}
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
@@ -51,6 +58,7 @@ macro_rules! token_punct_def {
 
 macro_rules! token_punct_parser {
     ($punct:tt pub struct $name:ident) => {
+        #[cfg(feature = "parsing")]
         impl Synom for $name {
             named!(parse_cursor(Cursor) -> $name, map!(tag!($punct), |cursor| {
                 $name(cursor.span())
@@ -63,6 +71,7 @@ macro_rules! token_punct_parser {
             }
         }
 
+        #[cfg(feature = "printing")]
         impl Print for $name {
             fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 f.write_str($punct)
@@ -79,11 +88,14 @@ macro_rules! token_delimiter {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        #[derive(Clone, Debug)]
+        #[cfg_attr(feature = "clone-impls", derive(Clone))]
+        #[cfg_attr(feature = "debug-impls", derive(Debug))]
         pub struct $name(pub Span);
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::Eq for $name {}
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
@@ -91,6 +103,7 @@ macro_rules! token_delimiter {
         }
 
         impl $name {
+            #[cfg(feature = "parsing")]
             pub fn parse<'a, F, R>(
                 input: Cursor<'a>,
                 f: F,
@@ -110,6 +123,7 @@ macro_rules! token_delimiter {
                 Ok((rest, ($name(span), res_cursor)))
             }
 
+            #[cfg(feature = "printing")]
             pub fn print<F>(
                 fmtr: &mut fmt::Formatter,
                 f: F,
@@ -141,17 +155,21 @@ macro_rules! token_keyword {
         /// macro instead.
         ///
         /// [`Token!`]: index.html
-        #[derive(Clone, Debug)]
+        #[cfg_attr(feature = "clone-impls", derive(Clone))]
+        #[cfg_attr(feature = "debug-impls", derive(Debug))]
         pub struct $name(pub Span);
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::Eq for $name {}
 
+        #[cfg(feature = "eq-impls")]
         impl ::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
             }
         }
 
+        #[cfg(feature = "parsing")]
         impl Synom for $name {
             named!(parse_cursor(Cursor) -> $name, map!(tag!($keyword), |cursor| {
                 $name(cursor.span())
@@ -164,6 +182,7 @@ macro_rules! token_keyword {
             }
         }
 
+        #[cfg(feature = "printing")]
         impl Print for $name {
             fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 f.write_str($keyword)
@@ -203,6 +222,7 @@ tokens! {
 }
 
 
+#[cfg(feature = "parsing")]
 macro_rules! tlpunct {
     ($i:expr, *) => { call!($i, <$crate::token::Asterisk as $crate::synom::Synom>::parse_cursor) };
     ($i:expr, ,) => { call!($i, <$crate::token::Comma as $crate::synom::Synom>::parse_cursor) };

@@ -1,37 +1,53 @@
+#[cfg(feature = "printing")]
 use std::fmt;
 
 use super::Ident;
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
-use punctuated::{Count, Punctuated, TrailingPunctuation, Whitespace};
+use punctuated::Punctuated;
+#[cfg(any(feature = "parsing", feature = "printing"))]
+use punctuated::{Count, Whitespace};
+#[cfg(feature = "parsing")]
+use punctuated::TrailingPunctuation;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 use token::Paren;
 
 
 /// A dot-separated list of identifiers.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct Path {
     pub segments: Punctuated<Ident, TLToken![.]>,
 }
 
 /// A dot-separated list of identifiers with optional generic arguments.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParameterizedPath {
     pub path: Path,
     pub args: Option<GenericArguments>,
 }
 
 /// Generic arguments for parameterized paths.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum GenericArguments {
     AngleBracketed(AngleBracketedGenericArguments),
     SpaceSeparated(SpaceSeparatedGenericArguments),
 }
 
 /// A comma-separated list of generic arguments enclosed in angle tokens.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct AngleBracketedGenericArguments {
     pub langle_token: TLToken![<],
     pub args: Punctuated<ParameterizedPath, TLToken![,]>,
@@ -39,34 +55,43 @@ pub struct AngleBracketedGenericArguments {
 }
 
 /// A space-separated list of generic arguments.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct SpaceSeparatedGenericArguments {
     pub args: Vec<ParameterizedPath>,
 }
 
 /// A dot-separated list of identifiers with optional generic arguments that
 /// spans over a single token tree group.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum SafeParameterizedPath {
     SpaceImmune(SafeParameterizedPathSpaceImmune),
     Parenthesized(SafeParameterizedPathParenthesized),
 }
 
 /// A parameterized path that spans a single token tree group.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct SafeParameterizedPathSpaceImmune {
     pub path: Path,
     pub args: Option<AngleBracketedGenericArguments>,
 }
 
 /// An arbitrary parameterized path enclosed in parentheses.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct SafeParameterizedPathParenthesized {
     pub paren_token: Paren,
     pub parameterized_path: ParameterizedPath,
 }
 
 
+#[cfg(feature = "parsing")]
 impl Synom for Path {
     named!(parse_cursor(Cursor) -> Path, do_parse!(
         segments: call!(|s| Punctuated::parse(
@@ -80,6 +105,7 @@ impl Synom for Path {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParameterizedPath {
     named!(parse_cursor(Cursor) -> ParameterizedPath, do_parse!(
         path: tlsyn!(Path) >>
@@ -89,6 +115,7 @@ impl Synom for ParameterizedPath {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for GenericArguments {
     named!(parse_cursor(Cursor) -> GenericArguments, alt_complete!(
         tlsyn!(AngleBracketedGenericArguments) => { GenericArguments::AngleBracketed }
@@ -97,6 +124,7 @@ impl Synom for GenericArguments {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for AngleBracketedGenericArguments {
     named!(parse_cursor(Cursor) -> AngleBracketedGenericArguments, do_parse!(
         langle_token: tlpunct!(<) >>
@@ -112,6 +140,7 @@ impl Synom for AngleBracketedGenericArguments {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for SpaceSeparatedGenericArguments {
     named!(parse_cursor(Cursor) -> SpaceSeparatedGenericArguments, do_parse!(
         args: sp!(many1!(tlsyn!(ParameterizedPath))) >>
@@ -120,6 +149,7 @@ impl Synom for SpaceSeparatedGenericArguments {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for SafeParameterizedPath {
     named!(parse_cursor(Cursor) -> SafeParameterizedPath, alt_complete!(
         tlsyn!(SafeParameterizedPathSpaceImmune) => { SafeParameterizedPath::SpaceImmune }
@@ -128,6 +158,7 @@ impl Synom for SafeParameterizedPath {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for SafeParameterizedPathSpaceImmune {
     named!(parse_cursor(Cursor) -> SafeParameterizedPathSpaceImmune, do_parse!(
         path: tlsyn!(Path) >>
@@ -137,6 +168,7 @@ impl Synom for SafeParameterizedPathSpaceImmune {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for SafeParameterizedPathParenthesized {
     named!(parse_cursor(Cursor) -> SafeParameterizedPathParenthesized, do_parse!(
         parameterized_path: parens!(tlsyn!(ParameterizedPath)) >>
@@ -209,12 +241,14 @@ impl Spanned for SafeParameterizedPathParenthesized {
 }
 
 
+#[cfg(feature = "printing")]
 impl Print for Path {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.segments.print(f, Count::OneOrMore, Whitespace::None)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParameterizedPath {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.path.print(f)?;
@@ -224,6 +258,7 @@ impl Print for ParameterizedPath {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for GenericArguments {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -233,6 +268,7 @@ impl Print for GenericArguments {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for AngleBracketedGenericArguments {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.langle_token.print(f)?;
@@ -243,6 +279,7 @@ impl Print for AngleBracketedGenericArguments {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for SpaceSeparatedGenericArguments {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let (first, rest) = self.args.split_first().unwrap();  // There must be at least one argument
@@ -258,6 +295,7 @@ impl Print for SpaceSeparatedGenericArguments {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for SafeParameterizedPath {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -267,6 +305,7 @@ impl Print for SafeParameterizedPath {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for SafeParameterizedPathSpaceImmune {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.path.print(f)?;
@@ -276,6 +315,7 @@ impl Print for SafeParameterizedPathSpaceImmune {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for SafeParameterizedPathParenthesized {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Paren::print(f, |f| {

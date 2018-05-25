@@ -1,19 +1,26 @@
 //! A punctuated sequence of syntax tree nodes separated by punctuation.
 
+#[cfg(feature = "printing")]
 use std::fmt;
 use std::option;
 use std::vec;
 
+#[cfg(feature = "parsing")]
 use nom;
 
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct Punctuated<T, P> {
     inner: Vec<(T, P)>,
     last: Option<Box<T>>,
@@ -70,6 +77,7 @@ where
     }
 }
 
+#[cfg(feature = "parsing")]
 impl<T, P> Punctuated<T, P>
 where
     T: Synom,
@@ -85,6 +93,7 @@ where
     }
 }
 
+#[cfg(feature = "parsing")]
 impl<T, P> Punctuated<T, P>
 where
     P: Synom,
@@ -151,10 +160,12 @@ where
     }
 }
 
+#[cfg(feature = "parsing")]
 fn parse_error<'a, O, E>(input: Cursor<'a>, error: E) -> nom::IResult<Cursor<'a>, O, E> {
     Err(nom::Err::Error(nom::Context::Code(input, nom::ErrorKind::Custom(error))))
 }
 
+#[cfg(feature = "printing")]
 impl<T, P> Punctuated<T, P>
 where
     T: Print,
@@ -170,6 +181,7 @@ where
     }
 }
 
+#[cfg(feature = "printing")]
 impl<T, P> Punctuated<T, P>
 where
     P: Print,

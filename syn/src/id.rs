@@ -1,26 +1,27 @@
+#[cfg(feature = "printing")]
 use std::fmt;
 
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
+#[cfg(feature = "parsing")]
 use utils::{is_hex_digit, u32_from_hex_str};
 
 
 /// A 32-bit number which identifies a TL combinator.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct Id {
-    span: Span,
-    id: u32,
+    pub span: Span,
+    pub id: u32,
 }
 
-impl Id {
-    pub fn new(span: Span, id: u32) -> Self {
-        Id { span, id }
-    }
-}
-
+#[cfg(feature = "parsing")]
 impl Synom for Id {
     named!(parse_cursor(Cursor) -> Id, do_parse!(
         // (8, 8) doesn't work for `storage.fileJpeg#7efe0e = storage.FileType;`
@@ -35,12 +36,23 @@ impl Synom for Id {
     ));
 }
 
+#[cfg(feature = "eq-impls")]
+impl Eq for Id {}
+
+#[cfg(feature = "eq-impls")]
+impl PartialEq for Id {
+    fn eq(&self, other: &Id) -> bool {
+        self.id == other.id
+    }
+}
+
 impl Spanned for Id {
     fn span(&self) -> Span {
         self.span
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for Id {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::LowerHex::fmt(&self.id, f)

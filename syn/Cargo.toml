@@ -14,7 +14,29 @@ categories = ["parser-implementations"]
 travis-ci = { repository = "hcpl/tl-lang" }
 
 [dependencies]
-nom = "4"
+nom = { version = "4", optional = true }
 
 [build-dependencies]
 version_check = "0.1"
+
+[dev-dependencies]
+pretty_assertions = "0.5"
+
+[features]
+default = []
+clone-impls = []
+debug-impls = []
+eq-impls = []
+parsing = ["nom"]
+printing = []
+
+[package.metadata.docs.rs]
+all-features = true
+
+[[example]]
+name = "parse_print"
+required-features = ["parsing", "printing", "debug-impls"]
+
+[[test]]
+name = "roundtrip"
+required-features = ["parsing", "printing", "eq-impls"]

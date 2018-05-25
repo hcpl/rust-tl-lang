@@ -1,14 +1,19 @@
+#[cfg(feature = "printing")]
 use std::fmt;
 
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 
 
 /// An identifier: `channels`, `SendMessageAction`.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct Ident {
     span: Span,
     string: String,
@@ -23,6 +28,13 @@ impl Ident {
             })
         } else {
             None
+        }
+    }
+
+    pub unsafe fn new_unchecked(span: Span, s: &str) -> Ident {
+        Ident {
+            span,
+            string: s.to_owned(),
         }
     }
 
@@ -45,6 +57,17 @@ impl Ident {
     }
 }
 
+#[cfg(feature = "eq-impls")]
+impl Eq for Ident {}
+
+#[cfg(feature = "eq-impls")]
+impl PartialEq for Ident {
+    fn eq(&self, other: &Ident) -> bool {
+        self.string == other.string
+    }
+}
+
+#[cfg(feature = "parsing")]
 impl Synom for Ident {
     named!(parse_cursor(Cursor) -> Ident, do_parse!(
         ident_str_cursor: take_while!(is_ident_char) >>
@@ -63,6 +86,7 @@ impl Spanned for Ident {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for Ident {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Display::fmt(&self.string, f)

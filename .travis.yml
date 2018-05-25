@@ -14,5 +14,14 @@ env:
     - RUST_BACKTRACE=1
 
 script:
-  - cargo build --verbose --all
-  - cargo test --verbose --all
+  - cargo build --verbose --manifest-path syn/Cargo.toml
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features printing
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features clone-impls
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features eq-impls
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing,printing
+  - cargo build --verbose --manifest-path syn/Cargo.toml --all-features
+
+  - cargo test --verbose --manifest-path syn/Cargo.toml
+  - cargo test --verbose --manifest-path syn/Cargo.toml --all-features

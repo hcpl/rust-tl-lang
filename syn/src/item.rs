@@ -1,16 +1,23 @@
+#[cfg(feature = "printing")]
 use std::fmt;
 
 use super::{BitIndex, Comment, Id, Ident, ParameterizedPath, Path, Type};
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::{Print, print_slice_with_separator};
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 use token::{Brace, Bracket, Paren};
+#[cfg(feature = "parsing")]
 use utils::is_decimal_digit;
 
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum Item {
     Comment(ItemComment),
     Delimiter(ItemDelimiter),
@@ -18,36 +25,46 @@ pub enum Item {
     Layer(ItemLayer),
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ItemComment {
     pub comment: Comment,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ItemDelimiter {
     pub delimiter: Delimiter,
 }
 
 /// Divides sections of declarations of TL combinators.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum Delimiter {
     Types(DelimiterTypes),
     Functions(DelimiterFunctions),
 }
 
 /// A `---types---` delimiter.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct DelimiterTypes {
     pub span: Span,
 }
 
 /// A `---functions---` delimiter.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct DelimiterFunctions {
     pub span: Span,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ItemCombinator {
     pub name: Path,
     pub combinator_id: Option<CombinatorId>,
@@ -58,13 +75,17 @@ pub struct ItemCombinator {
     pub semicolon_token: TLToken![;],
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct CombinatorId {
     pub hash_token: TLToken![#],
     pub id: Id,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct OptParam {
     pub brace_token: Brace,
     pub var_idents: Vec<Ident>,
@@ -72,7 +93,9 @@ pub struct OptParam {
     pub ty: Type,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum Param {
     Conditional(ParamConditional),
     Repeated(ParamRepeated),
@@ -80,7 +103,9 @@ pub enum Param {
     TypeOnly(ParamTypeOnly),
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParamConditional {
     pub var_ident: Ident,
     pub colon_token: TLToken![:],
@@ -88,20 +113,26 @@ pub struct ParamConditional {
     pub ty: Type,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ConditionalParamDef {
     pub var_ident: Ident,
     pub bit_selector: Option<BitSelector>,
     pub question_token: TLToken![?],
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct BitSelector {
     pub dot_token: TLToken![.],
     pub bit_index: BitIndex,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParamRepeated {
     pub param_repeated_ident: Option<ParamRepeatedIdent>,
     pub multiplicity: Option<Multiplicity>,
@@ -109,19 +140,25 @@ pub struct ParamRepeated {
     pub params: Vec<Param>,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParamRepeatedIdent {
     pub var_ident: Ident,
     pub colon_token: TLToken![:],
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct Multiplicity {
     pub term: Ident,  // FIXME: actually, it can be any term here
     pub asterisk_token: TLToken![*],
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParamWithParen {
     pub paren_token: Paren,
     pub var_idents: Vec<Ident>,
@@ -129,18 +166,52 @@ pub struct ParamWithParen {
     pub ty: Type,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct ParamTypeOnly {
     pub ty: Type,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct ItemLayer {
     pub span: Span,
     pub layer: u32,
 }
 
 
+#[cfg(feature = "eq-impls")]
+impl Eq for DelimiterTypes {}
+#[cfg(feature = "eq-impls")]
+impl Eq for DelimiterFunctions {}
+#[cfg(feature = "eq-impls")]
+impl Eq for ItemLayer {}
+
+#[cfg(feature = "eq-impls")]
+impl PartialEq for DelimiterTypes {
+    fn eq(&self, _other: &DelimiterTypes) -> bool {
+        true
+    }
+}
+
+#[cfg(feature = "eq-impls")]
+impl PartialEq for DelimiterFunctions {
+    fn eq(&self, _other: &DelimiterFunctions) -> bool {
+        true
+    }
+}
+
+
+#[cfg(feature = "eq-impls")]
+impl PartialEq for ItemLayer {
+    fn eq(&self, other: &ItemLayer) -> bool {
+        self.layer == other.layer
+    }
+}
+
+
+#[cfg(feature = "parsing")]
 impl Synom for Item {
     named!(parse_cursor(Cursor) -> Item, alt_complete!(
         tlsyn!(ItemComment) => { Item::Comment }
@@ -153,6 +224,7 @@ impl Synom for Item {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ItemComment {
     named!(parse_cursor(Cursor) -> ItemComment, do_parse!(
         comment: tlsyn!(Comment) >>
@@ -160,6 +232,7 @@ impl Synom for ItemComment {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ItemDelimiter {
     named!(parse_cursor(Cursor) -> ItemDelimiter, do_parse!(
         delimiter: tlsyn!(Delimiter) >>
@@ -167,6 +240,7 @@ impl Synom for ItemDelimiter {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for Delimiter {
     named!(parse_cursor(Cursor) -> Delimiter, alt_complete!(
         tlsyn!(DelimiterTypes) => { Delimiter::Types }
@@ -175,7 +249,7 @@ impl Synom for Delimiter {
     ));
 }
 
-// FIXME: Spanning
+#[cfg(feature = "parsing")]
 impl Synom for DelimiterTypes {
     named!(parse_cursor(Cursor) -> DelimiterTypes, do_parse!(
         types_cursor: tag!("---types---") >>
@@ -185,7 +259,7 @@ impl Synom for DelimiterTypes {
     ));
 }
 
-// FIXME: Spanning
+#[cfg(feature = "parsing")]
 impl Synom for DelimiterFunctions {
     named!(parse_cursor(Cursor) -> DelimiterFunctions, do_parse!(
         functions_cursor: tag!("---functions---") >>
@@ -195,6 +269,7 @@ impl Synom for DelimiterFunctions {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ItemCombinator {
     named!(parse_cursor(Cursor) -> ItemCombinator, sp!(do_parse!(
         name: tlsyn!(Path) >>
@@ -211,6 +286,7 @@ impl Synom for ItemCombinator {
     )));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for CombinatorId {
     named!(parse_cursor(Cursor) -> CombinatorId, do_parse!(
         hash_token: tlpunct!(#) >>
@@ -219,6 +295,7 @@ impl Synom for CombinatorId {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for OptParam {
     named!(parse_cursor(Cursor) -> OptParam, do_parse!(
         opt_param: braces!(tuple!(
@@ -236,6 +313,7 @@ impl Synom for OptParam {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for Param {
     named!(parse_cursor(Cursor) -> Param , alt_complete!(
         tlsyn!(ParamConditional) => { Param::Conditional }
@@ -248,6 +326,7 @@ impl Synom for Param {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParamConditional {
     named!(parse_cursor(Cursor) -> ParamConditional, do_parse!(
         var_ident: tlsyn!(Ident) >>
@@ -259,6 +338,7 @@ impl Synom for ParamConditional {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ConditionalParamDef {
     named!(parse_cursor(Cursor) -> ConditionalParamDef, do_parse!(
         var_ident: tlsyn!(Ident) >>
@@ -269,6 +349,7 @@ impl Synom for ConditionalParamDef {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for BitSelector {
     named!(parse_cursor(Cursor) -> BitSelector, do_parse!(
         dot_token: tlpunct!(.) >>
@@ -278,6 +359,7 @@ impl Synom for BitSelector {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParamRepeated {
     named!(parse_cursor(Cursor) -> ParamRepeated, do_parse!(
         param_repeated_ident: opt!(tlsyn!(ParamRepeatedIdent)) >>
@@ -293,6 +375,7 @@ impl Synom for ParamRepeated {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParamRepeatedIdent {
     named!(parse_cursor(Cursor) -> ParamRepeatedIdent, do_parse!(
         var_ident: tlsyn!(Ident) >>
@@ -302,6 +385,7 @@ impl Synom for ParamRepeatedIdent {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for Multiplicity {
     named!(parse_cursor(Cursor) -> Multiplicity, do_parse!(
         term: tlsyn!(Ident) >>
@@ -311,6 +395,7 @@ impl Synom for Multiplicity {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParamWithParen {
     named!(parse_cursor(Cursor) -> ParamWithParen, do_parse!(
         param: parens!(tuple!(
@@ -328,6 +413,7 @@ impl Synom for ParamWithParen {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for ParamTypeOnly {
     named!(parse_cursor(Cursor) -> ParamTypeOnly, do_parse!(
         ty: tlsyn!(Type) >>
@@ -336,7 +422,7 @@ impl Synom for ParamTypeOnly {
     ));
 }
 
-// FIXME: Spanning
+#[cfg(feature = "parsing")]
 impl Synom for ItemLayer {
     named!(parse_cursor(Cursor) -> ItemLayer, sp!(do_parse!(
         tag!("//") >>
@@ -502,6 +588,7 @@ impl Spanned for ItemLayer {
 }
 
 
+#[cfg(feature = "printing")]
 impl Print for Item {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -513,18 +600,21 @@ impl Print for Item {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ItemComment {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.comment.print(f)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ItemDelimiter {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.delimiter.print(f)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for Delimiter {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -534,18 +624,21 @@ impl Print for Delimiter {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for DelimiterTypes {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str("---types---")
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for DelimiterFunctions {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str("---functions---")
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ItemCombinator {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.name.print(f)?;
@@ -566,6 +659,7 @@ impl Print for ItemCombinator {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for CombinatorId {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.hash_token.print(f)?;
@@ -575,6 +669,7 @@ impl Print for CombinatorId {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for OptParam {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Brace::print(f, |f| {
@@ -586,6 +681,7 @@ impl Print for OptParam {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for Param {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -597,6 +693,7 @@ impl Print for Param {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParamConditional {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.var_ident.print(f)?;
@@ -608,6 +705,7 @@ impl Print for ParamConditional {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ConditionalParamDef {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.var_ident.print(f)?;
@@ -618,6 +716,7 @@ impl Print for ConditionalParamDef {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for BitSelector {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.dot_token.print(f)?;
@@ -627,6 +726,7 @@ impl Print for BitSelector {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParamRepeated {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.param_repeated_ident.print(f)?;
@@ -640,6 +740,7 @@ impl Print for ParamRepeated {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParamRepeatedIdent {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.var_ident.print(f)?;
@@ -649,6 +750,7 @@ impl Print for ParamRepeatedIdent {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for Multiplicity {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.term.print(f)?;
@@ -658,6 +760,7 @@ impl Print for Multiplicity {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParamWithParen {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Paren::print(f, |f| {
@@ -671,12 +774,14 @@ impl Print for ParamWithParen {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ParamTypeOnly {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.ty.print(f)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for ItemLayer {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str("//")?;

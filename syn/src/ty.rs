@@ -1,15 +1,21 @@
+#[cfg(feature = "printing")]
 use std::fmt;
 
 use super::{Ident, SafeParameterizedPath};
+#[cfg(feature = "parsing")]
 use cursor::Cursor;
+#[cfg(feature = "printing")]
 use print::Print;
 use span::Span;
 use spanned::Spanned;
+#[cfg(feature = "parsing")]
 use synom::Synom;
 
 
 /// The possible types that can appear in TL declarations.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub enum Type {
     Int(TypeInt),
     ParameterizedPath(TypeParameterizedPath),
@@ -17,25 +23,32 @@ pub enum Type {
 }
 
 /// A special type of integers in range from 0 to 2^31-1 inclusive: `#`.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct TypeInt {
     pub hash_token: TLToken![#],
 }
 
 /// A type represented by a safe parameterized path: `contacts.Link`, `messages.Chats`.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct TypeParameterizedPath {
     pub safe_parameterized_path: SafeParameterizedPath,
 }
 
 /// A type parameter: `!X`.
-#[derive(Debug)]
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
 pub struct TypeTypeParameter {
     pub excl_token: TLToken![!],
     pub ident: Ident,
 }
 
 
+#[cfg(feature = "parsing")]
 impl Synom for Type {
     named!(parse_cursor(Cursor) -> Type, alt_complete!(
         tlsyn!(TypeInt) => { Type::Int }
@@ -46,6 +59,7 @@ impl Synom for Type {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for TypeInt {
     named!(parse_cursor(Cursor) -> TypeInt, do_parse!(
         hash_token: tlpunct!(#) >>
@@ -53,6 +67,7 @@ impl Synom for TypeInt {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for TypeParameterizedPath {
     named!(parse_cursor(Cursor) -> TypeParameterizedPath, do_parse!(
         safe_parameterized_path: tlsyn!(SafeParameterizedPath) >>
@@ -60,6 +75,7 @@ impl Synom for TypeParameterizedPath {
     ));
 }
 
+#[cfg(feature = "parsing")]
 impl Synom for TypeTypeParameter {
     named!(parse_cursor(Cursor) -> TypeTypeParameter, do_parse!(
         excl_token: tlpunct!(!) >>
@@ -99,6 +115,7 @@ impl Spanned for TypeTypeParameter {
 }
 
 
+#[cfg(feature = "printing")]
 impl Print for Type {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -109,18 +126,21 @@ impl Print for Type {
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for TypeInt {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.hash_token.print(f)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for TypeParameterizedPath {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.safe_parameterized_path.print(f)
     }
 }
 
+#[cfg(feature = "printing")]
 impl Print for TypeTypeParameter {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.excl_token.print(f)?;

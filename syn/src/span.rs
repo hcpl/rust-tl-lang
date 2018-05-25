@@ -4,7 +4,7 @@ use std::num::NonZeroUsize;
 
 
 /// A region of source text.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Span {
     begin: usize,
     end: usize,
@@ -38,6 +38,7 @@ impl Span {
         Span { begin, end }
     }
 
+    #[cfg(feature = "parsing")]
     pub(crate) unsafe fn new_unchecked(begin: usize, end: usize) -> Span {
         Span { begin, end }
     }

@@ -1,19 +1,25 @@
 //! A parsing library for parsing a string of TL language schema into a syntax tree of TL language
 //! source text.
 
+#[cfg(feature = "parsing")]
 #[macro_use]
 extern crate nom;
 
 
+#[cfg(feature = "parsing")]
 #[macro_use]
 mod parsers;
+#[cfg(feature = "parsing")]
 mod utils;
 
+#[cfg(feature = "parsing")]
 pub mod cursor;
+#[cfg(feature = "printing")]
 pub mod print;
 pub mod punctuated;
 pub mod span;
 pub mod spanned;
+#[cfg(feature = "parsing")]
 pub mod synom;
 #[macro_use]
 pub mod token;
@@ -52,15 +58,18 @@ mod ty;
 pub use ty::{Type, TypeInt, TypeParameterizedPath, TypeTypeParameter};
 
 
+#[cfg(feature = "parsing")]
 use synom::{Parser, Synom};
 
 /// Parse a string of TL language schema into the chosen syntax tree node.
+#[cfg(feature = "parsing")]
 pub fn parse_str<T: Synom>(s: &str) -> Result<T, nom::Err<&str>> {
     let parser = T::parse_cursor;
     parser.parse_str(s)
 }
 
 /// Parse the content of a file of TL language schema.
+#[cfg(feature = "parsing")]
 pub fn parse_file(mut content: &str) -> Result<File, nom::Err<&str>> {
     // Strip the BOM if it is present
     const BOM: &str = "\u{feff}";
