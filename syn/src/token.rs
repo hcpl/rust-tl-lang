@@ -104,7 +104,8 @@ macro_rules! token_delimiter {
 
                 let begin = input.offset();
                 let end = rest.offset();
-                let span = Span::new(begin, end);
+                assert!(1 <= begin && begin <= end);
+                let span = unsafe { Span::new_unchecked(begin, end) };
 
                 Ok((rest, ($name(span), res_cursor)))
             }

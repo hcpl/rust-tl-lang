@@ -18,10 +18,11 @@ impl<'a> Cursor<'a> {
     }
 
     pub fn span(self) -> Span {
-        let start = self.offset;
+        let begin = self.offset;
         let end = self.offset + self.remaining.len();
 
-        Span::new(start, end)
+        assert!(1 <= begin && begin <= end);
+        unsafe { Span::new_unchecked(begin, end) }
     }
 
     pub fn offset(self) -> usize {

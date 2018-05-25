@@ -1,13 +1,18 @@
 extern crate version_check;
 
-fn main() {
-    match version_check::is_min_version("1.24.0") {
+fn query_print_cfg(version: &str, flag: &str) {
+    match version_check::is_min_version(version) {
         Some((true, _version)) => {
-            println!("cargo:rustc-cfg=char_stable_inherent_ascii_methods");
+            println!("cargo:rustc-cfg={}", flag);
         },
         Some(_) => (),
         None => {
             eprintln!("couldn't query version info from rustc");
         },
     }
+}
+
+fn main() {
+    query_print_cfg("1.24.0", "char_stable_inherent_ascii_methods");
+    query_print_cfg("1.28.0", "stable_nonzero_types");
 }
