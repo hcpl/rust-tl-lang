@@ -151,6 +151,24 @@
 <span id="151">151</span>
 <span id="152">152</span>
 <span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Ident</span>, <span class="ident">SafeParameterizedPath</span>};
 
@@ -195,6 +213,12 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
     <span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">Spanned</span>;
+    <span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Type</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeInt</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeParameterizedPath</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeTypeParameter</span> {}
 
     <span class="kw">impl</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="ident">Type</span> {
         <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
@@ -232,6 +256,12 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">cursor</span>::<span class="ident">Cursor</span>;
     <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">Synom</span>;
+    <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Type</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeInt</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeParameterizedPath</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeTypeParameter</span> {}
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">Type</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">Type</span>, <span class="macro">alt_complete</span><span class="macro">!</span>(
@@ -273,6 +303,12 @@
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">print</span>::<span class="ident">Print</span>;
+    <span class="kw">use</span> <span class="ident">print</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Type</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeInt</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeParameterizedPath</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">TypeTypeParameter</span> {}
 
     <span class="kw">impl</span> <span class="ident">Print</span> <span class="kw">for</span> <span class="ident">Type</span> {
         <span class="kw">fn</span> <span class="ident">print</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {

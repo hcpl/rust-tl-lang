@@ -276,6 +276,29 @@
 <span id="276">276</span>
 <span id="277">277</span>
 <span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Tokens representing TL language punctuation, keywords, and delimiters.</span>
 
@@ -286,10 +309,15 @@
 <span class="kw">use</span> <span class="ident">cursor</span>::<span class="ident">Cursor</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">print</span>::<span class="ident">Print</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">print</span>::<span class="ident">private</span>::<span class="ident">Sealed</span> <span class="kw">as</span> <span class="ident">PrintSealed</span>;
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 <span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">Spanned</span>;
+<span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">private</span>::<span class="ident">Sealed</span> <span class="kw">as</span> <span class="ident">SpannedSealed</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">Synom</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">private</span>::<span class="ident">Sealed</span> <span class="kw">as</span> <span class="ident">SynomSealed</span>;
 
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">tokens</span> {
@@ -338,17 +366,25 @@
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">token_punct_parser</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">punct</span>:<span class="ident">tt</span> <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
+        <span class="kw">impl</span> <span class="ident">SynomSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
         <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro">map</span><span class="macro">!</span>(<span class="macro">tag</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">punct</span>), <span class="op">|</span><span class="ident">cursor</span><span class="op">|</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">cursor</span>.<span class="ident">span</span>())
             }));
         }
 
+        <span class="kw">impl</span> <span class="ident">SpannedSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
+
         <span class="kw">impl</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
                 <span class="self">self</span>.<span class="number">0</span>
             }
         }
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
+        <span class="kw">impl</span> <span class="ident">PrintSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
         <span class="kw">impl</span> <span class="ident">Print</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
@@ -418,6 +454,8 @@
             }
         }
 
+        <span class="kw">impl</span> <span class="ident">SpannedSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
+
         <span class="kw">impl</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
                 <span class="self">self</span>.<span class="number">0</span>
@@ -449,17 +487,25 @@
         }
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
+        <span class="kw">impl</span> <span class="ident">SynomSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
         <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro">map</span><span class="macro">!</span>(<span class="macro">tag</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">keyword</span>), <span class="op">|</span><span class="ident">cursor</span><span class="op">|</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">cursor</span>.<span class="ident">span</span>())
             }));
         }
 
+        <span class="kw">impl</span> <span class="ident">SpannedSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
+
         <span class="kw">impl</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
                 <span class="self">self</span>.<span class="number">0</span>
             }
         }
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
+        <span class="kw">impl</span> <span class="ident">PrintSealed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {}
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;printing&quot;</span>)]</span>
         <span class="kw">impl</span> <span class="ident">Print</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {

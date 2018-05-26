@@ -51,6 +51,23 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! A trait that can provide the `Span` of the complete contents of a syntax</span>
 <span class="doccomment">//! tree node.</span>
@@ -58,9 +75,26 @@
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
 
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">private</span> {
+    <span class="doccomment">/// `Sealed` stops crates other than `tl-lang-syn` from implementing the</span>
+    <span class="doccomment">/// `Print` trait.</span>
+    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Sealed</span> {}
+
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Sealed</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span> {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Sealed</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Sealed</span><span class="op">&gt;</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Sealed</span><span class="op">&gt;</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">T</span>] {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Sealed</span><span class="op">&gt;</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+}
+
+
 <span class="doccomment">/// A trait that can provide the `Span` of the complete contents of a syntax</span>
 <span class="doccomment">/// tree node.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Spanned</span> {
+<span class="doccomment">///</span>
+<span class="doccomment">/// This trait is sealed and cannot be implemented for types outside of</span>
+<span class="doccomment">/// `tl-lang-syn` to avoid breaking backwards compatibility when adding new</span>
+<span class="doccomment">/// methods or derived traits.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Spanned</span>: <span class="ident">private</span>::<span class="ident">Sealed</span> {
     <span class="doccomment">/// Return a `Span` covering the complete contents of this syntax tree node,</span>
     <span class="doccomment">/// or [`Span::zeroed()`] if this node is empty.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span>;

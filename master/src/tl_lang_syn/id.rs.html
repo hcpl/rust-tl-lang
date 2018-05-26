@@ -65,6 +65,16 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
@@ -89,7 +99,11 @@
 
 <span class="kw">mod</span> <span class="ident">spanned</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
     <span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">Spanned</span>;
+    <span class="kw">use</span> <span class="ident">spanned</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Id</span> {}
 
     <span class="kw">impl</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="ident">Id</span> {
         <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
@@ -103,7 +117,10 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">cursor</span>::<span class="ident">Cursor</span>;
     <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">Synom</span>;
+    <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
     <span class="kw">use</span> <span class="ident">utils</span>::{<span class="ident">is_hex_digit</span>, <span class="ident">u32_from_hex_str</span>};
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Id</span> {}
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">Id</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">Id</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
@@ -126,6 +143,9 @@
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">print</span>::<span class="ident">Print</span>;
+    <span class="kw">use</span> <span class="ident">print</span>::<span class="ident">private</span>::<span class="ident">Sealed</span>;
+
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Id</span> {}
 
     <span class="kw">impl</span> <span class="ident">Print</span> <span class="kw">for</span> <span class="ident">Id</span> {
         <span class="kw">fn</span> <span class="ident">print</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
