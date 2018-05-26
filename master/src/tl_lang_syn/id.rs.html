@@ -109,8 +109,8 @@
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">Id</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
             <span class="comment">// (8, 8) doesn&#39;t work for `storage.fileJpeg#7efe0e = storage.FileType;`</span>
             <span class="comment">//id_cursor: take_while_m_n!(8, 8, is_hex_digit) &gt;&gt;</span>
-            <span class="comment">// Cap at 8 hex digits, because ids are 32-bit numbers, but the must be</span>
-            <span class="comment">// at least one</span>
+            <span class="comment">// Cap at 8 hex digits, because ids are 32-bit numbers, but there</span>
+            <span class="comment">// must be at least one</span>
             <span class="ident">id_cursor</span>: <span class="macro">take_while_m_n</span><span class="macro">!</span>(<span class="number">1</span>, <span class="number">8</span>, <span class="ident">is_hex_digit</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">id</span>: <span class="macro">map_res</span><span class="macro">!</span>(<span class="macro">value</span><span class="macro">!</span>(<span class="ident">id_cursor</span>.<span class="ident">to_str</span>()), <span class="ident">u32_from_hex_str</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">span</span>: <span class="macro">value</span><span class="macro">!</span>(<span class="ident">id_cursor</span>.<span class="ident">span</span>()) <span class="op">&gt;&gt;</span>

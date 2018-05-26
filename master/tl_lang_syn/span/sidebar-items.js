@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Span","A region of source text."]]});
+initSidebarItems({"enum":[["SpanState","The state of a `Span`."]],"struct":[["Span","A region of source text."]]});

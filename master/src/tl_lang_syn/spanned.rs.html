@@ -40,30 +40,50 @@
 <span id="40">40</span>
 <span id="41">41</span>
 <span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! A trait that can provide the `Span` of the complete contents of a syntax tree node.</span>
+<span class="doccomment">//! A trait that can provide the `Span` of the complete contents of a syntax</span>
+<span class="doccomment">//! tree node.</span>
 
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
 
+<span class="doccomment">/// A trait that can provide the `Span` of the complete contents of a syntax</span>
+<span class="doccomment">/// tree node.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Spanned</span> {
+    <span class="doccomment">/// Return a `Span` covering the complete contents of this syntax tree node,</span>
+    <span class="doccomment">/// or [`Span::zeroed()`] if this node is empty.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span>;
 }
 
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Spanned</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span> {
+    <span class="doccomment">/// Return a `Span` of the value behind this reference.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
         (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">span</span>()
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Spanned</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Return a `Span` of the value in this box.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
         (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">span</span>()
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Spanned</span><span class="op">&gt;</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Return a `Span` of the contained value (if any), or [`Span::zeroed()`]</span>
+    <span class="doccomment">/// (if not).</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">t</span>) <span class="op">=&gt;</span> <span class="ident">t</span>.<span class="ident">span</span>(),
@@ -73,12 +93,14 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Spanned</span><span class="op">&gt;</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">T</span>] {
+    <span class="doccomment">/// Return a [`Span::union()`] of spans in this slice.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
         <span class="ident">Span</span>::<span class="ident">union</span>(<span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">Spanned</span>::<span class="ident">span</span>))
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Spanned</span><span class="op">&gt;</span> <span class="ident">Spanned</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Return a [`Span::union()`] of spans in this vector.</span>
     <span class="kw">fn</span> <span class="ident">span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Span</span> {
         <span class="self">self</span>.<span class="ident">as_slice</span>().<span class="ident">span</span>()
     }
