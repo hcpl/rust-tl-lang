@@ -4,9 +4,26 @@
 use span::Span;
 
 
+pub(crate) mod private {
+    /// `Sealed` stops crates other than `tl-lang-syn` from implementing the
+    /// `Print` trait.
+    pub trait Sealed {}
+
+    impl<'a, T: Sealed + ?Sized> Sealed for &'a T {}
+    impl<T: Sealed + ?Sized> Sealed for Box<T> {}
+    impl<T: Sealed> Sealed for Option<T> {}
+    impl<'a, T: Sealed> Sealed for &'a [T] {}
+    impl<T: Sealed> Sealed for Vec<T> {}
+}
+
+
 /// A trait that can provide the `Span` of the complete contents of a syntax
 /// tree node.
-pub trait Spanned {
+///
+/// This trait is sealed and cannot be implemented for types outside of
+/// `tl-lang-syn` to avoid breaking backwards compatibility when adding new
+/// methods or derived traits.
+pub trait Spanned: private::Sealed {
     /// Return a `Span` covering the complete contents of this syntax tree node,
     /// or [`Span::zeroed()`] if this node is empty.
     fn span(&self) -> Span;

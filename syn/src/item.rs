@@ -214,7 +214,29 @@ impl PartialEq for ItemLayer {
 
 mod spanned {
     use super::*;
+    use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for  Item {}
+    impl Sealed for  ItemCombinator {}
+    impl Sealed for  CombinatorId {}
+    impl Sealed for  OptParam {}
+    impl Sealed for  Param {}
+    impl Sealed for  ParamConditional {}
+    impl Sealed for  ConditionalParamDef {}
+    impl Sealed for  BitSelector {}
+    impl Sealed for  ParamRepeated {}
+    impl Sealed for  ParamRepeatedIdent {}
+    impl Sealed for  Multiplicity {}
+    impl Sealed for  ParamWithParen {}
+    impl Sealed for  ParamTypeOnly {}
+    impl Sealed for  ItemDelimiter {}
+    impl Sealed for  Delimiter {}
+    impl Sealed for  DelimiterTypes {}
+    impl Sealed for  DelimiterFunctions {}
+    impl Sealed for  ItemLayer {}
+    impl Sealed for  ItemComment {}
 
     impl Spanned for Item {
         fn span(&self) -> Span {
@@ -376,7 +398,28 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
     use utils::is_decimal_digit;
+
+    impl Sealed for  Item {}
+    impl Sealed for  ItemCombinator {}
+    impl Sealed for  CombinatorId {}
+    impl Sealed for  OptParam {}
+    impl Sealed for  Param {}
+    impl Sealed for  ParamConditional {}
+    impl Sealed for  ConditionalParamDef {}
+    impl Sealed for  BitSelector {}
+    impl Sealed for  ParamRepeated {}
+    impl Sealed for  ParamRepeatedIdent {}
+    impl Sealed for  Multiplicity {}
+    impl Sealed for  ParamWithParen {}
+    impl Sealed for  ParamTypeOnly {}
+    impl Sealed for  ItemDelimiter {}
+    impl Sealed for  Delimiter {}
+    impl Sealed for  DelimiterTypes {}
+    impl Sealed for  DelimiterFunctions {}
+    impl Sealed for  ItemLayer {}
+    impl Sealed for  ItemComment {}
 
     impl Synom for Item {
         named!(parse_cursor(Cursor) -> Item, alt_complete!(
@@ -591,6 +634,27 @@ mod printing {
 
     use super::*;
     use print::{Print, print_slice_with_separator};
+    use print::private::Sealed;
+
+    impl Sealed for  Item {}
+    impl Sealed for  ItemCombinator {}
+    impl Sealed for  CombinatorId {}
+    impl Sealed for  OptParam {}
+    impl Sealed for  Param {}
+    impl Sealed for  ParamConditional {}
+    impl Sealed for  ConditionalParamDef {}
+    impl Sealed for  BitSelector {}
+    impl Sealed for  ParamRepeated {}
+    impl Sealed for  ParamRepeatedIdent {}
+    impl Sealed for  Multiplicity {}
+    impl Sealed for  ParamWithParen {}
+    impl Sealed for  ParamTypeOnly {}
+    impl Sealed for  ItemDelimiter {}
+    impl Sealed for  Delimiter {}
+    impl Sealed for  DelimiterTypes {}
+    impl Sealed for  DelimiterFunctions {}
+    impl Sealed for  ItemLayer {}
+    impl Sealed for  ItemComment {}
 
     impl Print for Item {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

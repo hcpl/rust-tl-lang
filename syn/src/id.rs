@@ -21,7 +21,11 @@ impl PartialEq for Id {
 
 mod spanned {
     use super::*;
+    use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for Id {}
 
     impl Spanned for Id {
         fn span(&self) -> Span {
@@ -35,7 +39,10 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
     use utils::{is_hex_digit, u32_from_hex_str};
+
+    impl Sealed for Id {}
 
     impl Synom for Id {
         named!(parse_cursor(Cursor) -> Id, do_parse!(
@@ -58,6 +65,9 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
+
+    impl Sealed for Id {}
 
     impl Print for Id {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

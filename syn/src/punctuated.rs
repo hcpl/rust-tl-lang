@@ -67,6 +67,13 @@ mod spanned {
     use super::*;
     use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl<T, P> Sealed for Punctuated<T, P>
+    where
+        T: Sealed,
+        P: Sealed,
+    {}
 
     impl<T, P> Spanned for Punctuated<T, P>
     where

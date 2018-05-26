@@ -72,7 +72,11 @@ impl PartialEq for Ident {
 
 mod spanned {
     use super::*;
+    use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for Ident {}
 
     impl Spanned for Ident {
         fn span(&self) -> Span {
@@ -86,6 +90,9 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
+
+    impl Sealed for Ident {}
 
     impl Synom for Ident {
         named!(parse_cursor(Cursor) -> Ident, do_parse!(
@@ -106,6 +113,9 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
+
+    impl Sealed for Ident {}
 
     impl Print for Ident {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

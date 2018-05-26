@@ -5,8 +5,20 @@ use nom::{self, AtEof};
 use cursor::Cursor;
 
 
-/// Parsing interface implemented by all types that can be parsed in a default way from a string.
-pub trait Synom: Sized {
+pub(crate) mod private {
+    /// `Sealed` stops crates other than `tl-lang-syn` from implementing the
+    /// `Print` trait.
+    pub trait Sealed {}
+}
+
+
+/// Parsing interface implemented by all types that can be parsed in a default
+/// way from a string.
+///
+/// This trait is sealed and cannot be implemented for types outside of
+/// `tl-lang-syn` to avoid breaking backwards compatibility when adding new
+/// methods or derived traits.
+pub trait Synom: Sized + private::Sealed {
     fn parse_cursor<'a>(input: Cursor<'a>) -> nom::IResult<Cursor<'a>, Self>;
 
     fn parse_str(input: &str) -> nom::IResult<&str, Self> {
@@ -17,7 +29,8 @@ pub trait Synom: Sized {
 }
 
 
-/// Parser that can parse TL language schema string into a particular syntax tree node.
+/// Parser that can parse TL language schema string into a particular syntax
+/// tree node.
 pub trait Parser: Sized {
     type Output;
 

@@ -80,6 +80,16 @@ mod spanned {
     use super::*;
     use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for Path {}
+    impl Sealed for ParameterizedPath {}
+    impl Sealed for GenericArguments {}
+    impl Sealed for AngleBracketedGenericArguments {}
+    impl Sealed for SpaceSeparatedGenericArguments {}
+    impl Sealed for SafeParameterizedPath {}
+    impl Sealed for SafeParameterizedPathSpaceImmune {}
+    impl Sealed for SafeParameterizedPathParenthesized {}
 
     impl Spanned for Path {
         fn span(&self) -> Span {
@@ -148,6 +158,16 @@ mod parsing {
     use cursor::Cursor;
     use punctuated::{Count, TrailingPunctuation, Whitespace};
     use synom::Synom;
+    use synom::private::Sealed;
+
+    impl Sealed for Path {}
+    impl Sealed for ParameterizedPath {}
+    impl Sealed for GenericArguments {}
+    impl Sealed for AngleBracketedGenericArguments {}
+    impl Sealed for SpaceSeparatedGenericArguments {}
+    impl Sealed for SafeParameterizedPath {}
+    impl Sealed for SafeParameterizedPathSpaceImmune {}
+    impl Sealed for SafeParameterizedPathParenthesized {}
 
     impl Synom for Path {
         named!(parse_cursor(Cursor) -> Path, do_parse!(
@@ -238,7 +258,17 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
     use punctuated::{Count, Whitespace};
+
+    impl Sealed for Path {}
+    impl Sealed for ParameterizedPath {}
+    impl Sealed for GenericArguments {}
+    impl Sealed for AngleBracketedGenericArguments {}
+    impl Sealed for SpaceSeparatedGenericArguments {}
+    impl Sealed for SafeParameterizedPath {}
+    impl Sealed for SafeParameterizedPathSpaceImmune {}
+    impl Sealed for SafeParameterizedPathParenthesized {}
 
     impl Print for Path {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -53,7 +53,13 @@ impl PartialEq for CommentMultiLine {
 
 mod spanned {
     use super::*;
+    use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for Comment {}
+    impl Sealed for CommentSingleLine {}
+    impl Sealed for CommentMultiLine {}
 
     impl Spanned for Comment {
         fn span(&self) -> Span {
@@ -87,6 +93,11 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
+
+    impl Sealed for Comment {}
+    impl Sealed for CommentSingleLine {}
+    impl Sealed for CommentMultiLine {}
 
     impl Synom for Comment {
         named!(parse_cursor(Cursor) -> Comment, alt_complete!(
@@ -129,6 +140,11 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
+
+    impl Sealed for Comment {}
+    impl Sealed for CommentSingleLine {}
+    impl Sealed for CommentMultiLine {}
 
     impl Print for Comment {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

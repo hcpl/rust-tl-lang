@@ -1,7 +1,25 @@
+//! Common printing facility for syntax tree nodes.
+
 use std::fmt;
 
 
-pub trait Print {
+pub(crate) mod private {
+    /// `Sealed` stops crates other than `tl-lang-syn` from implementing the
+    /// `Print` trait.
+    pub trait Sealed {}
+
+    impl<'a, T: Sealed + ?Sized> Sealed for &'a T {}
+    impl<T: Sealed + ?Sized> Sealed for Box<T> {}
+    impl<T: Sealed> Sealed for Option<T> {}
+}
+
+
+/// Common printing facility for syntax tree nodes.
+///
+/// This trait is sealed and cannot be implemented for types outside of
+/// `tl-lang-syn` to avoid breaking backwards compatibility when adding new
+/// methods or derived traits.
+pub trait Print: private::Sealed {
     fn print(&self, f: &mut fmt::Formatter) -> fmt::Result;
 
     fn display_wrapper<'a>(&'a self) -> DisplayWrapper<'a, Self>  {

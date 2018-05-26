@@ -41,6 +41,12 @@ mod spanned {
     use super::*;
     use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for Type {}
+    impl Sealed for TypeInt {}
+    impl Sealed for TypeParameterizedPath {}
+    impl Sealed for TypeTypeParameter {}
 
     impl Spanned for Type {
         fn span(&self) -> Span {
@@ -78,6 +84,12 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
+
+    impl Sealed for Type {}
+    impl Sealed for TypeInt {}
+    impl Sealed for TypeParameterizedPath {}
+    impl Sealed for TypeTypeParameter {}
 
     impl Synom for Type {
         named!(parse_cursor(Cursor) -> Type, alt_complete!(
@@ -119,6 +131,12 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
+
+    impl Sealed for Type {}
+    impl Sealed for TypeInt {}
+    impl Sealed for TypeParameterizedPath {}
+    impl Sealed for TypeTypeParameter {}
 
     impl Print for Type {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

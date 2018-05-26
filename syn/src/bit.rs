@@ -54,7 +54,11 @@ impl PartialEq for BitIndex {
 
 mod spanned {
     use super::*;
+    use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for BitIndex {}
 
     impl Spanned for BitIndex {
         fn span(&self) -> Span {
@@ -68,7 +72,10 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
     use utils::is_decimal_digit;
+
+    impl Sealed for BitIndex {}
 
     impl Synom for BitIndex {
         named!(parse_cursor(Cursor) -> BitIndex, do_parse!(
@@ -88,6 +95,9 @@ mod printing {
 
     use super::*;
     use print::Print;
+    use print::private::Sealed;
+
+    impl Sealed for BitIndex {}
 
     impl Print for BitIndex {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

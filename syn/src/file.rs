@@ -13,6 +13,9 @@ mod spanned {
     use super::*;
     use span::Span;
     use spanned::Spanned;
+    use spanned::private::Sealed;
+
+    impl Sealed for File {}
 
     impl Spanned for File {
         fn span(&self) -> Span {
@@ -28,6 +31,9 @@ mod parsing {
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
+    use synom::private::Sealed;
+
+    impl Sealed for File {}
 
     impl Synom for File {
         named!(parse_cursor(Cursor) -> File, do_parse!(
@@ -49,6 +55,9 @@ mod printing {
 
     use super::*;
     use print::{Print, print_slice_with_separator};
+    use print::private::Sealed;
+
+    impl Sealed for File {}
 
     impl Print for File {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {

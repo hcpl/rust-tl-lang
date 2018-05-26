@@ -7,10 +7,15 @@ use std::fmt;
 use cursor::Cursor;
 #[cfg(feature = "printing")]
 use print::Print;
+#[cfg(feature = "printing")]
+use print::private::Sealed as PrintSealed;
 use span::Span;
 use spanned::Spanned;
+use spanned::private::Sealed as SpannedSealed;
 #[cfg(feature = "parsing")]
 use synom::Synom;
+#[cfg(feature = "parsing")]
+use synom::private::Sealed as SynomSealed;
 
 
 macro_rules! tokens {
@@ -59,17 +64,25 @@ macro_rules! token_punct_def {
 macro_rules! token_punct_parser {
     ($punct:tt pub struct $name:ident) => {
         #[cfg(feature = "parsing")]
+        impl SynomSealed for $name {}
+
+        #[cfg(feature = "parsing")]
         impl Synom for $name {
             named!(parse_cursor(Cursor) -> $name, map!(tag!($punct), |cursor| {
                 $name(cursor.span())
             }));
         }
 
+        impl SpannedSealed for $name {}
+
         impl Spanned for $name {
             fn span(&self) -> Span {
                 self.0
             }
         }
+
+        #[cfg(feature = "printing")]
+        impl PrintSealed for $name {}
 
         #[cfg(feature = "printing")]
         impl Print for $name {
@@ -139,6 +152,8 @@ macro_rules! token_delimiter {
             }
         }
 
+        impl SpannedSealed for $name {}
+
         impl Spanned for $name {
             fn span(&self) -> Span {
                 self.0
@@ -170,17 +185,25 @@ macro_rules! token_keyword {
         }
 
         #[cfg(feature = "parsing")]
+        impl SynomSealed for $name {}
+
+        #[cfg(feature = "parsing")]
         impl Synom for $name {
             named!(parse_cursor(Cursor) -> $name, map!(tag!($keyword), |cursor| {
                 $name(cursor.span())
             }));
         }
 
+        impl SpannedSealed for $name {}
+
         impl Spanned for $name {
             fn span(&self) -> Span {
                 self.0
             }
         }
+
+        #[cfg(feature = "printing")]
+        impl PrintSealed for $name {}
 
         #[cfg(feature = "printing")]
         impl Print for $name {
