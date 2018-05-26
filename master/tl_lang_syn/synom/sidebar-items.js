@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Parser","Parser that can parse TL language schema string into a particular syntax tree node."],["Synom","Parsing interface implemented by all types that can be parsed in a default way from a string."]]});

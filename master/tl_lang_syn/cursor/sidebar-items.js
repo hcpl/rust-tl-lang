@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Cursor","A cheaply copyable cursor into a `&str`."]]});

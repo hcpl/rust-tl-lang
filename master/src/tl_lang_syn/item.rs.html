@@ -766,12 +766,25 @@
 <span id="766">766</span>
 <span id="767">767</span>
 <span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">BitIndex</span>, <span class="ident">Comment</span>, <span class="ident">Id</span>, <span class="ident">Ident</span>, <span class="ident">ParameterizedPath</span>, <span class="ident">Path</span>, <span class="ident">Type</span>};
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 <span class="kw">use</span> <span class="ident">token</span>::{<span class="ident">Brace</span>, <span class="ident">Bracket</span>, <span class="ident">Paren</span>, <span class="ident">SlashSlash</span>};
 
 
+<span class="doccomment">/// Top-level entities in TL schema that occupy whole lines.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -782,6 +795,7 @@
     <span class="ident">Comment</span>(<span class="ident">ItemComment</span>),
 }
 
+<span class="doccomment">/// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -795,6 +809,7 @@
     <span class="kw">pub</span> <span class="ident">semicolon_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[;],
 }
 
+<span class="doccomment">/// A TL combinator id: `#1cb5c415`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -803,6 +818,7 @@
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">Id</span>,
 }
 
+<span class="doccomment">/// An optional field declaration: `{X:Type}`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -813,6 +829,7 @@
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">Type</span>,
 }
 
+<span class="doccomment">/// A required field declaration.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -823,6 +840,7 @@
     <span class="ident">TypeOnly</span>(<span class="ident">ParamTypeOnly</span>),
 }
 
+<span class="doccomment">/// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -842,6 +860,7 @@
     <span class="kw">pub</span> <span class="ident">question_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[<span class="question-mark">?</span>],
 }
 
+<span class="doccomment">/// Selects a bit from a `#` parameter.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -876,6 +895,7 @@
     <span class="kw">pub</span> <span class="ident">asterisk_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[<span class="kw-2">*</span>],
 }
 
+<span class="doccomment">/// A declaration enclosed in parentheses that may have multiple fields.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -886,6 +906,7 @@
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">Type</span>,
 }
 
+<span class="doccomment">/// A field with a bare type.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -893,6 +914,7 @@
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">Type</span>,
 }
 
+<span class="doccomment">/// A delimiter item.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
@@ -923,6 +945,7 @@
     <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
 }
 
+<span class="doccomment">/// A layer item: `// LAYER 68`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ItemLayer</span> {
@@ -932,6 +955,7 @@
     <span class="kw">pub</span> <span class="ident">layer</span>: <span class="ident">u32</span>,
 }
 
+<span class="doccomment">/// A comment item.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>

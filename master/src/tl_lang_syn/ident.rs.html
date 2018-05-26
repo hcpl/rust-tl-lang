@@ -157,11 +157,24 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
 
-<span class="doccomment">/// An identifier: `channels`, `SendMessageAction`.</span>
+<span class="doccomment">/// An identifier: `channels`, `SendMessageAction`, `X`, etc..</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Ident</span> {
@@ -170,28 +183,39 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Ident</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">is_valid_ident</span>(<span class="ident">s</span>) {
+    <span class="doccomment">/// Create a new `Ident` with the given `span` and the given `string` if</span>
+    <span class="doccomment">/// the string is a valid TL language identifier.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">is_valid_ident</span>(<span class="ident">string</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">Ident</span> {
                 <span class="ident">span</span>,
-                <span class="ident">string</span>: <span class="ident">s</span>.<span class="ident">to_owned</span>(),
+                <span class="ident">string</span>: <span class="ident">string</span>.<span class="ident">to_owned</span>(),
             })
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_unchecked</span>(<span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Ident</span> {
+    <span class="doccomment">/// Create a new `Ident` with the given `span` and the given `string`</span>
+    <span class="doccomment">/// without checking the string.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Safety</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The string must be a valid TL language identifier.</span>
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_unchecked</span>(<span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Ident</span> {
         <span class="ident">Ident</span> {
             <span class="ident">span</span>,
-            <span class="ident">string</span>: <span class="ident">s</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">string</span>: <span class="ident">string</span>.<span class="ident">to_owned</span>(),
         }
     }
 
+    <span class="doccomment">/// Extract a string view into this `Ident`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">string</span>
     }
 
+    <span class="doccomment">/// Return true if the first character of this `Ident` is lowercase, and</span>
+    <span class="doccomment">/// false otherwise.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_lowercase</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">string</span>.<span class="ident">chars</span>().<span class="ident">next</span>() {
             <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=&gt;</span> <span class="ident">c</span>.<span class="ident">is_lowercase</span>(),
@@ -199,6 +223,8 @@
         }
     }
 
+    <span class="doccomment">/// Return true if the first character of this `Ident` is uppercase, and</span>
+    <span class="doccomment">/// false otherwise.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_uppercase</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">string</span>.<span class="ident">chars</span>().<span class="ident">next</span>() {
             <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=&gt;</span> <span class="ident">c</span>.<span class="ident">is_uppercase</span>(),
