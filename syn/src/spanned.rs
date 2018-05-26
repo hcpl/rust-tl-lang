@@ -24,7 +24,7 @@ impl<T: Spanned> Spanned for Option<T> {
     fn span(&self) -> Span {
         match *self {
             Some(ref t) => t.span(),
-            None => Span::empty(),
+            None => Span::zeroed(),
         }
     }
 }

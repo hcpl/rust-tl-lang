@@ -36,7 +36,7 @@ matrix:
         - cargo install cargo-travis || echo "cargo-travis already installed"
         - cargo install-update cargo-travis
       script:
-        - cargo doc --manifest-path syn/Cargo.toml
+        - cargo doc --manifest-path syn/Cargo.toml --all-features
         - git clone --depth=1 --branch gh-pages "https://github.com/${TRAVIS_REPO_SLUG}" target/gh-pages
         - |
           if [ -e "target/gh-pages/${TRAVIS_BRANCH}/index.html" ]; then

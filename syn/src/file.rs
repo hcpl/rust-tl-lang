@@ -1,6 +1,7 @@
 use super::Item;
 
 
+/// A complete file of TL language source text.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]

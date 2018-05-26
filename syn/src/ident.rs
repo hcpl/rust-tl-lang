@@ -1,7 +1,7 @@
 use span::Span;
 
 
-/// An identifier: `channels`, `SendMessageAction`.
+/// An identifier: `channels`, `SendMessageAction`, `X`, etc..
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct Ident {
@@ -10,28 +10,39 @@ pub struct Ident {
 }
 
 impl Ident {
-    pub fn new(span: Span, s: &str) -> Option<Ident> {
-        if is_valid_ident(s) {
+    /// Create a new `Ident` with the given `span` and the given `string` if
+    /// the string is a valid TL language identifier.
+    pub fn new(span: Span, string: &str) -> Option<Ident> {
+        if is_valid_ident(string) {
             Some(Ident {
                 span,
-                string: s.to_owned(),
+                string: string.to_owned(),
             })
         } else {
             None
         }
     }
 
-    pub unsafe fn new_unchecked(span: Span, s: &str) -> Ident {
+    /// Create a new `Ident` with the given `span` and the given `string`
+    /// without checking the string.
+    ///
+    /// # Safety
+    ///
+    /// The string must be a valid TL language identifier.
+    pub unsafe fn new_unchecked(span: Span, string: &str) -> Ident {
         Ident {
             span,
-            string: s.to_owned(),
+            string: string.to_owned(),
         }
     }
 
+    /// Extract a string view into this `Ident`.
     pub fn as_str(&self) -> &str {
         &self.string
     }
 
+    /// Return true if the first character of this `Ident` is lowercase, and
+    /// false otherwise.
     pub fn is_lowercase(&self) -> bool {
         match self.string.chars().next() {
             Some(c) => c.is_lowercase(),
@@ -39,6 +50,8 @@ impl Ident {
         }
     }
 
+    /// Return true if the first character of this `Ident` is uppercase, and
+    /// false otherwise.
     pub fn is_uppercase(&self) -> bool {
         match self.string.chars().next() {
             Some(c) => c.is_uppercase(),

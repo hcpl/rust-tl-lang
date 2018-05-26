@@ -10,6 +10,8 @@ pub struct BitIndex {
 }
 
 impl BitIndex {
+    /// Create a new `BitIndex` with the given `span` and the given `index` if
+    /// `0 <= index < 32`.
     pub fn new(span: Span, index: u8) -> Option<BitIndex> {
         if is_valid_nat_bit_index(index) {
             Some(BitIndex { span, index })
@@ -18,10 +20,17 @@ impl BitIndex {
         }
     }
 
+    /// Create a new `BitIndex` with the given `span` and the given `index`
+    /// without checking.
+    ///
+    /// # Safety
+    ///
+    /// The index must satisfy `0 <= index < 32`
     pub unsafe fn new_unchecked(span: Span, index: u8) -> BitIndex {
         BitIndex { span, index }
     }
 
+    /// Get the index.
     pub fn index(&self) -> u8 {
         self.index
     }

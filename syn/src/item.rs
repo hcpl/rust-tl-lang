@@ -3,6 +3,7 @@ use span::Span;
 use token::{Brace, Bracket, Paren, SlashSlash};
 
 
+/// Top-level entities in TL schema that occupy whole lines.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -13,6 +14,7 @@ pub enum Item {
     Comment(ItemComment),
 }
 
+/// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -26,6 +28,7 @@ pub struct ItemCombinator {
     pub semicolon_token: TLToken![;],
 }
 
+/// A TL combinator id: `#1cb5c415`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -34,6 +37,7 @@ pub struct CombinatorId {
     pub id: Id,
 }
 
+/// An optional field declaration: `{X:Type}`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -44,6 +48,7 @@ pub struct OptParam {
     pub ty: Type,
 }
 
+/// A required field declaration.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -54,6 +59,7 @@ pub enum Param {
     TypeOnly(ParamTypeOnly),
 }
 
+/// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -73,6 +79,7 @@ pub struct ConditionalParamDef {
     pub question_token: TLToken![?],
 }
 
+/// Selects a bit from a `#` parameter.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -107,6 +114,7 @@ pub struct Multiplicity {
     pub asterisk_token: TLToken![*],
 }
 
+/// A declaration enclosed in parentheses that may have multiple fields.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -117,6 +125,7 @@ pub struct ParamWithParen {
     pub ty: Type,
 }
 
+/// A field with a bare type.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -124,6 +133,7 @@ pub struct ParamTypeOnly {
     pub ty: Type,
 }
 
+/// A delimiter item.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
@@ -154,6 +164,7 @@ pub struct DelimiterFunctions {
     pub span: Span,
 }
 
+/// A layer item: `// LAYER 68`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct ItemLayer {
@@ -163,6 +174,7 @@ pub struct ItemLayer {
     pub layer: u32,
 }
 
+/// A comment item.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]

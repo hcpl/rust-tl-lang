@@ -1,3 +1,5 @@
+//! A cheaply copyable cursor into a `&str` supporting efiicient traversal.
+
 use std::ops;
 use std::str;
 
@@ -6,6 +8,16 @@ use nom::{self, Offset};
 use span::Span;
 
 
+/// A cheaply copyable cursor into a `&str`.
+///
+/// This cursor holds a shared reference into the immutable `str` and can be
+/// efficiently manipulated and copied around.
+///
+/// A `Cursor` is created from an input `&str`. Upon creation it will point to
+/// the first byte of the string.
+///
+/// Two cursors are equal if they have the same location in the same input
+/// string, and have the same scope.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Cursor<'a> {
     offset: usize,
@@ -13,10 +25,13 @@ pub struct Cursor<'a> {
 }
 
 impl<'a> Cursor<'a> {
+    /// Create a new `Cursor` from the given `input`. The created cursor points
+    /// to the first byte of the string.
     pub fn new(input: &'a str) -> Cursor<'a> {
         Cursor { offset: 1, remaining: input }
     }
 
+    /// Return the span of the whole cursor.
     pub fn span(self) -> Span {
         let begin = self.offset;
         let end = self.offset + self.remaining.len();
@@ -25,10 +40,12 @@ impl<'a> Cursor<'a> {
         unsafe { Span::new_unchecked(begin, end) }
     }
 
+    /// Get the offset this `Cursor` is located at.
     pub fn offset(self) -> usize {
         self.offset
     }
 
+    /// Get the part of the input string this cursor is operating on.
     pub fn to_str(self) -> &'a str {
         self.remaining
     }
