@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Span","A region of source text."]]});

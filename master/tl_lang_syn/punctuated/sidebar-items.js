@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Count",""],["Pair",""],["TrailingPunctuation",""],["Whitespace",""]],"struct":[["IntoPairs",""],["Punctuated",""]]});
