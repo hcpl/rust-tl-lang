@@ -55,32 +55,43 @@ impl Span {
         Span { begin, end }
     }
 
-    /// Return true if this `Span` is in zeroed state, and false otherwise.
-    pub fn is_zeroed(&self) -> bool {
+    /// Return the state of this `Span`.
+    pub fn state(&self) -> SpanState {
         self.assert_internal_consistency();
-        self.begin == 0
+
+        match self.begin {
+            0 => SpanState::Zeroed,
+            _ => SpanState::Normal,
+        }
     }
 
     /// Return a `Span` that encloses both `self` and `other`.
     ///
-    /// If either of the spans is zeroed, the result is a zeroed `Span`.
+    /// If one of the spans is zeroed, the result is another `Span`.
+    ///
+    /// If both spans are zeroed, the result is a zeroed `Span`.
     pub fn to(self, other: Span) -> Span {
         self.assert_internal_consistency();
         other.assert_internal_consistency();
 
-        if self.is_zeroed() || other.is_zeroed() {
-            Span::zeroed()
-        } else {
-            Span {
-                begin: cmp::min(self.begin, other.begin),
-                end: cmp::max(self.end, other.end),
-            }
+        use self::SpanState::*;
+
+        match (self.state(), other.state()) {
+            (Normal, Normal) => {
+                Span {
+                    begin: cmp::min(self.begin, other.begin),
+                    end: cmp::max(self.end, other.end),
+                }
+            },
+            (Normal, Zeroed) => self,
+            (Zeroed, Normal) => other,
+            (Zeroed, Zeroed) => Span::zeroed(),
         }
     }
 
     /// Create a `Span` that encloses all spans in the given iterator.
     ///
-    /// If the iterator is empty or if any span in this iterator is zeroed the
+    /// If the iterator is empty or if all spans in the iterator are zeroed the
     /// result is a zeroed `Span`.
     pub fn union<I>(iter: I) -> Span
     where
@@ -104,4 +115,14 @@ impl Span {
             (self.begin != 0 && self.end != 0 && self.begin <= self.end)
         );
     }
+}
+
+
+/// The state of a `Span`.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum SpanState {
+    /// The state when both `begin` and `end` are zero.
+    Zeroed,
+    /// The state when both `begin` and `end` are non-zero, and also `begin <= end`.
+    Normal,
 }
