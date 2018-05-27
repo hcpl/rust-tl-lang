@@ -169,6 +169,10 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Ident</span>, <span class="ident">SafeParameterizedPath</span>};
 
@@ -177,6 +181,7 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;hash-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Hash</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Type</span> {
     <span class="ident">Int</span>(<span class="ident">TypeInt</span>),
     <span class="ident">ParameterizedPath</span>(<span class="ident">TypeParameterizedPath</span>),
@@ -187,6 +192,7 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;hash-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Hash</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeInt</span> {
     <span class="kw">pub</span> <span class="ident">hash_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[#],
 }
@@ -195,6 +201,7 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;hash-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Hash</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeParameterizedPath</span> {
     <span class="kw">pub</span> <span class="ident">safe_parameterized_path</span>: <span class="ident">SafeParameterizedPath</span>,
 }
@@ -203,6 +210,7 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;hash-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Hash</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeTypeParameter</span> {
     <span class="kw">pub</span> <span class="ident">excl_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[<span class="op">!</span>],
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Ident</span>,
