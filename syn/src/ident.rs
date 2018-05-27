@@ -61,12 +61,15 @@ impl Ident {
 }
 
 #[cfg(feature = "eq-impls")]
-impl Eq for Ident {}
+mod eq_impls {
+    use super::*;
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for Ident {
-    fn eq(&self, other: &Ident) -> bool {
-        self.string == other.string
+    impl Eq for Ident {}
+
+    impl PartialEq for Ident {
+        fn eq(&self, other: &Ident) -> bool {
+            self.string == other.string
+        }
     }
 }
 

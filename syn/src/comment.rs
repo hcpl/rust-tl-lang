@@ -32,22 +32,22 @@ pub struct CommentMultiLine {
 
 
 #[cfg(feature = "eq-impls")]
-impl Eq for CommentSingleLine {}
-#[cfg(feature = "eq-impls")]
-impl Eq for CommentMultiLine {}
+mod eq_impls {
+    use super::*;
 
+    impl Eq for CommentSingleLine {}
+    impl Eq for CommentMultiLine {}
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for CommentSingleLine {
-    fn eq(&self, other: &CommentSingleLine) -> bool {
-        self.content == other.content
+    impl PartialEq for CommentSingleLine {
+        fn eq(&self, other: &CommentSingleLine) -> bool {
+            self.content == other.content
+        }
     }
-}
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for CommentMultiLine {
-    fn eq(&self, other: &CommentMultiLine) -> bool {
-        self.content == other.content
+    impl PartialEq for CommentMultiLine {
+        fn eq(&self, other: &CommentMultiLine) -> bool {
+            self.content == other.content
+        }
     }
 }
 

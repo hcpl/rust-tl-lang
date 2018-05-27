@@ -43,12 +43,15 @@ fn is_valid_nat_bit_index(index_u8: u8) -> bool {
 }
 
 #[cfg(feature = "eq-impls")]
-impl Eq for BitIndex {}
+mod eq_impls {
+    use super::*;
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for BitIndex {
-    fn eq(&self, other: &BitIndex) -> bool {
-        self.index == other.index
+    impl Eq for BitIndex {}
+
+    impl PartialEq for BitIndex {
+        fn eq(&self, other: &BitIndex) -> bool {
+            self.index == other.index
+        }
     }
 }
 

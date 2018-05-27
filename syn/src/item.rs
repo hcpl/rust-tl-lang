@@ -200,30 +200,29 @@ pub struct ItemComment {
 
 
 #[cfg(feature = "eq-impls")]
-impl Eq for DelimiterTypes {}
-#[cfg(feature = "eq-impls")]
-impl Eq for DelimiterFunctions {}
-#[cfg(feature = "eq-impls")]
-impl Eq for ItemLayer {}
+mod eq_impls {
+    use super::*;
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for DelimiterTypes {
-    fn eq(&self, _other: &DelimiterTypes) -> bool {
-        true
+    impl Eq for DelimiterTypes {}
+    impl Eq for DelimiterFunctions {}
+    impl Eq for ItemLayer {}
+
+    impl PartialEq for DelimiterTypes {
+        fn eq(&self, _other: &DelimiterTypes) -> bool {
+            true
+        }
     }
-}
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for DelimiterFunctions {
-    fn eq(&self, _other: &DelimiterFunctions) -> bool {
-        true
+    impl PartialEq for DelimiterFunctions {
+        fn eq(&self, _other: &DelimiterFunctions) -> bool {
+            true
+        }
     }
-}
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for ItemLayer {
-    fn eq(&self, other: &ItemLayer) -> bool {
-        self.layer == other.layer
+    impl PartialEq for ItemLayer {
+        fn eq(&self, other: &ItemLayer) -> bool {
+            self.layer == other.layer
+        }
     }
 }
 

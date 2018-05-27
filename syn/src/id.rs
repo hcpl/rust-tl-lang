@@ -10,12 +10,15 @@ pub struct Id {
 }
 
 #[cfg(feature = "eq-impls")]
-impl Eq for Id {}
+mod eq_impls {
+    use super::*;
 
-#[cfg(feature = "eq-impls")]
-impl PartialEq for Id {
-    fn eq(&self, other: &Id) -> bool {
-        self.id == other.id
+    impl Eq for Id {}
+
+    impl PartialEq for Id {
+        fn eq(&self, other: &Id) -> bool {
+            self.id == other.id
+        }
     }
 }
 

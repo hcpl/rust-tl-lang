@@ -1,22 +1,5 @@
 //! Tokens representing TL language punctuation, keywords, and delimiters.
 
-#[cfg(feature = "printing")]
-use std::fmt;
-
-#[cfg(feature = "parsing")]
-use cursor::Cursor;
-#[cfg(feature = "printing")]
-use print::Print;
-#[cfg(feature = "printing")]
-use print::private::Sealed as PrintSealed;
-use span::Span;
-use spanned::Spanned;
-use spanned::private::Sealed as SpannedSealed;
-#[cfg(feature = "parsing")]
-use synom::Synom;
-#[cfg(feature = "parsing")]
-use synom::private::Sealed as SynomSealed;
-
 
 macro_rules! tokens {
     (
@@ -31,7 +14,6 @@ macro_rules! tokens {
         }
     ) => (
         $(token_punct_def! { #[$punct_doc] $punct pub struct $punct_name })*
-        $(token_punct_parser! { $punct pub struct $punct_name })*
         $(token_delimiter! { #[$delimiter_doc] $delimiter_left $delimiter_right pub struct $delimiter_name })*
         $(token_keyword! { #[$keyword_doc] $keyword pub struct $keyword_name })*
     )
@@ -47,53 +29,49 @@ macro_rules! token_punct_def {
         /// [`Token!`]: index.html
         #[cfg_attr(feature = "clone-impls", derive(Clone))]
         #[cfg_attr(feature = "debug-impls", derive(Debug))]
-        pub struct $name(pub Span);
+        pub struct $name(pub $crate::span::Span);
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::Eq for $name {}
+        impl $crate::std::cmp::Eq for $name {}
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::PartialEq for $name {
+        impl $crate::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
             }
         }
 
         #[cfg(feature = "hash-impls")]
-        impl ::std::hash::Hash for $name {
-            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+        impl $crate::std::hash::Hash for $name {
+            fn hash<H: $crate::std::hash::Hasher>(&self, _state: &mut H) {
                 // No state to hash -- do nothing
             }
         }
-    }
-}
 
-macro_rules! token_punct_parser {
-    ($punct:tt pub struct $name:ident) => {
-        #[cfg(feature = "parsing")]
-        impl SynomSealed for $name {}
+        impl $crate::spanned::private::Sealed for $name {}
 
-        #[cfg(feature = "parsing")]
-        impl Synom for $name {
-            named!(parse_cursor(Cursor) -> $name, map!(tag!($punct), |cursor| {
-                $name(cursor.span())
-            }));
-        }
-
-        impl SpannedSealed for $name {}
-
-        impl Spanned for $name {
-            fn span(&self) -> Span {
+        impl $crate::spanned::Spanned for $name {
+            fn span(&self) -> $crate::span::Span {
                 self.0
             }
         }
 
-        #[cfg(feature = "printing")]
-        impl PrintSealed for $name {}
+        #[cfg(feature = "parsing")]
+        impl $crate::synom::private::Sealed for $name {}
+
+        #[cfg(feature = "parsing")]
+        impl $crate::synom::Synom for $name {
+            named!(parse_cursor($crate::cursor::Cursor) -> $name, map!(tag!($punct), |cursor| {
+                $name(cursor.span())
+            }));
+        }
 
         #[cfg(feature = "printing")]
-        impl Print for $name {
-            fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        impl $crate::print::private::Sealed for $name {}
+
+        #[cfg(feature = "printing")]
+        impl $crate::print::Print for $name {
+            fn print(&self, f: &mut $crate::std::fmt::Formatter) -> $crate::std::fmt::Result {
                 f.write_str($punct)
             }
         }
@@ -110,33 +88,41 @@ macro_rules! token_delimiter {
         /// [`Token!`]: index.html
         #[cfg_attr(feature = "clone-impls", derive(Clone))]
         #[cfg_attr(feature = "debug-impls", derive(Debug))]
-        pub struct $name(pub Span);
+        pub struct $name(pub $crate::span::Span);
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::Eq for $name {}
+        impl $crate::std::cmp::Eq for $name {}
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::PartialEq for $name {
+        impl $crate::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
             }
         }
 
         #[cfg(feature = "hash-impls")]
-        impl ::std::hash::Hash for $name {
-            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+        impl $crate::std::hash::Hash for $name {
+            fn hash<H: $crate::std::hash::Hasher>(&self, _state: &mut H) {
                 // No state to hash -- do nothing
+            }
+        }
+
+        impl $crate::spanned::private::Sealed for $name {}
+
+        impl $crate::spanned::Spanned for $name {
+            fn span(&self) -> $crate::span::Span {
+                self.0
             }
         }
 
         impl $name {
             #[cfg(feature = "parsing")]
             pub fn parse<'a, F, R>(
-                input: Cursor<'a>,
+                input: $crate::cursor::Cursor<'a>,
                 f: F,
-            ) -> $crate::nom::IResult<Cursor<'a>, ($name, R)>
+            ) -> $crate::nom::IResult<$crate::cursor::Cursor<'a>, ($name, R)>
             where
-                F: FnOnce(Cursor<'a>) -> $crate::nom::IResult<Cursor<'a>, R>,
+                F: FnOnce($crate::cursor::Cursor<'a>) -> $crate::nom::IResult<$crate::cursor::Cursor<'a>, R>,
             {
                 // FIXME: Handle nesting (low-priority)
                 let (rest, res_cursor) =
@@ -145,32 +131,24 @@ macro_rules! token_delimiter {
                 let begin = input.offset();
                 let end = rest.offset();
                 assert!(1 <= begin && begin <= end);
-                let span = unsafe { Span::new_unchecked(begin, end) };
+                let span = unsafe { $crate::span::Span::new_unchecked(begin, end) };
 
                 Ok((rest, ($name(span), res_cursor)))
             }
 
             #[cfg(feature = "printing")]
             pub fn print<F>(
-                fmtr: &mut fmt::Formatter,
+                fmtr: &mut $crate::std::fmt::Formatter,
                 f: F,
-            ) -> fmt::Result
+            ) -> $crate::std::fmt::Result
             where
-                F: FnOnce(&mut fmt::Formatter) -> fmt::Result
+                F: FnOnce(&mut $crate::std::fmt::Formatter) -> $crate::std::fmt::Result
             {
                 fmtr.write_str($delimiter_left)?;
                 f(fmtr)?;
                 fmtr.write_str($delimiter_right)?;
 
                 Ok(())
-            }
-        }
-
-        impl SpannedSealed for $name {}
-
-        impl Spanned for $name {
-            fn span(&self) -> Span {
-                self.0
             }
         }
     }
@@ -186,49 +164,49 @@ macro_rules! token_keyword {
         /// [`Token!`]: index.html
         #[cfg_attr(feature = "clone-impls", derive(Clone))]
         #[cfg_attr(feature = "debug-impls", derive(Debug))]
-        pub struct $name(pub Span);
+        pub struct $name(pub $crate::span::Span);
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::Eq for $name {}
+        impl $crate::std::cmp::Eq for $name {}
 
         #[cfg(feature = "eq-impls")]
-        impl ::std::cmp::PartialEq for $name {
+        impl $crate::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
             }
         }
 
         #[cfg(feature = "hash-impls")]
-        impl ::std::hash::Hash for $name {
-            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+        impl $crate::std::hash::Hash for $name {
+            fn hash<H: $crate::std::hash::Hasher>(&self, _state: &mut H) {
                 // No state to hash -- do nothing
             }
         }
 
-        #[cfg(feature = "parsing")]
-        impl SynomSealed for $name {}
+        impl $crate::spanned::private::Sealed for $name {}
 
-        #[cfg(feature = "parsing")]
-        impl Synom for $name {
-            named!(parse_cursor(Cursor) -> $name, map!(tag!($keyword), |cursor| {
-                $name(cursor.span())
-            }));
-        }
-
-        impl SpannedSealed for $name {}
-
-        impl Spanned for $name {
-            fn span(&self) -> Span {
+        impl $crate::spanned::Spanned for $name {
+            fn span(&self) -> $crate::span::Span {
                 self.0
             }
         }
 
-        #[cfg(feature = "printing")]
-        impl PrintSealed for $name {}
+        #[cfg(feature = "parsing")]
+        impl $crate::synom::private::Sealed for $name {}
+
+        #[cfg(feature = "parsing")]
+        impl $crate::synom::Synom for $name {
+            named!(parse_cursor($crate::cursor::Cursor) -> $name, map!(tag!($keyword), |cursor| {
+                $name(cursor.span())
+            }));
+        }
 
         #[cfg(feature = "printing")]
-        impl Print for $name {
-            fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        impl $crate::print::private::Sealed for $name {}
+
+        #[cfg(feature = "printing")]
+        impl $crate::print::Print for $name {
+            fn print(&self, f: &mut $crate::std::fmt::Formatter) -> $crate::std::fmt::Result {
                 f.write_str($keyword)
             }
         }
