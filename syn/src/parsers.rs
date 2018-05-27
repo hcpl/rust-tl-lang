@@ -51,12 +51,16 @@ macro_rules! sp {
     ($i:expr, $($args:tt)*) => {
         {
             use $crate::parsers::space;
-            use $crate::nom::Convert;
+            use $crate::nom::{AtEof, Convert};
 
             match sep!($i, space, $($args)*) {
                 Err(e)      => Err(e),
                 Ok((i1, o)) => {
                     match space(i1) {
+                        Err($crate::nom::Err::Incomplete(_)) => {
+                            assert!(i1.at_eof());
+                            Ok((i1, o))
+                        },
                         Err(e)      => Err($crate::nom::Err::convert(e)),
                         Ok((i2, _)) => Ok((i2, o)),
                     }

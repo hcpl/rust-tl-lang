@@ -2,24 +2,29 @@ extern crate tl_lang_syn;
 #[macro_use]
 extern crate pretty_assertions;
 
+
 use tl_lang_syn::print::Print;
 
 
-const SMALL_TL: &str = "
----types---
-x_z#aaaaaaaa = b;
+macro_rules! roundtrip_tests {
+    ($($test_name:ident => $file_name:expr;)+) => {
+        $(
+            #[test]
+            fn $test_name() {
+                let original_string = include_str!($file_name);
 
----functions---
+                // Do a syntax tree-based roundtrip instead of a string-based one
+                // because the string->tree->string conversion is lossy.
+                let parsed_tree = tl_lang_syn::parse_file(original_string).unwrap();
+                let generated_string = parsed_tree.display_wrapper().to_string();
+                let parsed_tree2 = tl_lang_syn::parse_file(&generated_string).unwrap();
 
-c.d.y_z#cccccccc {opt_param:type1} param:type2 bar:baz.spam.deadbeef<  A, B ,  C.D ,E > = g.h.i;
----types---
-";
+                assert_eq!(parsed_tree, parsed_tree2);
+            }
+        )+
+    };
+}
 
-#[test]
-fn roundtrip() {
-    let parsed = tl_lang_syn::parse_file(SMALL_TL).unwrap();
-    let tl = parsed.display_wrapper().to_string();
-    let parsed2 = tl_lang_syn::parse_file(&tl).unwrap();
-
-    assert_eq!(parsed, parsed2);
+roundtrip_tests! {
+    roundtrip_small => "small.tl";
 }

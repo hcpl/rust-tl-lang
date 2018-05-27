@@ -459,11 +459,11 @@ mod parsing {
 
     impl Synom for OptParam {
         named!(parse_cursor(Cursor) -> OptParam, do_parse!(
-            opt_param: braces!(tuple!(
+            opt_param: braces!(sp!(tuple!(
                 sp!(many1!(tlsyn!(Ident))),
                 tlpunct!(:),
                 tlsyn!(Type)
-            )) >>
+            ))) >>
 
             (OptParam {
                 brace_token: opt_param.0,
@@ -475,7 +475,7 @@ mod parsing {
     }
 
     impl Synom for Param {
-        named!(parse_cursor(Cursor) -> Param , alt_complete!(
+        named!(parse_cursor(Cursor) -> Param, alt_complete!(
             tlsyn!(ParamConditional) => { Param::Conditional }
             |
             tlsyn!(ParamRepeated) => { Param::Repeated }
@@ -551,11 +551,11 @@ mod parsing {
 
     impl Synom for ParamWithParen {
         named!(parse_cursor(Cursor) -> ParamWithParen, do_parse!(
-            param: parens!(tuple!(
+            param: parens!(sp!(tuple!(
                 sp!(many1!(tlsyn!(Ident))),
                 tlpunct!(:),
                 tlsyn!(Type)
-            )) >>
+            ))) >>
 
             (ParamWithParen {
                 paren_token: param.0,
@@ -752,7 +752,7 @@ mod printing {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             self.param_repeated_ident.print(f)?;
             self.multiplicity.print(f)?;
-            Brace::print(f, |f| {
+            Bracket::print(f, |f| {
                 print_slice_with_separator(&self.params, " ", f)?;
                 Ok(())
             })?;
@@ -830,6 +830,7 @@ mod printing {
             self.slash_slash_token.print(f)?;
             f.write_str(" ")?;
             self.layer_token.print(f)?;
+            f.write_str(" ")?;
             fmt::Display::fmt(&self.layer, f)?;
 
             Ok(())

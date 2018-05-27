@@ -171,7 +171,7 @@ mod parsing {
 
     impl Synom for Path {
         named!(parse_cursor(Cursor) -> Path, do_parse!(
-            segments: call!(|s| Punctuated::parse(
+            segments: call!(|s| Punctuated::<Ident, TLToken![.]>::parse(
                 s,
                 TrailingPunctuation::None,
                 Count::OneOrMore,
@@ -183,12 +183,12 @@ mod parsing {
     }
 
     impl Synom for ParameterizedPath {
-        named!(parse_cursor(Cursor) -> ParameterizedPath, do_parse!(
+        named!(parse_cursor(Cursor) -> ParameterizedPath, sp!(do_parse!(
             path: tlsyn!(Path) >>
             args: opt!(tlsyn!(GenericArguments)) >>
 
             (ParameterizedPath { path, args })
-        ));
+        )));
     }
 
     impl Synom for GenericArguments {
@@ -279,6 +279,9 @@ mod printing {
     impl Print for ParameterizedPath {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             self.path.print(f)?;
+            if let Some(GenericArguments::SpaceSeparated(_)) = self.args {
+                f.write_str(" ")?;
+            }
             self.args.print(f)?;
 
             Ok(())
