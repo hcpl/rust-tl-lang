@@ -345,6 +345,9 @@
 <span id="345">345</span>
 <span id="346">346</span>
 <span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">Ident</span>;
 <span class="kw">use</span> <span class="ident">punctuated</span>::<span class="ident">Punctuated</span>;
@@ -519,7 +522,7 @@
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">Path</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">Path</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
-            <span class="ident">segments</span>: <span class="macro">call</span><span class="macro">!</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">Punctuated</span>::<span class="ident">parse</span>(
+            <span class="ident">segments</span>: <span class="macro">call</span><span class="macro">!</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">Punctuated</span>::<span class="op">&lt;</span><span class="ident">Ident</span>, <span class="macro">TLToken</span><span class="macro">!</span>[.]<span class="op">&gt;</span>::<span class="ident">parse</span>(
                 <span class="ident">s</span>,
                 <span class="ident">TrailingPunctuation</span>::<span class="prelude-val">None</span>,
                 <span class="ident">Count</span>::<span class="ident">OneOrMore</span>,
@@ -531,12 +534,12 @@
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ParameterizedPath</span> {
-        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParameterizedPath</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
+        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParameterizedPath</span>, <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
             <span class="ident">path</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Path</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">args</span>: <span class="macro">opt</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">GenericArguments</span>)) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ParameterizedPath</span> { <span class="ident">path</span>, <span class="ident">args</span> })
-        ));
+        )));
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">GenericArguments</span> {
@@ -627,6 +630,9 @@
     <span class="kw">impl</span> <span class="ident">Print</span> <span class="kw">for</span> <span class="ident">ParameterizedPath</span> {
         <span class="kw">fn</span> <span class="ident">print</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="self">self</span>.<span class="ident">path</span>.<span class="ident">print</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">GenericArguments</span>::<span class="ident">SpaceSeparated</span>(<span class="kw">_</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">args</span> {
+                <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot; &quot;</span>)<span class="question-mark">?</span>;
+            }
             <span class="self">self</span>.<span class="ident">args</span>.<span class="ident">print</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
 
             <span class="prelude-val">Ok</span>(())
