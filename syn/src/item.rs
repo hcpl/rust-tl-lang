@@ -7,6 +7,7 @@ use token::{Brace, Bracket, Paren, SlashSlash};
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum Item {
     Combinator(ItemCombinator),
     Delimiter(ItemDelimiter),
@@ -18,6 +19,7 @@ pub enum Item {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ItemCombinator {
     pub name: Path,
     pub combinator_id: Option<CombinatorId>,
@@ -32,6 +34,7 @@ pub struct ItemCombinator {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct CombinatorId {
     pub hash_token: TLToken![#],
     pub id: Id,
@@ -41,6 +44,7 @@ pub struct CombinatorId {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct OptParam {
     pub brace_token: Brace,
     pub var_idents: Vec<Ident>,
@@ -52,6 +56,7 @@ pub struct OptParam {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum Param {
     Conditional(ParamConditional),
     Repeated(ParamRepeated),
@@ -63,6 +68,7 @@ pub enum Param {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParamConditional {
     pub var_ident: Ident,
     pub colon_token: TLToken![:],
@@ -73,6 +79,7 @@ pub struct ParamConditional {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ConditionalParamDef {
     pub var_ident: Ident,
     pub bit_selector: Option<BitSelector>,
@@ -83,6 +90,7 @@ pub struct ConditionalParamDef {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct BitSelector {
     pub dot_token: TLToken![.],
     pub bit_index: BitIndex,
@@ -91,6 +99,7 @@ pub struct BitSelector {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParamRepeated {
     pub param_repeated_ident: Option<ParamRepeatedIdent>,
     pub multiplicity: Option<Multiplicity>,
@@ -101,6 +110,7 @@ pub struct ParamRepeated {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParamRepeatedIdent {
     pub var_ident: Ident,
     pub colon_token: TLToken![:],
@@ -109,6 +119,7 @@ pub struct ParamRepeatedIdent {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct Multiplicity {
     pub term: Ident,  // FIXME: actually, it can be any term here
     pub asterisk_token: TLToken![*],
@@ -118,6 +129,7 @@ pub struct Multiplicity {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParamWithParen {
     pub paren_token: Paren,
     pub var_idents: Vec<Ident>,
@@ -129,6 +141,7 @@ pub struct ParamWithParen {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParamTypeOnly {
     pub ty: Type,
 }
@@ -137,6 +150,7 @@ pub struct ParamTypeOnly {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ItemDelimiter {
     pub delimiter: Delimiter,
 }
@@ -145,6 +159,7 @@ pub struct ItemDelimiter {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum Delimiter {
     Types(DelimiterTypes),
     Functions(DelimiterFunctions),
@@ -178,6 +193,7 @@ pub struct ItemLayer {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ItemComment {
     pub comment: Comment,
 }
@@ -208,6 +224,32 @@ impl PartialEq for DelimiterFunctions {
 impl PartialEq for ItemLayer {
     fn eq(&self, other: &ItemLayer) -> bool {
         self.layer == other.layer
+    }
+}
+
+
+#[cfg(feature = "hash-impls")]
+mod hash_impls {
+    use std::hash::{Hash, Hasher};
+
+    use super::*;
+
+    impl Hash for DelimiterTypes {
+        fn hash<H: Hasher>(&self, _state: &mut H) {
+            // No state to hash -- do nothing
+        }
+    }
+
+    impl Hash for DelimiterFunctions {
+        fn hash<H: Hasher>(&self, _state: &mut H) {
+            // No state to hash -- do nothing
+        }
+    }
+
+    impl Hash for ItemLayer {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.layer.hash(state);
+        }
     }
 }
 

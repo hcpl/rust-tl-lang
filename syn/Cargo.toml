@@ -27,6 +27,7 @@ default = []
 clone-impls = []
 debug-impls = []
 eq-impls = []
+hash-impls = []
 parsing = ["nom"]
 printing = []
 

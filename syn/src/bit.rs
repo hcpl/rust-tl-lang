@@ -52,6 +52,19 @@ impl PartialEq for BitIndex {
     }
 }
 
+#[cfg(feature = "hash-impls")]
+mod hash_impls {
+    use std::hash::{Hash, Hasher};
+
+    use super::*;
+
+    impl Hash for BitIndex {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.index.hash(state);
+        }
+    }
+}
+
 mod spanned {
     use super::*;
     use span::Span;

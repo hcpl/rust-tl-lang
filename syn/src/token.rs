@@ -58,6 +58,13 @@ macro_rules! token_punct_def {
                 true
             }
         }
+
+        #[cfg(feature = "hash-impls")]
+        impl ::std::hash::Hash for $name {
+            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+                // No state to hash -- do nothing
+            }
+        }
     }
 }
 
@@ -112,6 +119,13 @@ macro_rules! token_delimiter {
         impl ::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
+            }
+        }
+
+        #[cfg(feature = "hash-impls")]
+        impl ::std::hash::Hash for $name {
+            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+                // No state to hash -- do nothing
             }
         }
 
@@ -181,6 +195,13 @@ macro_rules! token_keyword {
         impl ::std::cmp::PartialEq for $name {
             fn eq(&self, _other: &$name) -> bool {
                 true
+            }
+        }
+
+        #[cfg(feature = "hash-impls")]
+        impl ::std::hash::Hash for $name {
+            fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {
+                // No state to hash -- do nothing
             }
         }
 

@@ -70,6 +70,19 @@ impl PartialEq for Ident {
     }
 }
 
+#[cfg(feature = "hash-impls")]
+mod hash_impls {
+    use std::hash::{Hash, Hasher};
+
+    use super::*;
+
+    impl Hash for Ident {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.string.hash(state)
+        }
+    }
+}
+
 mod spanned {
     use super::*;
     use span::Span;

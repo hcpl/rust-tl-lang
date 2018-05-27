@@ -7,6 +7,7 @@ use std::vec;
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct Punctuated<T, P> {
     inner: Vec<(T, P)>,
     last: Option<Box<T>>,

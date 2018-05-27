@@ -7,6 +7,7 @@ use token::Paren;
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct Path {
     pub segments: Punctuated<Ident, TLToken![.]>,
 }
@@ -15,6 +16,7 @@ pub struct Path {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct ParameterizedPath {
     pub path: Path,
     pub args: Option<GenericArguments>,
@@ -24,6 +26,7 @@ pub struct ParameterizedPath {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum GenericArguments {
     AngleBracketed(AngleBracketedGenericArguments),
     SpaceSeparated(SpaceSeparatedGenericArguments),
@@ -33,6 +36,7 @@ pub enum GenericArguments {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct AngleBracketedGenericArguments {
     pub langle_token: TLToken![<],
     pub args: Punctuated<ParameterizedPath, TLToken![,]>,
@@ -43,6 +47,7 @@ pub struct AngleBracketedGenericArguments {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct SpaceSeparatedGenericArguments {
     pub args: Vec<ParameterizedPath>,
 }
@@ -52,6 +57,7 @@ pub struct SpaceSeparatedGenericArguments {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum SafeParameterizedPath {
     SpaceImmune(SafeParameterizedPathSpaceImmune),
     Parenthesized(SafeParameterizedPathParenthesized),
@@ -61,6 +67,7 @@ pub enum SafeParameterizedPath {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct SafeParameterizedPathSpaceImmune {
     pub path: Path,
     pub args: Option<AngleBracketedGenericArguments>,
@@ -70,6 +77,7 @@ pub struct SafeParameterizedPathSpaceImmune {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct SafeParameterizedPathParenthesized {
     pub paren_token: Paren,
     pub parameterized_path: ParameterizedPath,

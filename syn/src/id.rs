@@ -19,6 +19,19 @@ impl PartialEq for Id {
     }
 }
 
+#[cfg(feature = "hash-impls")]
+mod hash_impls {
+    use std::hash::{Hash, Hasher};
+
+    use super::*;
+
+    impl Hash for Id {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.id.hash(state);
+        }
+    }
+}
+
 mod spanned {
     use super::*;
     use span::Span;

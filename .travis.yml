@@ -20,6 +20,7 @@ script:
   - cargo build --verbose --manifest-path syn/Cargo.toml --features clone-impls
   - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls
   - cargo build --verbose --manifest-path syn/Cargo.toml --features eq-impls
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features hash-impls
   - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing,printing
   - cargo build --verbose --manifest-path syn/Cargo.toml --all-features
 

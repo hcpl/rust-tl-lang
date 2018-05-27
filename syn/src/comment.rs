@@ -6,6 +6,7 @@ use token::{SlashAsterisk, SlashSlash};
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum Comment {
     SingleLine(CommentSingleLine),
     MultiLine(CommentMultiLine),
@@ -47,6 +48,26 @@ impl PartialEq for CommentSingleLine {
 impl PartialEq for CommentMultiLine {
     fn eq(&self, other: &CommentMultiLine) -> bool {
         self.content == other.content
+    }
+}
+
+
+#[cfg(feature = "hash-impls")]
+mod hash_impls {
+    use std::hash::{Hash, Hasher};
+
+    use super::*;
+
+    impl Hash for CommentSingleLine {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.content.hash(state);
+        }
+    }
+
+    impl Hash for CommentMultiLine {
+        fn hash<H: Hasher>(&self, state: &mut H) {
+            self.content.hash(state);
+        }
     }
 }
 

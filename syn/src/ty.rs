@@ -5,6 +5,7 @@ use super::{Ident, SafeParameterizedPath};
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub enum Type {
     Int(TypeInt),
     ParameterizedPath(TypeParameterizedPath),
@@ -15,6 +16,7 @@ pub enum Type {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct TypeInt {
     pub hash_token: TLToken![#],
 }
@@ -23,6 +25,7 @@ pub struct TypeInt {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct TypeParameterizedPath {
     pub safe_parameterized_path: SafeParameterizedPath,
 }
@@ -31,6 +34,7 @@ pub struct TypeParameterizedPath {
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
 pub struct TypeTypeParameter {
     pub excl_token: TLToken![!],
     pub ident: Ident,
