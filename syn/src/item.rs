@@ -440,7 +440,7 @@ mod parsing {
     use cursor::Cursor;
     use synom::Synom;
     use synom::private::Sealed;
-    use utils::is_decimal_digit;
+    use utils::parsing::is_decimal_digit;
 
     impl Sealed for  Item {}
     impl Sealed for  ItemCombinator {}
@@ -881,6 +881,167 @@ mod printing {
     impl Print for ItemComment {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             self.comment.print(f)
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "eq-impls")]
+    use super::*;
+    #[cfg(feature = "eq-impls")]
+    use span::Span;
+    #[cfg(feature = "eq-impls")]
+    use utils::tests::test_span_permutations;
+
+
+    #[cfg(feature = "eq-impls")]
+    fn test_delimiter_types_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&DelimiterTypes, &DelimiterTypes) -> bool,
+        FA1: Fn(&DelimiterTypes, &DelimiterTypes),
+        FA2: Fn(&DelimiterTypes, &DelimiterTypes),
+    {
+        test_span_permutations(
+            |span1| DelimiterTypes { span: span1 },
+            |span2| DelimiterTypes { span: span2 },
+            &test_eq,
+            &assert_when_eq,
+            &assert_when_ne,
+        );
+    }
+
+    #[cfg(feature = "eq-impls")]
+    fn test_delimiter_functions_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&DelimiterFunctions, &DelimiterFunctions) -> bool,
+        FA1: Fn(&DelimiterFunctions, &DelimiterFunctions),
+        FA2: Fn(&DelimiterFunctions, &DelimiterFunctions),
+    {
+        test_span_permutations(
+            |span1| DelimiterFunctions { span: span1 },
+            |span2| DelimiterFunctions { span: span2 },
+            &test_eq,
+            &assert_when_eq,
+            &assert_when_ne,
+        );
+    }
+
+    #[cfg(feature = "eq-impls")]
+    fn test_item_layer_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&ItemLayer, &ItemLayer) -> bool,
+        FA1: Fn(&ItemLayer, &ItemLayer),
+        FA2: Fn(&ItemLayer, &ItemLayer),
+    {
+        fn new_item_layer(span: Span, layer: u32) -> ItemLayer {
+            ItemLayer {
+                slash_slash_token: SlashSlash(span),
+                layer_token: TLToken![LAYER](span),
+                layer_span: span,
+                layer,
+            }
+        }
+
+        let layers = [1, 57, 68, 74, 78];
+
+        for layer1 in &layers {
+            for layer2 in &layers {
+                test_span_permutations(
+                    |span1| new_item_layer(span1, *layer1),
+                    |span2| new_item_layer(span2, *layer2),
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    mod eq_does_not_depend_on_span {
+        use super::{
+            test_delimiter_types_span_permutations,
+            test_delimiter_functions_span_permutations,
+            test_item_layer_span_permutations,
+        };
+
+        #[test]
+        fn delimiter_types() {
+            test_delimiter_types_span_permutations(
+                |_, _| true,
+                |x, y| any_debug_assert_eq!(x, y),
+                |_, _| unreachable!("Stateless syntax tree nodes must all be equal to each other"),
+            );
+        }
+
+        #[test]
+        fn delimiter_functions() {
+            test_delimiter_functions_span_permutations(
+                |_, _| true,
+                |x, y| any_debug_assert_eq!(x, y),
+                |_, _| unreachable!("Stateless syntax tree nodes must all be equal to each other"),
+            );
+        }
+
+        #[test]
+        fn item_layer() {
+            test_item_layer_span_permutations(
+                |x, y| x.layer == y.layer,
+                |x, y| any_debug_assert_eq!(x, y),
+                |x, y| any_debug_assert_ne!(x, y),
+            );
+        }
+    }
+
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    mod eq_hash_property {
+        use utils::tests::get_hasher_state;
+
+        use super::{
+            test_delimiter_types_span_permutations,
+            test_delimiter_functions_span_permutations,
+            test_item_layer_span_permutations,
+        };
+
+        #[test]
+        fn delimiter_types() {
+            test_delimiter_types_span_permutations(
+                |x, y| x == y,
+                |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+                |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+            );
+        }
+
+        #[test]
+        fn delimiter_functions() {
+            test_delimiter_functions_span_permutations(
+                |x, y| x == y,
+                |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+                |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+            );
+        }
+
+        #[test]
+        fn item_layer() {
+            test_item_layer_span_permutations(
+                |x, y| x == y,
+                |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+                |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+            );
         }
     }
 }

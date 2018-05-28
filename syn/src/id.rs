@@ -56,7 +56,7 @@ mod parsing {
     use cursor::Cursor;
     use synom::Synom;
     use synom::private::Sealed;
-    use utils::{is_hex_digit, u32_from_hex_str};
+    use utils::parsing::{is_hex_digit, u32_from_hex_str};
 
     impl Sealed for Id {}
 
@@ -89,5 +89,63 @@ mod printing {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             fmt::LowerHex::fmt(&self.id, f)
         }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "eq-impls")]
+    use super::*;
+    #[cfg(feature = "eq-impls")]
+    use utils::tests::test_span_permutations;
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    use utils::tests::get_hasher_state;
+
+
+    #[cfg(feature = "eq-impls")]
+    fn test_id_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&Id, &Id) -> bool,
+        FA1: Fn(&Id, &Id),
+        FA2: Fn(&Id, &Id),
+    {
+        let ids = [0, 1, 2, 100, 0xFF, 0xFFFF, 0xFFFFFFFF];
+
+        for id1 in &ids {
+            for id2 in &ids {
+                test_span_permutations(
+                    |span1| Id { span: span1, id: *id1 },
+                    |span2| Id { span: span2, id: *id2 },
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    #[test]
+    fn eq_does_not_depend_on_span() {
+        test_id_span_permutations(
+            |x, y| x.id == y.id,
+            |x, y| any_debug_assert_eq!(x, y),
+            |x, y| any_debug_assert_ne!(x, y),
+        );
+    }
+
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    #[test]
+    fn eq_hash_property() {
+        test_id_span_permutations(
+            |x, y| x == y,
+            |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+            |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+        );
     }
 }

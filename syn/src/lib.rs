@@ -9,7 +9,7 @@ extern crate nom;
 #[cfg(feature = "parsing")]
 #[macro_use]
 mod parsers;
-#[cfg(feature = "parsing")]
+#[cfg_attr(test, macro_use)]
 mod utils;
 
 #[cfg(feature = "parsing")]

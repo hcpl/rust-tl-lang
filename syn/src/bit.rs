@@ -89,7 +89,7 @@ mod parsing {
     use cursor::Cursor;
     use synom::Synom;
     use synom::private::Sealed;
-    use utils::is_decimal_digit;
+    use utils::parsing::is_decimal_digit;
 
     impl Sealed for BitIndex {}
 
@@ -119,5 +119,81 @@ mod printing {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             fmt::Display::fmt(&self.index, f)
         }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "eq-impls")]
+    use super::*;
+    #[cfg(feature = "eq-impls")]
+    use span::Span;
+    #[cfg(feature = "eq-impls")]
+    use utils::tests::test_span_permutations;
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    use utils::tests::get_hasher_state;
+
+
+    #[cfg(feature = "eq-impls")]
+    #[test]
+    fn valid_bit_indices() {
+        for i in 0..32 {
+            let actual = BitIndex::new(Span::zeroed(), i as u8);
+            let expected = Some(BitIndex { span: Span::zeroed(), index: i as u8 });
+
+            any_debug_assert_eq!(actual, expected);
+        }
+
+        for i in 32..256 {
+            let actual = BitIndex::new(Span::zeroed(), i as u8);
+            let expected = None;
+
+            any_debug_assert_eq!(actual, expected);
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    fn test_bit_index_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&BitIndex, &BitIndex) -> bool,
+        FA1: Fn(&BitIndex, &BitIndex),
+        FA2: Fn(&BitIndex, &BitIndex),
+    {
+        for i1 in 0..32 {
+            for i2 in 0..32 {
+                test_span_permutations(
+                    |span1| BitIndex::new(span1, i1).unwrap(),
+                    |span2| BitIndex::new(span2, i2).unwrap(),
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    #[test]
+    fn eq_does_not_depend_on_span() {
+        test_bit_index_span_permutations(
+            |bi1, bi2| bi1.index() == bi2.index(),
+            |bi1, bi2| any_debug_assert_eq!(bi1, bi2),
+            |bi1, bi2| any_debug_assert_ne!(bi1, bi2),
+        );
+    }
+
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    #[test]
+    fn eq_hash_property() {
+        test_bit_index_span_permutations(
+            |bi1, bi2| bi1 == bi2,
+            |bi1, bi2| any_debug_assert_eq!(get_hasher_state(bi1), get_hasher_state(bi2)),
+            |bi1, bi2| any_debug_assert_ne!(get_hasher_state(bi1), get_hasher_state(bi2)),
+        );
     }
 }

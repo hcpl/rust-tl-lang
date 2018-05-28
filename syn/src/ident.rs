@@ -196,3 +196,63 @@ mod ascii_shim {
 }
 
 use self::ascii_shim::{is_ascii_alphanumeric, is_ascii_alphabetic};
+
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "eq-impls")]
+    use super::*;
+    #[cfg(feature = "eq-impls")]
+    use utils::tests::test_span_permutations;
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    use utils::tests::get_hasher_state;
+
+
+    #[cfg(feature = "eq-impls")]
+    fn test_ident_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&Ident, &Ident) -> bool,
+        FA1: Fn(&Ident, &Ident),
+        FA2: Fn(&Ident, &Ident),
+    {
+        let idents = ["B", "j", "x_z", "EasyHaricotPlantInformedFacetItemPlant", "r2d2"];
+
+        assert!(idents.iter().all(|ident| is_valid_ident(ident)));
+
+        for ident1 in &idents {
+            for ident2 in &idents {
+                test_span_permutations(
+                    |span1| Ident { span: span1, string: (*ident1).to_owned() },
+                    |span2| Ident { span: span2, string: (*ident2).to_owned() },
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    #[test]
+    fn eq_does_not_depend_on_span() {
+        test_ident_span_permutations(
+            |x, y| x.string == y.string,
+            |x, y| any_debug_assert_eq!(x, y),
+            |x, y| any_debug_assert_ne!(x, y),
+        );
+    }
+
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    #[test]
+    fn eq_hash_property() {
+        test_ident_span_permutations(
+            |x, y| x == y,
+            |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+            |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+        );
+    }
+}

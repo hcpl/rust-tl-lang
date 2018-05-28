@@ -20,6 +20,7 @@ nom = { version = "4", optional = true }
 version_check = "0.1"
 
 [dev-dependencies]
+lipsum = "0.5"
 pretty_assertions = "0.5"
 
 [features]

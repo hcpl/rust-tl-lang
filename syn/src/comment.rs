@@ -193,3 +193,139 @@ mod printing {
         }
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    extern crate lipsum;
+
+    #[cfg(feature = "eq-impls")]
+    use super::*;
+    #[cfg(feature = "eq-impls")]
+    use span::Span;
+    #[cfg(feature = "eq-impls")]
+    use utils::tests::test_span_permutations;
+
+
+    #[cfg(feature = "eq-impls")]
+    fn test_comment_single_line_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&CommentSingleLine, &CommentSingleLine) -> bool,
+        FA1: Fn(&CommentSingleLine, &CommentSingleLine),
+        FA2: Fn(&CommentSingleLine, &CommentSingleLine),
+    {
+        fn new_comment_single_line(span: Span, content: &str) -> CommentSingleLine {
+            CommentSingleLine {
+                slash_slash_token: SlashSlash(span),
+                content_span: span,
+                content: content.to_owned(),
+            }
+        }
+
+        let contents = ["", "x", "foo", "Hello, world", lipsum::LOREM_IPSUM, lipsum::LIBER_PRIMUS];
+
+        for content1 in &contents {
+            for content2 in &contents {
+                test_span_permutations(
+                    |span1| new_comment_single_line(span1, *content1),
+                    |span2| new_comment_single_line(span2, *content2),
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    fn test_comment_multi_line_span_permutations<FT, FA1, FA2>(
+        test_eq: FT,
+        assert_when_eq: FA1,
+        assert_when_ne: FA2,
+    )
+    where
+        FT: Fn(&CommentMultiLine, &CommentMultiLine) -> bool,
+        FA1: Fn(&CommentMultiLine, &CommentMultiLine),
+        FA2: Fn(&CommentMultiLine, &CommentMultiLine),
+    {
+        fn new_comment_multi_line(span: Span, content: &str) -> CommentMultiLine {
+            CommentMultiLine {
+                slash_asterisk_token: SlashAsterisk(span),
+                content_span: span,
+                content: content.to_owned(),
+            }
+        }
+
+        let contents = ["", "x", "foo", "Hello, world", lipsum::LOREM_IPSUM, lipsum::LIBER_PRIMUS];
+
+        for content1 in &contents {
+            for content2 in &contents {
+                test_span_permutations(
+                    |span1| new_comment_multi_line(span1, *content1),
+                    |span2| new_comment_multi_line(span2, *content2),
+                    &test_eq,
+                    &assert_when_eq,
+                    &assert_when_ne,
+                );
+            }
+        }
+    }
+
+    #[cfg(feature = "eq-impls")]
+    mod eq_does_not_depend_on_span {
+        use super::{
+            test_comment_single_line_span_permutations,
+            test_comment_multi_line_span_permutations,
+        };
+
+        #[test]
+        fn comment_single_line() {
+            test_comment_single_line_span_permutations(
+                |x, y| x.content == y.content,
+                |x, y| any_debug_assert_eq!(x, y),
+                |x, y| any_debug_assert_ne!(x, y),
+            );
+        }
+
+        #[test]
+        fn comment_multi_line() {
+            test_comment_multi_line_span_permutations(
+                |x, y| x.content == y.content,
+                |x, y| any_debug_assert_eq!(x, y),
+                |x, y| any_debug_assert_ne!(x, y),
+            );
+        }
+    }
+
+    #[cfg(all(feature = "eq-impls", feature = "hash-impls"))]
+    mod eq_hash_property {
+        use utils::tests::get_hasher_state;
+
+        use super::{
+            test_comment_single_line_span_permutations,
+            test_comment_multi_line_span_permutations,
+        };
+
+        #[test]
+        fn comment_single_line() {
+            test_comment_single_line_span_permutations(
+                |x, y| x == y,
+                |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+                |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+            );
+        }
+
+        #[test]
+        fn comment_multi_line() {
+            test_comment_multi_line_span_permutations(
+                |x, y| x == y,
+                |x, y| any_debug_assert_eq!(get_hasher_state(x), get_hasher_state(y)),
+                |x, y| any_debug_assert_ne!(get_hasher_state(x), get_hasher_state(y)),
+            );
+        }
+    }
+}

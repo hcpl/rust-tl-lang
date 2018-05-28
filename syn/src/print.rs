@@ -27,6 +27,7 @@ pub trait Print: private::Sealed {
     }
 }
 
+/// Wrapper around a value of type `T: Print` that implements `Display`.
 #[derive(Debug)]
 pub struct DisplayWrapper<'a, T: ?Sized + 'a>(&'a T);
 
