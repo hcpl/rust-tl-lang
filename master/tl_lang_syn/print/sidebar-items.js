@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DisplayWrapper",""]],"trait":[["Print","Common printing facility for syntax tree nodes."]]});
+initSidebarItems({"struct":[["DisplayWrapper","Wrapper around a value of type `T: Print` that implements `Display`."]],"trait":[["Print","Common printing facility for syntax tree nodes."]]});
