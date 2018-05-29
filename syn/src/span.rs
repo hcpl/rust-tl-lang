@@ -74,7 +74,9 @@ impl Span {
     /// # Safety
     ///
     /// `begin` and `end` must be either both zero or both non-zero such that
-    /// `begin <= end`.
+    /// `begin <= end` holds.
+    ///
+    /// If conditions are not met, it is a violation of safety guarantees.
     pub unsafe fn new_unchecked(begin: usize, end: usize) -> Span {
         Span { begin, end }
     }
@@ -130,8 +132,9 @@ impl Span {
     }
 
     /// Checks if this `Span` upholds the guarantee that it only has two states:
-    /// * zeroed: both `begin` and `end` equal zero;
-    /// * normal: both `begin` and `end` not equal zero and, additionally,
+    ///
+    /// - zeroed: both `begin` and `end` equal zero;
+    /// - normal: both `begin` and `end` not equal zero and, additionally,
     ///   `begin <= end`.
     fn assert_internal_consistency(&self) {
         assert!(

@@ -25,7 +25,9 @@ impl BitIndex {
     ///
     /// # Safety
     ///
-    /// The index must satisfy `0 <= index < 32`
+    /// The index must satisfy `0 <= index < 32`.
+    ///
+    /// If conditions are not met, it is a violation of safety guarantees.
     pub unsafe fn new_unchecked(span: Span, index: u8) -> BitIndex {
         BitIndex { span, index }
     }

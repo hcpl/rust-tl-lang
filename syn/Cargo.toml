@@ -13,6 +13,7 @@ categories = ["parser-implementations"]
 [badges]
 travis-ci = { repository = "hcpl/tl-lang" }
 
+
 [dependencies]
 nom = { version = "4", optional = true }
 
@@ -32,8 +33,6 @@ hash-impls = []
 parsing = ["nom"]
 printing = []
 
-[package.metadata.docs.rs]
-all-features = true
 
 [[example]]
 name = "parse_print"
@@ -42,3 +41,7 @@ required-features = ["parsing", "printing", "debug-impls"]
 [[test]]
 name = "roundtrip"
 required-features = ["parsing", "printing", "eq-impls"]
+
+
+[package.metadata.docs.rs]
+all-features = true

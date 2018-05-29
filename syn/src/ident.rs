@@ -29,6 +29,8 @@ impl Ident {
     /// # Safety
     ///
     /// The string must be a valid TL language identifier.
+    ///
+    /// If conditions are not met, it is a violation of safety guarantees.
     pub unsafe fn new_unchecked(span: Span, string: &str) -> Ident {
         Ident {
             span,

@@ -6,6 +6,44 @@ extern crate pretty_assertions;
 use tl_lang_syn::print::Print;
 
 
+#[cfg(not(feature = "debug-impls"))]
+macro_rules! non_debug_assert_eq {
+    ($left:expr, $right:expr) => {{
+        let left = &{$left};
+        let right = &{$right};
+
+        if !(*left == *right) {
+            panic!("assertion failed: `(left == right)`");
+        }
+    }};
+    ($left:expr, $right:expr) => {
+        non_debug_assert_eq!($left, $right)
+    };
+    ($left:expr, $right:expr, $($args:tt)+) => {{
+        let left = &{$left};
+        let right = &{$right};
+
+        if !(*left == *right) {
+            panic!("assertion failed: `(left == right)`: {}", format_args!($($args)+));
+        }
+    }};
+}
+
+#[cfg(not(feature = "debug-impls"))]
+macro_rules! any_debug_assert_eq {
+    ($($args:tt)+) => {
+        non_debug_assert_eq!($($args)+)
+    }
+}
+
+#[cfg(feature = "debug-impls")]
+macro_rules! any_debug_assert_eq {
+    ($($args:tt)+) => {
+        assert_eq!($($args)+)
+    }
+}
+
+
 macro_rules! roundtrip_tests {
     ($($test_name:ident => $file_name:expr;)+) => {
         $(
@@ -19,7 +57,7 @@ macro_rules! roundtrip_tests {
                 let generated_string = parsed_tree.display_wrapper().to_string();
                 let parsed_tree2 = tl_lang_syn::parse_file(&generated_string).unwrap();
 
-                assert_eq!(parsed_tree, parsed_tree2);
+                any_debug_assert_eq!(parsed_tree, parsed_tree2);
             }
         )+
     };
