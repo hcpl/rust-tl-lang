@@ -81,6 +81,16 @@ impl Span {
         Span { begin, end }
     }
 
+    /// Get the beginning index.
+    pub fn begin(&self) -> usize {
+        self.begin
+    }
+
+    /// Get the ending index.
+    pub fn end(&self) -> usize {
+        self.end
+    }
+
     /// Return the state of this `Span`.
     pub fn state(&self) -> SpanState {
         self.assert_internal_consistency();

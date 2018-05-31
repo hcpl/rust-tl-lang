@@ -14,6 +14,7 @@ mod utils;
 
 #[cfg(feature = "parsing")]
 pub mod cursor;
+pub mod error;
 #[cfg(feature = "printing")]
 pub mod print;
 pub mod punctuated;
@@ -65,16 +66,17 @@ mod convenience_parsing_functions {
     use std::path::Path as FsPath;
 
     use super::*;
+    use error::ParseResult;
     use synom::{Parser, Synom};
 
     /// Parse a string of TL language schema into the chosen syntax tree node.
-    pub fn parse_str<T: Synom>(s: &str) -> Result<T, nom::Err<&str>> {
+    pub fn parse_str<T: Synom>(s: &str) -> ParseResult<T> {
         let parser = T::parse_cursor;
         parser.parse_str(s)
     }
 
     /// Parse the content of a file of TL language schema.
-    pub fn parse_file_str(mut content: &str) -> Result<File, nom::Err<&str>> {
+    pub fn parse_file_str(mut content: &str) -> ParseResult<File> {
         // Strip the BOM if it is present
         const BOM: &str = "\u{feff}";
         if content.starts_with(BOM) {
@@ -93,27 +95,7 @@ mod convenience_parsing_functions {
         let mut content = String::with_capacity(initial_buffer_size);
         file.read_to_string(&mut content)?;
 
-        parse_file_str(&content).map_err(|e| io::Error::new(io::ErrorKind::Other, nom_err_to_owned(e)))
-    }
-
-    fn nom_err_to_owned<I, E>(error: nom::Err<&I, E>) -> nom::Err<I::Owned, E>
-    where
-        I: ToOwned + ?Sized,
-    {
-        match error {
-            nom::Err::Incomplete(needed) => nom::Err::Incomplete(needed),
-            nom::Err::Error(context)     => nom::Err::Error(nom_context_to_owned(context)),
-            nom::Err::Failure(context)   => nom::Err::Failure(nom_context_to_owned(context)),
-        }
-    }
-
-    fn nom_context_to_owned<I, E>(context: nom::Context<&I, E>) -> nom::Context<I::Owned, E>
-    where
-        I: ToOwned + ?Sized,
-    {
-        match context {
-            nom::Context::Code(input, kind) => nom::Context::Code(input.to_owned(), kind),
-        }
+        parse_file_str(&content).map_err(|e| io::Error::new(io::ErrorKind::Other, e))
     }
 }
 

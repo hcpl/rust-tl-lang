@@ -26,13 +26,14 @@ script:
   - cargo build --verbose --manifest-path syn/Cargo.toml --features eq-impls,hash-impls
   - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls,hash-impls
   - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing,printing
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,parsing,printing
   - cargo build --verbose --manifest-path syn/Cargo.toml --all-features
 
   - cargo test --verbose --manifest-path syn/Cargo.toml
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls,hash-impls
   - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls
   - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls,hash-impls
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls,hash-impls
   - cargo test --verbose --manifest-path syn/Cargo.toml --features parsing,printing
   - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,parsing,printing
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
