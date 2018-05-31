@@ -34,6 +34,7 @@ script:
   - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls
   - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls,hash-impls
   - cargo test --verbose --manifest-path syn/Cargo.toml --features parsing,printing
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,parsing,printing
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
 
 matrix:

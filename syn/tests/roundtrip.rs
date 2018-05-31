@@ -53,9 +53,9 @@ macro_rules! roundtrip_tests {
 
                 // Do a syntax tree-based roundtrip instead of a string-based one
                 // because the string->tree->string conversion is lossy.
-                let parsed_tree = tl_lang_syn::parse_file(original_string).unwrap();
+                let parsed_tree = tl_lang_syn::parse_file_str(original_string).unwrap();
                 let generated_string = parsed_tree.display_wrapper().to_string();
-                let parsed_tree2 = tl_lang_syn::parse_file(&generated_string).unwrap();
+                let parsed_tree2 = tl_lang_syn::parse_file_str(&generated_string).unwrap();
 
                 any_debug_assert_eq!(parsed_tree, parsed_tree2);
             }
