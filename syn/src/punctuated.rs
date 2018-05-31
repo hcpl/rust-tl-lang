@@ -125,6 +125,8 @@ impl<T, P> Punctuated<T, P> {
     ///
     /// This method panics if the sequence does not already have a trailing
     /// punctuation when this method is called.
+    ///
+    /// [`push`]: Punctuated::push()
     pub fn push_value(&mut self, value: T) {
         assert!(self.empty_or_trailing());
         self.last = Some(Box::new(value));

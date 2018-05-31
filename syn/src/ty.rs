@@ -1,6 +1,7 @@
 use super::{Ident, SafeParameterizedPath};
 
 
+// FIXME: handle arbitrary parameterized paths when inside parentheses.
 /// The possible types that can appear in TL declarations.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
@@ -10,6 +11,7 @@ pub enum Type {
     Int(TypeInt),
     ParameterizedPath(TypeParameterizedPath),
     TypeParameter(TypeTypeParameter),
+    Bare(TypeBare),
 }
 
 /// A special type of integers in range from 0 to 2^31-1 inclusive: `#`.
@@ -40,6 +42,16 @@ pub struct TypeTypeParameter {
     pub ident: Ident,
 }
 
+/// A bare type parameter: `%(Tuple X n)`.
+#[cfg_attr(feature = "clone-impls", derive(Clone))]
+#[cfg_attr(feature = "debug-impls", derive(Debug))]
+#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+#[cfg_attr(feature = "hash-impls", derive(Hash))]
+pub struct TypeBare {
+    pub percent_token: TLToken![%],
+    pub inner: Box<Type>,
+}
+
 
 mod spanned {
     use super::*;
@@ -51,6 +63,7 @@ mod spanned {
     impl Sealed for TypeInt {}
     impl Sealed for TypeParameterizedPath {}
     impl Sealed for TypeTypeParameter {}
+    impl Sealed for TypeBare {}
 
     impl Spanned for Type {
         fn span(&self) -> Span {
@@ -58,6 +71,7 @@ mod spanned {
                 Type::Int(ref t) => t.span(),
                 Type::ParameterizedPath(ref t) => t.span(),
                 Type::TypeParameter(ref t) => t.span(),
+                Type::Bare(ref t) => t.span(),
             }
         }
     }
@@ -80,6 +94,13 @@ mod spanned {
                 .to(self.ident.span())
         }
     }
+
+    impl Spanned for TypeBare {
+        fn span(&self) -> Span {
+            self.percent_token.span()
+                .to(self.inner.span())
+        }
+    }
 }
 
 
@@ -94,6 +115,7 @@ mod parsing {
     impl Sealed for TypeInt {}
     impl Sealed for TypeParameterizedPath {}
     impl Sealed for TypeTypeParameter {}
+    impl Sealed for TypeBare {}
 
     impl Synom for Type {
         named!(parse_cursor(Cursor) -> Type, alt_complete!(
@@ -102,6 +124,8 @@ mod parsing {
             tlsyn!(TypeParameterizedPath) => { Type::ParameterizedPath }
             |
             tlsyn!(TypeTypeParameter) => { Type::TypeParameter }
+            |
+            tlsyn!(TypeBare) => { Type::Bare }
         ));
     }
 
@@ -126,6 +150,14 @@ mod parsing {
             (TypeTypeParameter { excl_token, ident })
         ));
     }
+
+    impl Synom for TypeBare {
+        named!(parse_cursor(Cursor) -> TypeBare, do_parse!(
+            percent_token: tlpunct!(%) >>
+            inner: map!(tlsyn!(Type), Box::new) >>
+            (TypeBare { percent_token, inner })
+        ));
+    }
 }
 
 
@@ -141,6 +173,7 @@ mod printing {
     impl Sealed for TypeInt {}
     impl Sealed for TypeParameterizedPath {}
     impl Sealed for TypeTypeParameter {}
+    impl Sealed for TypeBare {}
 
     impl Print for Type {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -148,6 +181,7 @@ mod printing {
                 Type::Int(ref t) => t.print(f),
                 Type::ParameterizedPath(ref t) => t.print(f),
                 Type::TypeParameter(ref t) => t.print(f),
+                Type::Bare(ref t) => t.print(f),
             }
         }
     }
@@ -168,6 +202,15 @@ mod printing {
         fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
             self.excl_token.print(f)?;
             self.ident.print(f)?;
+
+            Ok(())
+        }
+    }
+
+    impl Print for TypeBare {
+        fn print(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            self.percent_token.print(f)?;
+            self.inner.print(f)?;
 
             Ok(())
         }

@@ -56,7 +56,7 @@ pub use path::{
 };
 
 mod ty;
-pub use ty::{Type, TypeInt, TypeParameterizedPath, TypeTypeParameter};
+pub use ty::{Type, TypeBare, TypeInt, TypeParameterizedPath, TypeTypeParameter};
 
 
 #[cfg(feature = "parsing")]

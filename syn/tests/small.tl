@@ -8,6 +8,7 @@ c.d.y_z#cccccccc {opt_param:type1} param:type2 bar:baz.spam.deadbeef<  A, B ,  C
 ---types---
 ---functions---
 a#ffffffff {q:t} {p r:u} { foo  spam   : Quux    } (i:int256) (x y z:int128) ( alice  bob   : Person ) = U;
+m.n p:%Bar q:%(   Baz  x y     z ) = R;
 ---types---
 
 // LAYER 68
