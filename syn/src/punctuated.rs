@@ -269,10 +269,11 @@ mod parsing {
         ) -> nom::IResult<Cursor<'a>, Self> {
             let actual_parse = |s| match whitespace {
                 Whitespace::None => parse(s),
-                Whitespace::Present => sp!(s, parse),
+                Whitespace::Present => with_afterspace!(s, parse),
             };
 
             let mut res = Punctuated::new();
+            input = nom::space0(input)?.0;
 
             // get the first element
             let (rest, res) = match actual_parse(input) {

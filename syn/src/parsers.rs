@@ -1,6 +1,3 @@
-use cursor::Cursor;
-
-
 macro_rules! tlsyn {
     ($i:expr, $t:ty) => {
         <$t as $crate::synom::Synom>::parse_cursor($i)
@@ -40,32 +37,26 @@ macro_rules! parens {
 
 macro_rules! slash_asterisks {
     ($i:expr,) => {
-        $crate::token::SlashAsterisk::parse($i, |i| take_until!(i, "*/"))
+        $crate::token::SlashAsterisk::parse($i, |i| take_until!(i, $crate::token::SlashAsterisk::RIGHT))
     };
 }
 
 
-named!(pub space(Cursor) -> Cursor, eat_separator!(" \t"));
-
-macro_rules! sp {
-    ($i:expr, $($args:tt)*) => {
+macro_rules! with_afterspace {
+    ($i:expr, $submac:ident!( $($args:tt)* )) => {
         {
-            use $crate::parsers::space;
-            use $crate::nom::{AtEof, Convert};
+            let i = {$i};
 
-            match sep!($i, space, $($args)*) {
-                Err(e)      => Err(e),
-                Ok((i1, o)) => {
-                    match space(i1) {
-                        Err($crate::nom::Err::Incomplete(_)) => {
-                            assert!(i1.at_eof());
-                            Ok((i1, o))
-                        },
-                        Err(e)      => Err($crate::nom::Err::convert(e)),
-                        Ok((i2, _)) => Ok((i2, o)),
-                    }
+            match $submac!(i, $($args)*) {
+                Err(e) => Err(e),
+                Ok((rest1, o)) => match nom::space0(rest1) {
+                    Err(e) => Err(e),
+                    Ok((rest2, _space)) => Ok((rest2, o)),
                 },
             }
         }
-    }
+    };
+    ($i:expr, $f:expr) => {
+        with_afterspace!($i, call!($f))
+    };
 }

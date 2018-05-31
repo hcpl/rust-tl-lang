@@ -90,6 +90,11 @@ macro_rules! token_delimiter {
         #[cfg_attr(feature = "debug-impls", derive(Debug))]
         pub struct $name(pub $crate::span::Span);
 
+        impl $name {
+            pub const LEFT: &'static str = $delimiter_left;
+            pub const RIGHT: &'static str = $delimiter_right;
+        }
+
         #[cfg(feature = "eq-impls")]
         impl $crate::std::cmp::Eq for $name {}
 

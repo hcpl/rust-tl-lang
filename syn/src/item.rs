@@ -179,7 +179,7 @@ pub struct DelimiterFunctions {
     pub span: Span,
 }
 
-/// A layer item: `// LAYER 68`.
+/// A layer item: `// LAYER 78`.
 #[cfg_attr(feature = "clone-impls", derive(Clone))]
 #[cfg_attr(feature = "debug-impls", derive(Debug))]
 pub struct ItemLayer {
@@ -436,6 +436,8 @@ mod spanned {
 
 #[cfg(feature = "parsing")]
 mod parsing {
+    use nom;
+
     use super::*;
     use cursor::Cursor;
     use synom::Synom;
@@ -475,19 +477,26 @@ mod parsing {
     }
 
     impl Synom for ItemCombinator {
-        named!(parse_cursor(Cursor) -> ItemCombinator, sp!(do_parse!(
+        named!(parse_cursor(Cursor) -> ItemCombinator, do_parse!(
+            call!(nom::space0) >>
             name: tlsyn!(Path) >>
             combinator_id: opt!(tlsyn!(CombinatorId)) >>
-            opt_params: sp!(many0!(tlsyn!(OptParam))) >>
-            params: many0!(sp!(tlsyn!(Param))) >>
+            call!(nom::space0) >>
+            opt_params: many0!(with_afterspace!(tlsyn!(OptParam))) >>
+            call!(nom::space0) >>
+            params: many0!(with_afterspace!(tlsyn!(Param))) >>
+            call!(nom::space0) >>
             equals_token: tlpunct!(=) >>
+            call!(nom::space0) >>
             result_type: tlsyn!(ParameterizedPath) >>
+            call!(nom::space0) >>
             semicolon_token: tlpunct!(;) >>
+            call!(nom::space0) >>
 
             (ItemCombinator {
                 name, combinator_id, opt_params, params, equals_token, result_type, semicolon_token,
             })
-        )));
+        ));
     }
 
     impl Synom for CombinatorId {
@@ -500,11 +509,17 @@ mod parsing {
 
     impl Synom for OptParam {
         named!(parse_cursor(Cursor) -> OptParam, do_parse!(
-            opt_param: braces!(sp!(tuple!(
-                sp!(many1!(tlsyn!(Ident))),
-                tlpunct!(:),
-                tlsyn!(Type)
-            ))) >>
+            opt_param: braces!(do_parse!(
+                call!(nom::space0) >>
+                var_idents: many1!(with_afterspace!(tlsyn!(Ident))) >>
+                call!(nom::space0) >>
+                colon_token: tlpunct!(:) >>
+                call!(nom::space0) >>
+                ty: tlsyn!(Type) >>
+                call!(nom::space0) >>
+
+                (var_idents, colon_token, ty)
+            )) >>
 
             (OptParam {
                 brace_token: opt_param.0,
@@ -561,7 +576,7 @@ mod parsing {
         named!(parse_cursor(Cursor) -> ParamRepeated, do_parse!(
             param_repeated_ident: opt!(tlsyn!(ParamRepeatedIdent)) >>
             multiplicity: opt!(tlsyn!(Multiplicity)) >>
-            params: brackets!(sp!(many0!(tlsyn!(Param)))) >>
+            params: brackets!(many0!(with_afterspace!(tlsyn!(Param)))) >>
 
             (ParamRepeated {
                 param_repeated_ident,
@@ -592,11 +607,17 @@ mod parsing {
 
     impl Synom for ParamWithParen {
         named!(parse_cursor(Cursor) -> ParamWithParen, do_parse!(
-            param: parens!(sp!(tuple!(
-                sp!(many1!(tlsyn!(Ident))),
-                tlpunct!(:),
-                tlsyn!(Type)
-            ))) >>
+            param: parens!(do_parse!(
+                call!(nom::space0) >>
+                var_idents: many1!(with_afterspace!(tlsyn!(Ident))) >>
+                call!(nom::space0) >>
+                colon_token: tlpunct!(:) >>
+                call!(nom::space0) >>
+                ty: tlsyn!(Type) >>
+                call!(nom::space0) >>
+
+                (var_idents, colon_token, ty)
+            )) >>
 
             (ParamWithParen {
                 paren_token: param.0,
@@ -649,15 +670,19 @@ mod parsing {
     }
 
     impl Synom for ItemLayer {
-        named!(parse_cursor(Cursor) -> ItemLayer, sp!(do_parse!(
+        named!(parse_cursor(Cursor) -> ItemLayer, do_parse!(
+            call!(nom::space0) >>
             slash_slash_token: tlsyn!(SlashSlash) >>
+            call!(nom::space0) >>
             layer_token: tlkeyword!(LAYER) >>
+            call!(nom::space0) >>
             layer_cursor: take_while!(is_decimal_digit) >>
             layer_span: value!(layer_cursor.span()) >>
             layer: map_res!(value!(layer_cursor.to_str()), str::parse) >>
+            call!(nom::space0) >>
 
             (ItemLayer { slash_slash_token, layer_token, layer_span, layer })
-        )));
+        ));
     }
 
     impl Synom for ItemComment {

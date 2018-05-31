@@ -80,7 +80,7 @@ impl<'a> Cursor<'a> {
     {
         let match_pos = match self.remaining.char_indices().find(|&(_, c)| predicate(c)) {
             Some((i, _)) => i,
-            None => return Err(nom::Err::Incomplete(nom::Needed::Size(1))),
+            None => self.remaining.len(),
         };
 
         if let Some(error_kind) = error_kind {

@@ -162,6 +162,8 @@ mod spanned {
 
 #[cfg(feature = "parsing")]
 mod parsing {
+    use nom;
+
     use super::*;
     use cursor::Cursor;
     use punctuated::{Count, TrailingPunctuation, Whitespace};
@@ -191,12 +193,13 @@ mod parsing {
     }
 
     impl Synom for ParameterizedPath {
-        named!(parse_cursor(Cursor) -> ParameterizedPath, sp!(do_parse!(
+        named!(parse_cursor(Cursor) -> ParameterizedPath, do_parse!(
             path: tlsyn!(Path) >>
+            call!(nom::space0) >>
             args: opt!(tlsyn!(GenericArguments)) >>
 
             (ParameterizedPath { path, args })
-        )));
+        ));
     }
 
     impl Synom for GenericArguments {
@@ -224,7 +227,7 @@ mod parsing {
 
     impl Synom for SpaceSeparatedGenericArguments {
         named!(parse_cursor(Cursor) -> SpaceSeparatedGenericArguments, do_parse!(
-            args: sp!(many1!(tlsyn!(ParameterizedPath))) >>
+            args: many1!(with_afterspace!(tlsyn!(ParameterizedPath))) >>
 
             (SpaceSeparatedGenericArguments { args })
         ));

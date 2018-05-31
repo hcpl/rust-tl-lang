@@ -12,3 +12,4 @@ a#ffffffff {q:t} {p r:u} { foo  spam   : Quux    } (i:int256) (x y z:int128) ( a
 
 // LAYER 68
 vector#1cb5c415 {t:Type} # [ t ] = Vector t;
+// LAYER 78
