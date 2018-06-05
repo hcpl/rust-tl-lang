@@ -1,5 +1,6 @@
 //! A punctuated sequence of syntax tree nodes separated by punctuation.
 
+use std::iter;
 use std::option;
 use std::slice;
 use std::vec;
@@ -146,6 +147,42 @@ impl<T, P> Punctuated<T, P> {
         self.inner.push((*last, punctuation));
     }
 
+    /// Remove the last punctuated pair from this sequence, or `None` if the
+    /// sequence is empty.
+    pub fn pop(&mut self) -> Option<Pair<T, P>> {
+        if self.last.is_some() {
+            self.last.take().map(|t| Pair::End(*t))
+        } else {
+            self.inner.pop().map(|(t, d)| Pair::Punctuated(t, d))
+        }
+    }
+
+    /// Remove an element at position `index`.
+    ///
+    /// # Panics
+    ///
+    /// This method panics if `index` is greater than or equal to the number of
+    /// elements previously in this punctuated sequence.
+    pub fn remove(&mut self, index: usize) -> Pair<T, P> {
+        assert!(index < self.len());
+
+        if index < self.inner.len() {
+            let (t, d) = self.inner.remove(index);
+            Pair::Punctuated(t, d)
+        } else {
+            // This assertion is actually unnecessary due to the combination of:
+            // * assertion in the beginning of the method;
+            // * and the condition in `if` being false.
+            // But we want to be safe here, so remove this only if permormance
+            // will suffer (remember that compiler can use assertions to
+            // optimize code).
+            assert!(index == self.inner.len());
+            // Invariant is asserted above, so `.unwrap()` must be fine here
+            let t = self.last.take().unwrap();
+            Pair::End(*t)
+        }
+    }
+
     /// Return true if either this `Punctuated` is empty, or it has a trailing
     /// punctuation.
     pub fn empty_or_trailing(&self) -> bool {
@@ -167,6 +204,44 @@ where
             self.push_punct(Default::default());
         }
         self.push_value(value);
+    }
+
+    /// Insert an element at position `index`.
+    ///
+    /// # Panics
+    ///
+    /// This method panics if `index` is greater than the number of elements
+    /// previously in this punctuated sequence.
+    pub fn insert(&mut self, index: usize, value: T) {
+        assert!(index <= self.len());
+
+        if index == self.len() {
+            self.push(value);
+        } else {
+            self.inner.insert(index, (value, Default::default()));
+        }
+    }
+}
+
+impl<T, P> iter::FromIterator<T> for Punctuated<T, P>
+where
+    P: Default,
+{
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut res = Punctuated::new();
+        res.extend(iter);
+        res
+    }
+}
+
+impl<T, P> Extend<T> for Punctuated<T, P>
+where
+    P: Default,
+{
+    fn extend<I :IntoIterator<Item = T>>(&mut self, iter: I) {
+        for value in iter {
+            self.push(value);
+        }
     }
 }
 
@@ -466,14 +541,14 @@ impl<T, P> ExactSizeIterator for IntoIter<T, P> {
 
 /// A single syntax tree node of type `T` followed by its trailing punctuation
 /// of type `P` if any,
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Pair<T, P> {
     Punctuated(T, P),
     End(T),
 }
 
 impl<T, P> Pair<T, P> {
-    /// Extracts the syntax tree node from this punctuated pair, discarding the
+    /// Extract the syntax tree node from this punctuated pair, discarding the
     /// following punctuation.
     pub fn into_value(self) -> T {
         match self {
@@ -481,21 +556,37 @@ impl<T, P> Pair<T, P> {
         }
     }
 
-    /// Borrows the syntax tree node from this punctuated pair.
+    /// Borrow the syntax tree node from this punctuated pair.
     pub fn value(&self) -> &T {
         match *self {
             Pair::Punctuated(ref t, _) | Pair::End(ref t) => t,
         }
     }
 
-    /// Mutably borrows the syntax tree node from this punctuated pair.
+    /// Mutably borrow the syntax tree node from this punctuated pair.
     pub fn value_mut(&mut self) -> &mut T {
         match *self {
             Pair::Punctuated(ref mut t, _) | Pair::End(ref mut t) => t,
         }
     }
 
-    /// Borrows the punctuation from this punctuated pair, unless this pair is
+    /// Convert from `Pair<T, P>` to `Pair<&T, &P>`.
+    pub fn as_ref(&self) -> Pair<&T, &P> {
+        match *self {
+            Pair::Punctuated(ref t, ref d) => Pair::Punctuated(t, d),
+            Pair::End(ref t) => Pair::End(t),
+        }
+    }
+
+    /// Convert from `Pair<T, P>` to `Pair<&mut T, &mut P>`.
+    pub fn as_mut(&mut self) -> Pair<&mut T, &mut P> {
+        match *self {
+            Pair::Punctuated(ref mut t, ref mut d) => Pair::Punctuated(t, d),
+            Pair::End(ref mut t) => Pair::End(t),
+        }
+    }
+
+    /// Borrow the punctuation from this punctuated pair, unless this pair is
     /// the final one and there is no trailing punctuation.
     pub fn punct(&self) -> Option<&P> {
         match *self {
@@ -615,4 +706,119 @@ pub enum Whitespace {
     None,
     /// Treat whitespace specially.
     Present,
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use std::marker::PhantomData;
+
+    #[test]
+    fn punctuated_empty_properties() {
+        // A workaround to test methods that take `self` by value even when
+        // "clone-impls" feature is not enabled.
+        let new_p = || Punctuated::new();
+        let mut p: Punctuated<u32, ()> = new_p();
+
+        assert_eq!(p.len(), 0);
+        assert!(p.empty_or_trailing());
+        assert_eq!(p.first(), None);
+        assert_eq!(p.last(), None);
+
+        assert!(p.iter().next().is_none());
+        assert_eq!(p.iter().len(), 0);
+
+        assert!(p.iter_mut().next().is_none());
+        assert_eq!(p.iter_mut().len(), 0);
+
+        assert!(new_p().into_iter().next().is_none());
+        assert_eq!(new_p().into_iter().len(), 0);
+
+        assert!(p.pairs().next().is_none());
+        assert_eq!(p.pairs().len(), 0);
+
+        assert!(p.pairs_mut().next().is_none());
+        assert_eq!(p.pairs_mut().len(), 0);
+
+        assert!(new_p().into_pairs().next().is_none());
+        assert_eq!(new_p().into_pairs().len(), 0);
+    }
+
+    #[test]
+    fn punctuated_no_trailing_1_elem_properties() {
+        // A workaround to test methods that take `self` by value even when
+        // "clone-impls" feature is not enabled.
+        let new_p = || vec![i64::min_value()].into_iter().collect();
+        let mut p: Punctuated<i64, PhantomData<String>> = new_p();
+
+        assert_eq!(p.len(), 1);
+        assert!(!p.empty_or_trailing());
+        assert_eq!(p.first(), Some(Pair::End(&-0x8000_0000_0000_0000)));
+        assert_eq!(p.last(), Some(Pair::End(&-0x8000_0000_0000_0000)));
+
+        let mut values_expected = vec![-0x8000_0000_0000_0000];
+
+        assert!(p.iter().eq(values_expected.iter()));
+        assert_eq!(p.iter().len(), 1);
+
+        assert!(p.iter_mut().eq(values_expected.iter_mut()));
+        assert_eq!(p.iter_mut().len(), 1);
+
+        assert!(new_p().into_iter().eq(values_expected.clone().into_iter()));
+        assert_eq!(new_p().into_iter().len(), 1);
+
+        let mut pairs_expected = vec![Pair::End(-0x8000_0000_0000_0000)];
+
+        assert!(p.pairs().eq(pairs_expected.iter().map(Pair::as_ref)));
+        assert_eq!(p.pairs().len(), 1);
+
+        assert!(p.pairs_mut().eq(pairs_expected.iter_mut().map(Pair::as_mut)));
+        assert_eq!(p.pairs_mut().len(), 1);
+
+        assert!(new_p().into_pairs().eq(pairs_expected.clone().into_iter()));
+        assert_eq!(new_p().into_pairs().len(), 1);
+    }
+
+    #[test]
+    fn punctuated_no_trailing_more_than_1_elem_properties() {
+        // A workaround to test methods that take `self` by value even when
+        // "clone-impls" feature is not enabled.
+        let new_p = || vec![4, 2, 5, 1, 3].into_iter().collect();
+        let mut p: Punctuated<u32, ()> = new_p();
+
+        assert_eq!(p.len(), 5);
+        assert!(!p.empty_or_trailing());
+        assert_eq!(p.first(), Some(Pair::Punctuated(&4, &())));
+        assert_eq!(p.last(), Some(Pair::End(&3)));
+
+        let mut values_expected = vec![4, 2, 5, 1, 3];
+
+        assert!(p.iter().eq(values_expected.iter()));
+        assert_eq!(p.iter().len(), 5);
+
+        assert!(p.iter_mut().eq(values_expected.iter_mut()));
+        assert_eq!(p.iter_mut().len(), 5);
+
+        assert!(new_p().into_iter().eq(values_expected.clone().into_iter()));
+        assert_eq!(new_p().into_iter().len(), 5);
+
+        let mut pairs_expected = vec![
+            Pair::Punctuated(4, ()),
+            Pair::Punctuated(2, ()),
+            Pair::Punctuated(5, ()),
+            Pair::Punctuated(1, ()),
+            Pair::End(3),
+        ];
+
+        assert!(p.pairs().eq(pairs_expected.iter().map(Pair::as_ref)));
+        assert_eq!(p.pairs().len(), 5);
+
+        assert!(p.pairs_mut().eq(pairs_expected.iter_mut().map(Pair::as_mut)));
+        assert_eq!(p.pairs_mut().len(), 5);
+
+        assert!(new_p().into_pairs().eq(pairs_expected.clone().into_iter()));
+        assert_eq!(new_p().into_pairs().len(), 5);
+    }
 }
