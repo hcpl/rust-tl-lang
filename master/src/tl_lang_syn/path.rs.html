@@ -356,6 +356,9 @@
 <span id="356">356</span>
 <span id="357">357</span>
 <span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">Ident</span>;
 <span class="kw">use</span> <span class="ident">punctuated</span>::<span class="ident">Punctuated</span>;
@@ -521,6 +524,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">parsing</span> {
+    <span class="kw">use</span> <span class="ident">nom</span>;
+
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">cursor</span>::<span class="ident">Cursor</span>;
     <span class="kw">use</span> <span class="ident">punctuated</span>::{<span class="ident">Count</span>, <span class="ident">TrailingPunctuation</span>, <span class="ident">Whitespace</span>};
@@ -550,12 +555,13 @@
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ParameterizedPath</span> {
-        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParameterizedPath</span>, <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
+        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParameterizedPath</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
             <span class="ident">path</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Path</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">args</span>: <span class="macro">opt</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">GenericArguments</span>)) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ParameterizedPath</span> { <span class="ident">path</span>, <span class="ident">args</span> })
-        )));
+        ));
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">GenericArguments</span> {
@@ -583,7 +589,7 @@
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">SpaceSeparatedGenericArguments</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">SpaceSeparatedGenericArguments</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
-            <span class="ident">args</span>: <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">many1</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">ParameterizedPath</span>))) <span class="op">&gt;&gt;</span>
+            <span class="ident">args</span>: <span class="macro">many1</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">ParameterizedPath</span>))) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">SpaceSeparatedGenericArguments</span> { <span class="ident">args</span> })
         ));

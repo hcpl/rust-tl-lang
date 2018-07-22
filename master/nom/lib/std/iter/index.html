@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `iter` mod in crate `nom`."><meta name="keywords" content="rust, rustlang, rust-lang, iter"><title>nom::lib::std::iter - Rust</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script src="../../../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module iter</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a></p><script>window.sidebarCurrent = {name: 'iter', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a>::<wbr><a class="mod" href=''>iter</a></span><span class='out-of-band'><span class='since' title='Stable since Rust version 1.0.0'>1.0.0</span><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/lib.rs.html#196' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Composable external iteration.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `iter` mod in crate `nom`."><meta name="keywords" content="rust, rustlang, rust-lang, iter"><title>nom::lib::std::iter - Rust</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script src="../../../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module iter</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a></p><script>window.sidebarCurrent = {name: 'iter', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a>::<wbr><a class="mod" href=''>iter</a></span><span class='out-of-band'><span class='since' title='Stable since Rust version 1.0.0'>1.0.0</span><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/lib.rs.html#195' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Composable external iteration.</p>
 <p>If you've found yourself with a collection of some kind, and needed to
 perform an operation on the elements of said collection, you'll quickly run
 into 'iterators'. Iterators are heavily used in idiomatic Rust code, so
@@ -299,6 +299,15 @@ of the produced iterators.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Flatten.html"
+                                  title='struct nom::lib::std::iter::Flatten'>Flatten</a></td>
+                           <td class='docblock-short'>
+                                <p>An iterator that flattens one level of nesting in an iterator of things
+that can be turned into iterators.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="struct" href="struct.Fuse.html"
                                   title='struct nom::lib::std::iter::Fuse'>Fuse</a></td>
                            <td class='docblock-short'>
@@ -350,6 +359,15 @@ element.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="struct" href="struct.RepeatWith.html"
+                                  title='struct nom::lib::std::iter::RepeatWith'>RepeatWith</a></td>
+                           <td class='docblock-short'>
+                                <p>An iterator that repeats elements of type <code>A</code> endlessly by
+applying the provided closure <code>F: FnMut() -&gt; A</code>.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="struct" href="struct.Rev.html"
                                   title='struct nom::lib::std::iter::Rev'>Rev</a></td>
                            <td class='docblock-short'>
@@ -382,6 +400,14 @@ element.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="struct" href="struct.StepBy.html"
+                                  title='struct nom::lib::std::iter::StepBy'>StepBy</a></td>
+                           <td class='docblock-short'>
+                                <p>An iterator for stepping iterators by a custom amount.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="struct" href="struct.Take.html"
                                   title='struct nom::lib::std::iter::Take'>Take</a></td>
                            <td class='docblock-short'>
@@ -402,32 +428,6 @@ element.</p>
                                   title='struct nom::lib::std::iter::Zip'>Zip</a></td>
                            <td class='docblock-short'>
                                 <p>An iterator that iterates two other iterators simultaneously.</p>
-
-                           </td>
-                       </tr>
-                       <tr class='unstable module-item'>
-                           <td><a class="struct" href="struct.Flatten.html"
-                                  title='struct nom::lib::std::iter::Flatten'>Flatten</a></td>
-                           <td class='docblock-short'>
-                               [<div class='stab unstable'>Experimental</div>] <p>An iterator that flattens one level of nesting in an iterator of things
-that can be turned into iterators.</p>
-
-                           </td>
-                       </tr>
-                       <tr class='unstable module-item'>
-                           <td><a class="struct" href="struct.RepeatWith.html"
-                                  title='struct nom::lib::std::iter::RepeatWith'>RepeatWith</a></td>
-                           <td class='docblock-short'>
-                               [<div class='stab unstable'>Experimental</div>] <p>An iterator that repeats elements of type <code>A</code> endlessly by
-applying the provided closure <code>F: FnMut() -&gt; A</code>.</p>
-
-                           </td>
-                       </tr>
-                       <tr class='unstable module-item'>
-                           <td><a class="struct" href="struct.StepBy.html"
-                                  title='struct nom::lib::std::iter::StepBy'>StepBy</a></td>
-                           <td class='docblock-short'>
-                               [<div class='stab unstable'>Experimental</div>] <p>An iterator for stepping iterators by a custom amount.</p>
 
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
@@ -546,11 +546,11 @@ iterator.</p>
 
                            </td>
                        </tr>
-                       <tr class='unstable module-item'>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.repeat_with.html"
                                   title='fn nom::lib::std::iter::repeat_with'>repeat_with</a></td>
                            <td class='docblock-short'>
-                               [<div class='stab unstable'>Experimental</div>] <p>Creates a new iterator that repeats elements of type <code>A</code> endlessly by
+                                <p>Creates a new iterator that repeats elements of type <code>A</code> endlessly by
 applying the provided closure, the repeater, <code>F: FnMut() -&gt; A</code>.</p>
 
                            </td>

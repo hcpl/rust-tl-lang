@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `fmt` mod in crate `nom`."><meta name="keywords" content="rust, rustlang, rust-lang, fmt"><title>nom::lib::std::fmt - Rust</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script src="../../../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module fmt</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'><a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a></p><script>window.sidebarCurrent = {name: 'fmt', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a>::<wbr><a class="mod" href=''>fmt</a></span><span class='out-of-band'><span class='since' title='Stable since Rust version 1.0.0'>1.0.0</span><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='https://doc.rust-lang.org/nightly/src/alloc/lib.rs.html#182' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Utilities for formatting and printing <code>String</code>s.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `fmt` mod in crate `nom`."><meta name="keywords" content="rust, rustlang, rust-lang, fmt"><title>nom::lib::std::fmt - Rust</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script src="../../../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module fmt</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'><a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a></p><script>window.sidebarCurrent = {name: 'fmt', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>nom</a>::<wbr><a href='../../index.html'>lib</a>::<wbr><a href='../index.html'>std</a>::<wbr><a class="mod" href=''>fmt</a></span><span class='out-of-band'><span class='since' title='Stable since Rust version 1.0.0'>1.0.0</span><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='https://doc.rust-lang.org/nightly/src/alloc/lib.rs.html#175' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Utilities for formatting and printing <code>String</code>s.</p>
 <p>This module contains the runtime support for the <a href="../../std/macro.format.html"><code>format!</code></a> syntax extension.
 This macro is implemented in the compiler to emit calls to this module in
 order to format arguments at runtime into strings.</p>
@@ -265,7 +265,8 @@ parameters (corresponding to <code>format_spec</code> in the syntax above). Thes
 parameters affect the string representation of what's being formatted. This
 syntax draws heavily from Python's, so it may seem a bit familiar.</p>
 <h2 id="fillalignment" class="section-header"><a href="#fillalignment">Fill/Alignment</a></h2>
-<p>The fill character is provided normally in conjunction with the <code>width</code>
+<p>The fill character is provided normally in conjunction with the
+<a href="#width"><code>width</code></a>
 parameter. This indicates that if the value being formatted is smaller than
 <code>width</code> some extra characters will be printed around it. The extra
 characters are specified by <code>fill</code>, and the alignment can be one of the
@@ -312,7 +313,8 @@ the digits.</li>
 If the value's string does not fill up this many characters, then the
 padding specified by fill/alignment will be used to take up the required
 space.</p>
-<p>The default fill/alignment for non-numerics is a space and left-aligned. The
+<p>The default <a href="#fillalignment">fill/alignment</a> for non-numerics is a space and
+left-aligned. The
 defaults for numeric formatters is also a space but with right-alignment. If
 the <code>0</code> flag is specified for numerics, then the implicit fill character is
 <code>0</code>.</p>
@@ -460,6 +462,15 @@ to prevent modification.</p>
                                 <p>A struct to represent both where to emit formatting strings to and how they
 should be formatted. A mutable version of this is passed to all formatting
 traits.</p>
+
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.Alignment.html"
+                                  title='enum nom::lib::std::fmt::Alignment'>Alignment</a></td>
+                           <td class='docblock-short'>
+                                <p>Possible alignments returned by <code>Formatter::align</code></p>
 
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>

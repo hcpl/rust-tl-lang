@@ -197,6 +197,8 @@
 <span id="197">197</span>
 <span id="198">198</span>
 <span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
@@ -225,7 +227,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Safety</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The index must satisfy `0 &lt;= index &lt; 32`</span>
+    <span class="doccomment">/// The index must satisfy `0 &lt;= index &lt; 32`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If conditions are not met, it is a violation of safety guarantees.</span>
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new_unchecked</span>(<span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">index</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">BitIndex</span> {
         <span class="ident">BitIndex</span> { <span class="ident">span</span>, <span class="ident">index</span> }
     }

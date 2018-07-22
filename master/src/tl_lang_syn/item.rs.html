@@ -1045,6 +1045,31 @@
 <span id="1045">1045</span>
 <span id="1046">1046</span>
 <span id="1047">1047</span>
+<span id="1048">1048</span>
+<span id="1049">1049</span>
+<span id="1050">1050</span>
+<span id="1051">1051</span>
+<span id="1052">1052</span>
+<span id="1053">1053</span>
+<span id="1054">1054</span>
+<span id="1055">1055</span>
+<span id="1056">1056</span>
+<span id="1057">1057</span>
+<span id="1058">1058</span>
+<span id="1059">1059</span>
+<span id="1060">1060</span>
+<span id="1061">1061</span>
+<span id="1062">1062</span>
+<span id="1063">1063</span>
+<span id="1064">1064</span>
+<span id="1065">1065</span>
+<span id="1066">1066</span>
+<span id="1067">1067</span>
+<span id="1068">1068</span>
+<span id="1069">1069</span>
+<span id="1070">1070</span>
+<span id="1071">1071</span>
+<span id="1072">1072</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">BitIndex</span>, <span class="ident">Comment</span>, <span class="ident">Id</span>, <span class="ident">Ident</span>, <span class="ident">ParameterizedPath</span>, <span class="ident">Path</span>, <span class="ident">Type</span>};
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
@@ -1227,7 +1252,7 @@
     <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
 }
 
-<span class="doccomment">/// A layer item: `// LAYER 68`.</span>
+<span class="doccomment">/// A layer item: `// LAYER 78`.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ItemLayer</span> {
@@ -1484,6 +1509,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">parsing</span> {
+    <span class="kw">use</span> <span class="ident">nom</span>;
+
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">cursor</span>::<span class="ident">Cursor</span>;
     <span class="kw">use</span> <span class="ident">synom</span>::<span class="ident">Synom</span>;
@@ -1523,19 +1550,26 @@
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ItemCombinator</span> {
-        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ItemCombinator</span>, <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
+        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ItemCombinator</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">name</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Path</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">combinator_id</span>: <span class="macro">opt</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">CombinatorId</span>)) <span class="op">&gt;&gt;</span>
-            <span class="ident">opt_params</span>: <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">many0</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">OptParam</span>))) <span class="op">&gt;&gt;</span>
-            <span class="ident">params</span>: <span class="macro">many0</span><span class="macro">!</span>(<span class="macro">sp</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Param</span>))) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+            <span class="ident">opt_params</span>: <span class="macro">many0</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">OptParam</span>))) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+            <span class="ident">params</span>: <span class="macro">many0</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Param</span>))) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">equals_token</span>: <span class="macro">tlpunct</span><span class="macro">!</span>(<span class="op">=</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">result_type</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">ParameterizedPath</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">semicolon_token</span>: <span class="macro">tlpunct</span><span class="macro">!</span>(;) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ItemCombinator</span> {
                 <span class="ident">name</span>, <span class="ident">combinator_id</span>, <span class="ident">opt_params</span>, <span class="ident">params</span>, <span class="ident">equals_token</span>, <span class="ident">result_type</span>, <span class="ident">semicolon_token</span>,
             })
-        )));
+        ));
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">CombinatorId</span> {
@@ -1548,11 +1582,17 @@
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">OptParam</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">OptParam</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
-            <span class="ident">opt_param</span>: <span class="macro">braces</span><span class="macro">!</span>(<span class="macro">sp</span><span class="macro">!</span>(<span class="macro">tuple</span><span class="macro">!</span>(
-                <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">many1</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Ident</span>))),
-                <span class="macro">tlpunct</span><span class="macro">!</span>(:),
-                <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Type</span>)
-            ))) <span class="op">&gt;&gt;</span>
+            <span class="ident">opt_param</span>: <span class="macro">braces</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">var_idents</span>: <span class="macro">many1</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Ident</span>))) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">colon_token</span>: <span class="macro">tlpunct</span><span class="macro">!</span>(:) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">ty</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Type</span>) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+
+                (<span class="ident">var_idents</span>, <span class="ident">colon_token</span>, <span class="ident">ty</span>)
+            )) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">OptParam</span> {
                 <span class="ident">brace_token</span>: <span class="ident">opt_param</span>.<span class="number">0</span>,
@@ -1609,7 +1649,7 @@
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParamRepeated</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
             <span class="ident">param_repeated_ident</span>: <span class="macro">opt</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">ParamRepeatedIdent</span>)) <span class="op">&gt;&gt;</span>
             <span class="ident">multiplicity</span>: <span class="macro">opt</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Multiplicity</span>)) <span class="op">&gt;&gt;</span>
-            <span class="ident">params</span>: <span class="macro">brackets</span><span class="macro">!</span>(<span class="macro">sp</span><span class="macro">!</span>(<span class="macro">many0</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Param</span>)))) <span class="op">&gt;&gt;</span>
+            <span class="ident">params</span>: <span class="macro">brackets</span><span class="macro">!</span>(<span class="macro">many0</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Param</span>)))) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ParamRepeated</span> {
                 <span class="ident">param_repeated_ident</span>,
@@ -1640,11 +1680,17 @@
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ParamWithParen</span> {
         <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ParamWithParen</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
-            <span class="ident">param</span>: <span class="macro">parens</span><span class="macro">!</span>(<span class="macro">sp</span><span class="macro">!</span>(<span class="macro">tuple</span><span class="macro">!</span>(
-                <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">many1</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Ident</span>))),
-                <span class="macro">tlpunct</span><span class="macro">!</span>(:),
-                <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Type</span>)
-            ))) <span class="op">&gt;&gt;</span>
+            <span class="ident">param</span>: <span class="macro">parens</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">var_idents</span>: <span class="macro">many1</span><span class="macro">!</span>(<span class="macro">with_afterspace</span><span class="macro">!</span>(<span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Ident</span>))) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">colon_token</span>: <span class="macro">tlpunct</span><span class="macro">!</span>(:) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+                <span class="ident">ty</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">Type</span>) <span class="op">&gt;&gt;</span>
+                <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
+
+                (<span class="ident">var_idents</span>, <span class="ident">colon_token</span>, <span class="ident">ty</span>)
+            )) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ParamWithParen</span> {
                 <span class="ident">paren_token</span>: <span class="ident">param</span>.<span class="number">0</span>,
@@ -1697,15 +1743,19 @@
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ItemLayer</span> {
-        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ItemLayer</span>, <span class="macro">sp</span><span class="macro">!</span>(<span class="macro">do_parse</span><span class="macro">!</span>(
+        <span class="macro">named</span><span class="macro">!</span>(<span class="ident">parse_cursor</span>(<span class="ident">Cursor</span>) <span class="op">-&gt;</span> <span class="ident">ItemLayer</span>, <span class="macro">do_parse</span><span class="macro">!</span>(
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">slash_slash_token</span>: <span class="macro">tlsyn</span><span class="macro">!</span>(<span class="ident">SlashSlash</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">layer_token</span>: <span class="macro">tlkeyword</span><span class="macro">!</span>(<span class="ident">LAYER</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">layer_cursor</span>: <span class="macro">take_while</span><span class="macro">!</span>(<span class="ident">is_decimal_digit</span>) <span class="op">&gt;&gt;</span>
             <span class="ident">layer_span</span>: <span class="macro">value</span><span class="macro">!</span>(<span class="ident">layer_cursor</span>.<span class="ident">span</span>()) <span class="op">&gt;&gt;</span>
             <span class="ident">layer</span>: <span class="macro">map_res</span><span class="macro">!</span>(<span class="macro">value</span><span class="macro">!</span>(<span class="ident">layer_cursor</span>.<span class="ident">to_str</span>()), <span class="ident">str</span>::<span class="ident">parse</span>) <span class="op">&gt;&gt;</span>
+            <span class="macro">call</span><span class="macro">!</span>(<span class="ident">nom</span>::<span class="ident">space0</span>) <span class="op">&gt;&gt;</span>
 
             (<span class="ident">ItemLayer</span> { <span class="ident">slash_slash_token</span>, <span class="ident">layer_token</span>, <span class="ident">layer_span</span>, <span class="ident">layer</span> })
-        )));
+        ));
     }
 
     <span class="kw">impl</span> <span class="ident">Synom</span> <span class="kw">for</span> <span class="ident">ItemComment</span> {
