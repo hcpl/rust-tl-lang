@@ -16,27 +16,27 @@ env:
 
 script:
   - cargo build --verbose --manifest-path syn/Cargo.toml
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features clone-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features eq-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features hash-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features printing
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,hash-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features eq-impls,hash-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls,hash-impls
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features parsing,printing
-  - cargo build --verbose --manifest-path syn/Cargo.toml --features debug-impls,parsing,printing
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "clone-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "debug-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "eq-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "hash-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "parsing"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "printing"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "debug-impls eq-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "debug-impls hash-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "eq-impls hash-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "debug-impls eq-impls hash-impls"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "parsing printing"
+  - cargo build --verbose --manifest-path syn/Cargo.toml --features "debug-impls parsing printing"
   - cargo build --verbose --manifest-path syn/Cargo.toml --all-features
 
   - cargo test --verbose --manifest-path syn/Cargo.toml
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features eq-impls,hash-impls
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,eq-impls,hash-impls
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features parsing,printing
-  - cargo test --verbose --manifest-path syn/Cargo.toml --features debug-impls,parsing,printing
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "eq-impls"
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "debug-impls eq-impls"
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "eq-impls hash-impls"
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "debug-impls eq-impls hash-impls"
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "parsing printing"
+  - cargo test --verbose --manifest-path syn/Cargo.toml --features "debug-impls parsing printing"
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
 
 matrix:

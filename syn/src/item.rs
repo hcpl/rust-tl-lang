@@ -3,199 +3,150 @@ use span::Span;
 use token::{Brace, Bracket, Paren, SlashSlash};
 
 
-/// Top-level entities in TL schema that occupy whole lines.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum Item {
-    Combinator(ItemCombinator),
-    Delimiter(ItemDelimiter),
-    Layer(ItemLayer),
-    Comment(ItemComment),
-}
+macro_attr_many! {
+    /// Top-level entities in TL schema that occupy whole lines.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum Item {
+        Combinator(ItemCombinator),
+        Delimiter(ItemDelimiter),
+        Layer(ItemLayer),
+        Comment(ItemComment),
+    }
 
-/// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ItemCombinator {
-    pub name: Path,
-    pub combinator_id: Option<CombinatorId>,
-    pub opt_params: Vec<OptParam>,
-    pub params: Vec<Param>,
-    pub equals_token: TLToken![=],
-    pub result_type: ParameterizedPath,
-    pub semicolon_token: TLToken![;],
-}
+    /// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ItemCombinator {
+        pub name: Path,
+        pub combinator_id: Option<CombinatorId>,
+        pub opt_params: Vec<OptParam>,
+        pub params: Vec<Param>,
+        pub equals_token: TLToken![=],
+        pub result_type: ParameterizedPath,
+        pub semicolon_token: TLToken![;],
+    }
 
-/// A TL combinator id: `#1cb5c415`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct CombinatorId {
-    pub hash_token: TLToken![#],
-    pub id: Id,
-}
+    /// A TL combinator id: `#1cb5c415`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct CombinatorId {
+        pub hash_token: TLToken![#],
+        pub id: Id,
+    }
 
-/// An optional field declaration: `{X:Type}`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct OptParam {
-    pub brace_token: Brace,
-    pub var_idents: Vec<Ident>,
-    pub colon_token: TLToken![:],
-    pub ty: Type,
-}
+    /// An optional field declaration: `{X:Type}`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct OptParam {
+        pub brace_token: Brace,
+        pub var_idents: Vec<Ident>,
+        pub colon_token: TLToken![:],
+        pub ty: Type,
+    }
 
-/// A required field declaration.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum Param {
-    Conditional(ParamConditional),
-    Repeated(ParamRepeated),
-    WithParen(ParamWithParen),
-    TypeOnly(ParamTypeOnly),
-}
+    /// A required field declaration.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum Param {
+        Conditional(ParamConditional),
+        Repeated(ParamRepeated),
+        WithParen(ParamWithParen),
+        TypeOnly(ParamTypeOnly),
+    }
 
-/// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParamConditional {
-    pub var_ident: Ident,
-    pub colon_token: TLToken![:],
-    pub conditional_param_def: Option<ConditionalParamDef>,
-    pub ty: Type,
-}
+    /// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParamConditional {
+        pub var_ident: Ident,
+        pub colon_token: TLToken![:],
+        pub conditional_param_def: Option<ConditionalParamDef>,
+        pub ty: Type,
+    }
 
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ConditionalParamDef {
-    pub var_ident: Ident,
-    pub bit_selector: Option<BitSelector>,
-    pub question_token: TLToken![?],
-}
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ConditionalParamDef {
+        pub var_ident: Ident,
+        pub bit_selector: Option<BitSelector>,
+        pub question_token: TLToken![?],
+    }
 
-/// Selects a bit from a `#` parameter.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct BitSelector {
-    pub dot_token: TLToken![.],
-    pub bit_index: BitIndex,
-}
+    /// Selects a bit from a `#` parameter.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct BitSelector {
+        pub dot_token: TLToken![.],
+        pub bit_index: BitIndex,
+    }
 
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParamRepeated {
-    pub param_repeated_ident: Option<ParamRepeatedIdent>,
-    pub multiplicity: Option<Multiplicity>,
-    pub bracket_token: Bracket,
-    pub params: Vec<Param>,
-}
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParamRepeated {
+        pub param_repeated_ident: Option<ParamRepeatedIdent>,
+        pub multiplicity: Option<Multiplicity>,
+        pub bracket_token: Bracket,
+        pub params: Vec<Param>,
+    }
 
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParamRepeatedIdent {
-    pub var_ident: Ident,
-    pub colon_token: TLToken![:],
-}
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParamRepeatedIdent {
+        pub var_ident: Ident,
+        pub colon_token: TLToken![:],
+    }
 
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct Multiplicity {
-    pub term: Ident,  // FIXME: actually, it can be any term here
-    pub asterisk_token: TLToken![*],
-}
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct Multiplicity {
+        pub term: Ident,  // FIXME: actually, it can be any term here
+        pub asterisk_token: TLToken![*],
+    }
 
-/// A declaration enclosed in parentheses that may have multiple fields.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParamWithParen {
-    pub paren_token: Paren,
-    pub var_idents: Vec<Ident>,
-    pub colon_token: TLToken![:],
-    pub ty: Type,
-}
+    /// A declaration enclosed in parentheses that may have multiple fields.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParamWithParen {
+        pub paren_token: Paren,
+        pub var_idents: Vec<Ident>,
+        pub colon_token: TLToken![:],
+        pub ty: Type,
+    }
 
-/// A field with a bare type.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParamTypeOnly {
-    pub ty: Type,
-}
+    /// A field with a bare type.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParamTypeOnly {
+        pub ty: Type,
+    }
 
-/// A delimiter item.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ItemDelimiter {
-    pub delimiter: Delimiter,
-}
+    /// A delimiter item.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ItemDelimiter {
+        pub delimiter: Delimiter,
+    }
 
-/// Divides sections of declarations of TL combinators.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum Delimiter {
-    Types(DelimiterTypes),
-    Functions(DelimiterFunctions),
-}
+    /// Divides sections of declarations of TL combinators.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum Delimiter {
+        Types(DelimiterTypes),
+        Functions(DelimiterFunctions),
+    }
 
-/// A `---types---` delimiter.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct DelimiterTypes {
-    pub span: Span,
-}
+    /// A `---types---` delimiter.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct DelimiterTypes {
+        pub span: Span,
+    }
 
-/// A `---functions---` delimiter.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct DelimiterFunctions {
-    pub span: Span,
-}
+    /// A `---functions---` delimiter.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct DelimiterFunctions {
+        pub span: Span,
+    }
 
-/// A layer item: `// LAYER 78`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct ItemLayer {
-    pub slash_slash_token: SlashSlash,
-    pub layer_token: TLToken![LAYER],
-    pub layer_span: Span,
-    pub layer: u32,
-}
+    /// A layer item: `// LAYER 78`.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct ItemLayer {
+        pub slash_slash_token: SlashSlash,
+        pub layer_token: TLToken![LAYER],
+        pub layer_span: Span,
+        pub layer: u32,
+    }
 
-/// A comment item.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ItemComment {
-    pub comment: Comment,
+    /// A comment item.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ItemComment {
+        pub comment: Comment,
+    }
 }
 
 

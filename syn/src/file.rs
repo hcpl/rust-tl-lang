@@ -1,13 +1,12 @@
 use super::Item;
 
 
-/// A complete file of TL language source text.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct File {
-    pub items: Vec<Item>,
+macro_attr_many! {
+    /// A complete file of TL language source text.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct File {
+        pub items: Vec<Item>,
+    }
 }
 
 mod spanned {

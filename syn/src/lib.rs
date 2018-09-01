@@ -1,6 +1,8 @@
 //! A parsing library for parsing a string of TL language schema into a syntax tree of TL language
 //! source text.
 
+#[macro_use]
+extern crate macro_attr;
 #[cfg(feature = "parsing")]
 #[macro_use]
 extern crate nom;
@@ -9,7 +11,7 @@ extern crate nom;
 #[cfg(feature = "parsing")]
 #[macro_use]
 mod parsers;
-#[cfg_attr(test, macro_use)]
+#[macro_use]
 mod utils;
 
 #[cfg(feature = "parsing")]

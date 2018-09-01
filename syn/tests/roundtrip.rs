@@ -16,7 +16,7 @@ macro_rules! non_debug_assert_eq {
             panic!("assertion failed: `(left == right)`");
         }
     }};
-    ($left:expr, $right:expr) => {
+    ($left:expr, $right:expr,) => {
         non_debug_assert_eq!($left, $right)
     };
     ($left:expr, $right:expr, $($args:tt)+) => {{

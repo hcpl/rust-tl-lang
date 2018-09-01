@@ -1,12 +1,13 @@
 use span::Span;
 
 
-/// An index pointing to the n-th bit of a `#` value (or, an `u32` value).
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct BitIndex {
-    span: Span,
-    index: u8,
+macro_attr_many! {
+    /// An index pointing to the n-th bit of a `#` value (or, an `u32` value).
+    #[cfg_derive!(Clone, Debug)]
+    pub struct BitIndex {
+        span: Span,
+        index: u8,
+    }
 }
 
 impl BitIndex {

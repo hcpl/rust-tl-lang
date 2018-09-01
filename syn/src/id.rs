@@ -1,12 +1,13 @@
 use span::Span;
 
 
-/// A 32-bit number which identifies a TL combinator.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct Id {
-    pub span: Span,
-    pub id: u32,
+macro_attr_many! {
+    /// A 32-bit number which identifies a TL combinator.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct Id {
+        pub span: Span,
+        pub id: u32,
+    }
 }
 
 #[cfg(feature = "eq-impls")]

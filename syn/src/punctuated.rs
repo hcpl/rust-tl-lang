@@ -6,15 +6,14 @@ use std::slice;
 use std::vec;
 
 
-/// A punctuated sequence of syntax tree nodes of type `T` separated by
-/// punctuation of type `P`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct Punctuated<T, P> {
-    inner: Vec<(T, P)>,
-    last: Option<Box<T>>,
+macro_attr! {
+    /// A punctuated sequence of syntax tree nodes of type `T` separated by
+    /// punctuation of type `P`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct Punctuated<T, P> {
+        inner: Vec<(T, P)>,
+        last: Option<Box<T>>,
+    }
 }
 
 impl<T, P> Punctuated<T, P> {

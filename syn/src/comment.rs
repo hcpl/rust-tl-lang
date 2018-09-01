@@ -2,32 +2,29 @@ use span::Span;
 use token::{SlashAsterisk, SlashSlash};
 
 
-/// A single-line or multiline comment.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum Comment {
-    SingleLine(CommentSingleLine),
-    MultiLine(CommentMultiLine),
-}
+macro_attr_many! {
+    /// A single-line or multiline comment.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum Comment {
+        SingleLine(CommentSingleLine),
+        MultiLine(CommentMultiLine),
+    }
 
-/// A `//...` comment spanning a single line.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct CommentSingleLine {
-    pub slash_slash_token: SlashSlash,
-    pub content_span: Span,
-    pub content: String,
-}
+    /// A `//...` comment spanning a single line.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct CommentSingleLine {
+        pub slash_slash_token: SlashSlash,
+        pub content_span: Span,
+        pub content: String,
+    }
 
-/// A `/*...*/` comment spanning multiple lines.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct CommentMultiLine {
-    pub slash_asterisk_token: SlashAsterisk,
-    pub content_span: Span,
-    pub content: String,
+    /// A `/*...*/` comment spanning multiple lines.
+    #[cfg_derive!(Clone, Debug)]
+    pub struct CommentMultiLine {
+        pub slash_asterisk_token: SlashAsterisk,
+        pub content_span: Span,
+        pub content: String,
+    }
 }
 
 

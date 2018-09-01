@@ -1,55 +1,42 @@
 use super::{Ident, SafeParameterizedPath};
 
 
-// FIXME: handle arbitrary parameterized paths when inside parentheses.
-/// The possible types that can appear in TL declarations.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum Type {
-    Int(TypeInt),
-    ParameterizedPath(TypeParameterizedPath),
-    TypeParameter(TypeTypeParameter),
-    Bare(TypeBare),
-}
+macro_attr_many! {
+    // FIXME: handle arbitrary parameterized paths when inside parentheses.
+    /// The possible types that can appear in TL declarations.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum Type {
+        Int(TypeInt),
+        ParameterizedPath(TypeParameterizedPath),
+        TypeParameter(TypeTypeParameter),
+        Bare(TypeBare),
+    }
 
-/// A special type of integers in range from 0 to 2^31-1 inclusive: `#`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct TypeInt {
-    pub hash_token: TLToken![#],
-}
+    /// A special type of integers in range from 0 to 2^31-1 inclusive: `#`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct TypeInt {
+        pub hash_token: TLToken![#],
+    }
 
-/// A type represented by a safe parameterized path: `contacts.Link`, `messages.Chats`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct TypeParameterizedPath {
-    pub safe_parameterized_path: SafeParameterizedPath,
-}
+    /// A type represented by a safe parameterized path: `contacts.Link`, `messages.Chats`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct TypeParameterizedPath {
+        pub safe_parameterized_path: SafeParameterizedPath,
+    }
 
-/// A type parameter: `!X`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct TypeTypeParameter {
-    pub excl_token: TLToken![!],
-    pub ident: Ident,
-}
+    /// A type parameter: `!X`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct TypeTypeParameter {
+        pub excl_token: TLToken![!],
+        pub ident: Ident,
+    }
 
-/// A bare type parameter: `%(Tuple X n)`.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct TypeBare {
-    pub percent_token: TLToken![%],
-    pub inner: Box<Type>,
+    /// A bare type parameter: `%(Tuple X n)`.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct TypeBare {
+        pub percent_token: TLToken![%],
+        pub inner: Box<Type>,
+    }
 }
 
 

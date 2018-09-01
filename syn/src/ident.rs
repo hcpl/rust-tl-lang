@@ -1,12 +1,13 @@
 use span::Span;
 
 
-/// An identifier: `channels`, `SendMessageAction`, `X`, etc..
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-pub struct Ident {
-    span: Span,
-    string: String,
+macro_attr_many! {
+    /// An identifier: `channels`, `SendMessageAction`, `X`, etc..
+    #[cfg_derive!(Clone, Debug)]
+    pub struct Ident {
+        span: Span,
+        string: String,
+    }
 }
 
 impl Ident {

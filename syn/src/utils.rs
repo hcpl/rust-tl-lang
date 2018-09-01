@@ -16,6 +16,114 @@ pub(crate) mod parsing {
     }
 }
 
+
+macro_rules! macro_attr_many {
+    (
+        $(
+            $(#[$($attrs:tt)*])*
+            pub $item_type:tt $name:ident { $($it:tt)* }
+        )*
+    ) => {
+        $(
+            macro_attr! {
+                $(#[$($attrs)*])*
+                pub $item_type $name { $($it)* }
+            }
+        )*
+    };
+}
+
+macro_rules! cfg_derive {
+    (
+        ($($args:ident),*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        pub $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            [pub] $($it)*
+        }
+    };
+
+    (@expand
+        (Clone $(, $args:ident)*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            #[cfg_attr(feature = "clone-impls", derive(Clone))]
+            [$it_first_tt] $($it)*
+        }
+    };
+
+    (@expand
+        (Debug $(, $args:ident)*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            #[cfg_attr(feature = "debug-impls", derive(Debug))]
+            [$it_first_tt] $($it)*
+        }
+    };
+
+    (@expand
+        (Eq, PartialEq $(, $args:ident)*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+            [$it_first_tt] $($it)*
+        }
+    };
+
+    (@expand
+        (Hash $(, $args:ident)*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            #[cfg_attr(feature = "hash-impls", derive(Hash))]
+            [$it_first_tt] $($it)*
+        }
+    };
+
+    (@expand
+        ($($args:ident),*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        macro_attr_callback! {
+            $cb,
+            $(#[$($attrs)*])*
+            #[derive($($args),*)]
+            $it_first_tt $($it)*
+        }
+    };
+}
+
+
 #[cfg(test)]
 #[macro_use]
 pub(crate) mod tests {
@@ -38,7 +146,7 @@ pub(crate) mod tests {
                 panic!("assertion failed: `(left == right)`");
             }
         }};
-        ($left:expr, $right:expr) => {
+        ($left:expr, $right:expr,) => {
             non_debug_assert_eq!($left, $right)
         };
         ($left:expr, $right:expr, $($args:tt)+) => {{
@@ -76,7 +184,7 @@ pub(crate) mod tests {
                 panic!("assertion failed: `(left != right)`");
             }
         }};
-        ($left:expr, $right:expr) => {
+        ($left:expr, $right:expr,) => {
             non_debug_assert_eq!($left, $right)
         };
         ($left:expr, $right:expr, $($args:tt)+) => {{

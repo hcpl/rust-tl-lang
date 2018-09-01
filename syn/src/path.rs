@@ -3,84 +3,62 @@ use punctuated::Punctuated;
 use token::Paren;
 
 
-/// A dot-separated list of identifiers.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct Path {
-    pub segments: Punctuated<Ident, TLToken![.]>,
-}
+macro_attr_many! {
+    /// A dot-separated list of identifiers.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct Path {
+        pub segments: Punctuated<Ident, TLToken![.]>,
+    }
 
-/// A dot-separated list of identifiers with optional generic arguments.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct ParameterizedPath {
-    pub path: Path,
-    pub args: Option<GenericArguments>,
-}
+    /// A dot-separated list of identifiers with optional generic arguments.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct ParameterizedPath {
+        pub path: Path,
+        pub args: Option<GenericArguments>,
+    }
 
-/// Generic arguments for parameterized paths.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum GenericArguments {
-    AngleBracketed(AngleBracketedGenericArguments),
-    SpaceSeparated(SpaceSeparatedGenericArguments),
-}
+    /// Generic arguments for parameterized paths.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum GenericArguments {
+        AngleBracketed(AngleBracketedGenericArguments),
+        SpaceSeparated(SpaceSeparatedGenericArguments),
+    }
 
-/// A comma-separated list of generic arguments enclosed in angle tokens.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct AngleBracketedGenericArguments {
-    pub langle_token: TLToken![<],
-    pub args: Punctuated<ParameterizedPath, TLToken![,]>,
-    pub rangle_token: TLToken![>],
-}
+    /// A comma-separated list of generic arguments enclosed in angle tokens.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct AngleBracketedGenericArguments {
+        pub langle_token: TLToken![<],
+        pub args: Punctuated<ParameterizedPath, TLToken![,]>,
+        pub rangle_token: TLToken![>],
+    }
 
-/// A space-separated list of generic arguments.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct SpaceSeparatedGenericArguments {
-    pub args: Vec<ParameterizedPath>,
-}
+    /// A space-separated list of generic arguments.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct SpaceSeparatedGenericArguments {
+        pub args: Vec<ParameterizedPath>,
+    }
 
-/// A dot-separated list of identifiers with optional generic arguments that
-/// spans over a single token tree group.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub enum SafeParameterizedPath {
-    SpaceImmune(SafeParameterizedPathSpaceImmune),
-    Parenthesized(SafeParameterizedPathParenthesized),
-}
+    /// A dot-separated list of identifiers with optional generic arguments that
+    /// spans over a single token tree group.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub enum SafeParameterizedPath {
+        SpaceImmune(SafeParameterizedPathSpaceImmune),
+        Parenthesized(SafeParameterizedPathParenthesized),
+    }
 
-/// A parameterized path that spans a single token tree group.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct SafeParameterizedPathSpaceImmune {
-    pub path: Path,
-    pub args: Option<AngleBracketedGenericArguments>,
-}
+    /// A parameterized path that spans a single token tree group.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct SafeParameterizedPathSpaceImmune {
+        pub path: Path,
+        pub args: Option<AngleBracketedGenericArguments>,
+    }
 
-/// An arbitrary parameterized path enclosed in parentheses.
-#[cfg_attr(feature = "clone-impls", derive(Clone))]
-#[cfg_attr(feature = "debug-impls", derive(Debug))]
-#[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
-#[cfg_attr(feature = "hash-impls", derive(Hash))]
-pub struct SafeParameterizedPathParenthesized {
-    pub paren_token: Paren,
-    pub parameterized_path: ParameterizedPath,
+    /// An arbitrary parameterized path enclosed in parentheses.
+    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    pub struct SafeParameterizedPathParenthesized {
+        pub paren_token: Paren,
+        pub parameterized_path: ParameterizedPath,
+    }
 }
 
 
