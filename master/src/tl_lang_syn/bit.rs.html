@@ -199,16 +199,18 @@
 <span id="199">199</span>
 <span id="200">200</span>
 <span id="201">201</span>
+<span id="202">202</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
 
-<span class="doccomment">/// An index pointing to the n-th bit of a `#` value (or, an `u32` value).</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BitIndex</span> {
-    <span class="ident">span</span>: <span class="ident">Span</span>,
-    <span class="ident">index</span>: <span class="ident">u8</span>,
+<span class="macro">macro_attr_many</span><span class="macro">!</span> {
+    <span class="doccomment">/// An index pointing to the n-th bit of a `#` value (or, an `u32` value).</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BitIndex</span> {
+        <span class="ident">span</span>: <span class="ident">Span</span>,
+        <span class="ident">index</span>: <span class="ident">u8</span>,
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">BitIndex</span> {

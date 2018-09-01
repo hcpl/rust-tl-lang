@@ -326,40 +326,34 @@
 <span id="326">326</span>
 <span id="327">327</span>
 <span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 <span class="kw">use</span> <span class="ident">token</span>::{<span class="ident">SlashAsterisk</span>, <span class="ident">SlashSlash</span>};
 
 
-<span class="doccomment">/// A single-line or multiline comment.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;hash-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Hash</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Comment</span> {
-    <span class="ident">SingleLine</span>(<span class="ident">CommentSingleLine</span>),
-    <span class="ident">MultiLine</span>(<span class="ident">CommentMultiLine</span>),
-}
+<span class="macro">macro_attr_many</span><span class="macro">!</span> {
+    <span class="doccomment">/// A single-line or multiline comment.</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Comment</span> {
+        <span class="ident">SingleLine</span>(<span class="ident">CommentSingleLine</span>),
+        <span class="ident">MultiLine</span>(<span class="ident">CommentMultiLine</span>),
+    }
 
-<span class="doccomment">/// A `//...` comment spanning a single line.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CommentSingleLine</span> {
-    <span class="kw">pub</span> <span class="ident">slash_slash_token</span>: <span class="ident">SlashSlash</span>,
-    <span class="kw">pub</span> <span class="ident">content_span</span>: <span class="ident">Span</span>,
-    <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">String</span>,
-}
+    <span class="doccomment">/// A `//...` comment spanning a single line.</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CommentSingleLine</span> {
+        <span class="kw">pub</span> <span class="ident">slash_slash_token</span>: <span class="ident">SlashSlash</span>,
+        <span class="kw">pub</span> <span class="ident">content_span</span>: <span class="ident">Span</span>,
+        <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">String</span>,
+    }
 
-<span class="doccomment">/// A `/*...*/` comment spanning multiple lines.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CommentMultiLine</span> {
-    <span class="kw">pub</span> <span class="ident">slash_asterisk_token</span>: <span class="ident">SlashAsterisk</span>,
-    <span class="kw">pub</span> <span class="ident">content_span</span>: <span class="ident">Span</span>,
-    <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// A `/*...*/` comment spanning multiple lines.</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CommentMultiLine</span> {
+        <span class="kw">pub</span> <span class="ident">slash_asterisk_token</span>: <span class="ident">SlashAsterisk</span>,
+        <span class="kw">pub</span> <span class="ident">content_span</span>: <span class="ident">Span</span>,
+        <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">String</span>,
+    }
 }
 
 

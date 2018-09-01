@@ -149,16 +149,18 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">span</span>::<span class="ident">Span</span>;
 
 
-<span class="doccomment">/// A 32-bit number which identifies a TL combinator.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clone-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;debug-impls&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Id</span> {
-    <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">u32</span>,
+<span class="macro">macro_attr_many</span><span class="macro">!</span> {
+    <span class="doccomment">/// A 32-bit number which identifies a TL combinator.</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Id</span> {
+        <span class="kw">pub</span> <span class="ident">span</span>: <span class="ident">Span</span>,
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">u32</span>,
+    }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;eq-impls&quot;</span>)]</span>
