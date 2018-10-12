@@ -3,7 +3,7 @@ use super::Item;
 
 macro_attr_many! {
     /// A complete file of TL language source text.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct File {
         pub items: Vec<Item>,
     }

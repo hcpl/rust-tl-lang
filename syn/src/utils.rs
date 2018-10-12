@@ -79,7 +79,7 @@ macro_rules! cfg_derive {
     };
 
     (@expand
-        (Eq, PartialEq $(, $args:ident)*),
+        (Eq $(, $args:ident)*),
         then $cb:tt,
         $(#[$($attrs:tt)*])*
         [$it_first_tt:tt] $($it:tt)*
@@ -88,7 +88,7 @@ macro_rules! cfg_derive {
             ($($args),*),
             then $cb,
             $(#[$($attrs)*])*
-            #[cfg_attr(feature = "eq-impls", derive(Eq, PartialEq))]
+            #[cfg_attr(feature = "eq-impls", derive(Eq))]
             [$it_first_tt] $($it)*
         }
     };
@@ -104,6 +104,21 @@ macro_rules! cfg_derive {
             then $cb,
             $(#[$($attrs)*])*
             #[cfg_attr(feature = "hash-impls", derive(Hash))]
+            [$it_first_tt] $($it)*
+        }
+    };
+
+    (@expand
+        (PartialEq $(, $args:ident)*),
+        then $cb:tt,
+        $(#[$($attrs:tt)*])*
+        [$it_first_tt:tt] $($it:tt)*
+    ) => {
+        cfg_derive! { @expand
+            ($($args),*),
+            then $cb,
+            $(#[$($attrs)*])*
+            #[cfg_attr(feature = "eq-impls", derive(PartialEq))]
             [$it_first_tt] $($it)*
         }
     };

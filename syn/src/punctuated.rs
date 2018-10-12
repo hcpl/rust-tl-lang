@@ -9,7 +9,7 @@ use std::vec;
 macro_attr! {
     /// A punctuated sequence of syntax tree nodes of type `T` separated by
     /// punctuation of type `P`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct Punctuated<T, P> {
         inner: Vec<(T, P)>,
         last: Option<Box<T>>,

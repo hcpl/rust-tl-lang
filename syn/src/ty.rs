@@ -4,7 +4,7 @@ use super::{Ident, SafeParameterizedPath};
 macro_attr_many! {
     // FIXME: handle arbitrary parameterized paths when inside parentheses.
     /// The possible types that can appear in TL declarations.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub enum Type {
         Int(TypeInt),
         ParameterizedPath(TypeParameterizedPath),
@@ -13,26 +13,26 @@ macro_attr_many! {
     }
 
     /// A special type of integers in range from 0 to 2^31-1 inclusive: `#`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct TypeInt {
         pub hash_token: TLToken![#],
     }
 
     /// A type represented by a safe parameterized path: `contacts.Link`, `messages.Chats`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct TypeParameterizedPath {
         pub safe_parameterized_path: SafeParameterizedPath,
     }
 
     /// A type parameter: `!X`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct TypeTypeParameter {
         pub excl_token: TLToken![!],
         pub ident: Ident,
     }
 
     /// A bare type parameter: `%(Tuple X n)`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct TypeBare {
         pub percent_token: TLToken![%],
         pub inner: Box<Type>,

@@ -5,7 +5,7 @@ use token::{Brace, Bracket, Paren, SlashSlash};
 
 macro_attr_many! {
     /// Top-level entities in TL schema that occupy whole lines.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub enum Item {
         Combinator(ItemCombinator),
         Delimiter(ItemDelimiter),
@@ -14,7 +14,7 @@ macro_attr_many! {
     }
 
     /// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ItemCombinator {
         pub name: Path,
         pub combinator_id: Option<CombinatorId>,
@@ -26,14 +26,14 @@ macro_attr_many! {
     }
 
     /// A TL combinator id: `#1cb5c415`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct CombinatorId {
         pub hash_token: TLToken![#],
         pub id: Id,
     }
 
     /// An optional field declaration: `{X:Type}`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct OptParam {
         pub brace_token: Brace,
         pub var_idents: Vec<Ident>,
@@ -42,7 +42,7 @@ macro_attr_many! {
     }
 
     /// A required field declaration.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub enum Param {
         Conditional(ParamConditional),
         Repeated(ParamRepeated),
@@ -51,7 +51,7 @@ macro_attr_many! {
     }
 
     /// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ParamConditional {
         pub var_ident: Ident,
         pub colon_token: TLToken![:],
@@ -59,7 +59,7 @@ macro_attr_many! {
         pub ty: Type,
     }
 
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ConditionalParamDef {
         pub var_ident: Ident,
         pub bit_selector: Option<BitSelector>,
@@ -67,13 +67,13 @@ macro_attr_many! {
     }
 
     /// Selects a bit from a `#` parameter.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct BitSelector {
         pub dot_token: TLToken![.],
         pub bit_index: BitIndex,
     }
 
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ParamRepeated {
         pub param_repeated_ident: Option<ParamRepeatedIdent>,
         pub multiplicity: Option<Multiplicity>,
@@ -81,20 +81,20 @@ macro_attr_many! {
         pub params: Vec<Param>,
     }
 
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ParamRepeatedIdent {
         pub var_ident: Ident,
         pub colon_token: TLToken![:],
     }
 
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct Multiplicity {
         pub term: Ident,  // FIXME: actually, it can be any term here
         pub asterisk_token: TLToken![*],
     }
 
     /// A declaration enclosed in parentheses that may have multiple fields.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ParamWithParen {
         pub paren_token: Paren,
         pub var_idents: Vec<Ident>,
@@ -103,19 +103,19 @@ macro_attr_many! {
     }
 
     /// A field with a bare type.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ParamTypeOnly {
         pub ty: Type,
     }
 
     /// A delimiter item.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ItemDelimiter {
         pub delimiter: Delimiter,
     }
 
     /// Divides sections of declarations of TL combinators.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub enum Delimiter {
         Types(DelimiterTypes),
         Functions(DelimiterFunctions),
@@ -143,7 +143,7 @@ macro_attr_many! {
     }
 
     /// A comment item.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct ItemComment {
         pub comment: Comment,
     }

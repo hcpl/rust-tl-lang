@@ -4,7 +4,7 @@ use token::{SlashAsterisk, SlashSlash};
 
 macro_attr_many! {
     /// A single-line or multiline comment.
-    #[cfg_derive!(Clone, Debug, Eq, PartialEq, Hash)]
+    #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub enum Comment {
         SingleLine(CommentSingleLine),
         MultiLine(CommentMultiLine),
