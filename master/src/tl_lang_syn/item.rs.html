@@ -1029,7 +1029,7 @@
 
 <span class="macro">macro_attr_many</span><span class="macro">!</span> {
     <span class="doccomment">/// Top-level entities in TL schema that occupy whole lines.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Item</span> {
         <span class="ident">Combinator</span>(<span class="ident">ItemCombinator</span>),
         <span class="ident">Delimiter</span>(<span class="ident">ItemDelimiter</span>),
@@ -1038,7 +1038,7 @@
     }
 
     <span class="doccomment">/// A TL combinator item: `inputMediaPhoto#8f2ab2ec id:InputPhoto = InputMedia;`.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ItemCombinator</span> {
         <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Path</span>,
         <span class="kw">pub</span> <span class="ident">combinator_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CombinatorId</span><span class="op">&gt;</span>,
@@ -1050,14 +1050,14 @@
     }
 
     <span class="doccomment">/// A TL combinator id: `#1cb5c415`.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CombinatorId</span> {
         <span class="kw">pub</span> <span class="ident">hash_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[#],
         <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">Id</span>,
     }
 
     <span class="doccomment">/// An optional field declaration: `{X:Type}`.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OptParam</span> {
         <span class="kw">pub</span> <span class="ident">brace_token</span>: <span class="ident">Brace</span>,
         <span class="kw">pub</span> <span class="ident">var_idents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span>,
@@ -1066,7 +1066,7 @@
     }
 
     <span class="doccomment">/// A required field declaration.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Param</span> {
         <span class="ident">Conditional</span>(<span class="ident">ParamConditional</span>),
         <span class="ident">Repeated</span>(<span class="ident">ParamRepeated</span>),
@@ -1075,7 +1075,7 @@
     }
 
     <span class="doccomment">/// A possibly conditional field: `bg_color:int`, `report_spam:flags.0?true`.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamConditional</span> {
         <span class="kw">pub</span> <span class="ident">var_ident</span>: <span class="ident">Ident</span>,
         <span class="kw">pub</span> <span class="ident">colon_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[:],
@@ -1083,7 +1083,7 @@
         <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">Type</span>,
     }
 
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConditionalParamDef</span> {
         <span class="kw">pub</span> <span class="ident">var_ident</span>: <span class="ident">Ident</span>,
         <span class="kw">pub</span> <span class="ident">bit_selector</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BitSelector</span><span class="op">&gt;</span>,
@@ -1091,13 +1091,13 @@
     }
 
     <span class="doccomment">/// Selects a bit from a `#` parameter.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BitSelector</span> {
         <span class="kw">pub</span> <span class="ident">dot_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[.],
         <span class="kw">pub</span> <span class="ident">bit_index</span>: <span class="ident">BitIndex</span>,
     }
 
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamRepeated</span> {
         <span class="kw">pub</span> <span class="ident">param_repeated_ident</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ParamRepeatedIdent</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">multiplicity</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Multiplicity</span><span class="op">&gt;</span>,
@@ -1105,20 +1105,20 @@
         <span class="kw">pub</span> <span class="ident">params</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Param</span><span class="op">&gt;</span>,
     }
 
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamRepeatedIdent</span> {
         <span class="kw">pub</span> <span class="ident">var_ident</span>: <span class="ident">Ident</span>,
         <span class="kw">pub</span> <span class="ident">colon_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[:],
     }
 
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Multiplicity</span> {
         <span class="kw">pub</span> <span class="ident">term</span>: <span class="ident">Ident</span>,  <span class="comment">// FIXME: actually, it can be any term here</span>
         <span class="kw">pub</span> <span class="ident">asterisk_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[<span class="kw-2">*</span>],
     }
 
     <span class="doccomment">/// A declaration enclosed in parentheses that may have multiple fields.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamWithParen</span> {
         <span class="kw">pub</span> <span class="ident">paren_token</span>: <span class="ident">Paren</span>,
         <span class="kw">pub</span> <span class="ident">var_idents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span>,
@@ -1127,19 +1127,19 @@
     }
 
     <span class="doccomment">/// A field with a bare type.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamTypeOnly</span> {
         <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">Type</span>,
     }
 
     <span class="doccomment">/// A delimiter item.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ItemDelimiter</span> {
         <span class="kw">pub</span> <span class="ident">delimiter</span>: <span class="ident">Delimiter</span>,
     }
 
     <span class="doccomment">/// Divides sections of declarations of TL combinators.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Delimiter</span> {
         <span class="ident">Types</span>(<span class="ident">DelimiterTypes</span>),
         <span class="ident">Functions</span>(<span class="ident">DelimiterFunctions</span>),
@@ -1167,7 +1167,7 @@
     }
 
     <span class="doccomment">/// A comment item.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ItemComment</span> {
         <span class="kw">pub</span> <span class="ident">comment</span>: <span class="ident">Comment</span>,
     }

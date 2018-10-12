@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.0.0/src/util.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>util.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.1.0/src/util.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>util.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -710,6 +710,10 @@
 <span id="710">710</span>
 <span id="711">711</span>
 <span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
 </pre><pre class="rust ">
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;verbose-errors&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
@@ -1203,6 +1207,7 @@
   <span class="ident">TakeTill1</span>,
   <span class="ident">TakeUntilAndConsume1</span>,
   <span class="ident">TakeWhileMN</span>,
+  <span class="ident">ParseTo</span>,
 }
 
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">rustfmt</span>, <span class="ident">rustfmt_skip</span>)]</span>
@@ -1270,6 +1275,7 @@
     <span class="ident">ErrorKind</span>::<span class="ident">TakeTill1</span>                 <span class="op">=&gt;</span> <span class="number">67</span>,
     <span class="ident">ErrorKind</span>::<span class="ident">TakeUntilAndConsume1</span>      <span class="op">=&gt;</span> <span class="number">68</span>,
     <span class="ident">ErrorKind</span>::<span class="ident">TakeWhileMN</span>               <span class="op">=&gt;</span> <span class="number">69</span>,
+    <span class="ident">ErrorKind</span>::<span class="ident">ParseTo</span>                   <span class="op">=&gt;</span> <span class="number">70</span>,
   }
 }
 
@@ -1339,6 +1345,7 @@
       <span class="ident">ErrorKind</span>::<span class="ident">TakeTill1</span>                 <span class="op">=&gt;</span> <span class="string">&quot;TakeTill1&quot;</span>,
       <span class="ident">ErrorKind</span>::<span class="ident">TakeUntilAndConsume1</span>      <span class="op">=&gt;</span> <span class="string">&quot;Take at least 1 until and consume&quot;</span>,
       <span class="ident">ErrorKind</span>::<span class="ident">TakeWhileMN</span>               <span class="op">=&gt;</span> <span class="string">&quot;TakeWhileMN&quot;</span>,
+      <span class="ident">ErrorKind</span>::<span class="ident">ParseTo</span>                   <span class="op">=&gt;</span> <span class="string">&quot;Parse string to the specified type&quot;</span>,
     }
   }
 
@@ -1420,6 +1427,7 @@
       <span class="ident">ErrorKind</span>::<span class="ident">TakeTill1</span>                 <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">TakeTill1</span>,
       <span class="ident">ErrorKind</span>::<span class="ident">TakeUntilAndConsume1</span>      <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">TakeUntilAndConsume1</span>,
       <span class="ident">ErrorKind</span>::<span class="ident">TakeWhileMN</span>               <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">TakeWhileMN</span>,
+      <span class="ident">ErrorKind</span>::<span class="ident">ParseTo</span>                   <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">ParseTo</span>,
     }
   }
 }

@@ -833,7 +833,7 @@
 <span class="macro">macro_attr</span><span class="macro">!</span> {
     <span class="doccomment">/// A punctuated sequence of syntax tree nodes of type `T` separated by</span>
     <span class="doccomment">/// punctuation of type `P`.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">P</span><span class="op">&gt;</span> {
         <span class="ident">inner</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">P</span>)<span class="op">&gt;</span>,
         <span class="ident">last</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>,

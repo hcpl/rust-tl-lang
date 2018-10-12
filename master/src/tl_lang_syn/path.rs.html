@@ -345,27 +345,27 @@
 
 <span class="macro">macro_attr_many</span><span class="macro">!</span> {
     <span class="doccomment">/// A dot-separated list of identifiers.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Path</span> {
         <span class="kw">pub</span> <span class="ident">segments</span>: <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">Ident</span>, <span class="macro">TLToken</span><span class="macro">!</span>[.]<span class="op">&gt;</span>,
     }
 
     <span class="doccomment">/// A dot-separated list of identifiers with optional generic arguments.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParameterizedPath</span> {
         <span class="kw">pub</span> <span class="ident">path</span>: <span class="ident">Path</span>,
         <span class="kw">pub</span> <span class="ident">args</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GenericArguments</span><span class="op">&gt;</span>,
     }
 
     <span class="doccomment">/// Generic arguments for parameterized paths.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">GenericArguments</span> {
         <span class="ident">AngleBracketed</span>(<span class="ident">AngleBracketedGenericArguments</span>),
         <span class="ident">SpaceSeparated</span>(<span class="ident">SpaceSeparatedGenericArguments</span>),
     }
 
     <span class="doccomment">/// A comma-separated list of generic arguments enclosed in angle tokens.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AngleBracketedGenericArguments</span> {
         <span class="kw">pub</span> <span class="ident">langle_token</span>: <span class="macro">TLToken</span><span class="macro">!</span>[<span class="op">&lt;</span>],
         <span class="kw">pub</span> <span class="ident">args</span>: <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">ParameterizedPath</span>, <span class="macro">TLToken</span><span class="macro">!</span>[,]<span class="op">&gt;</span>,
@@ -373,28 +373,28 @@
     }
 
     <span class="doccomment">/// A space-separated list of generic arguments.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SpaceSeparatedGenericArguments</span> {
         <span class="kw">pub</span> <span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParameterizedPath</span><span class="op">&gt;</span>,
     }
 
     <span class="doccomment">/// A dot-separated list of identifiers with optional generic arguments that</span>
     <span class="doccomment">/// spans over a single token tree group.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SafeParameterizedPath</span> {
         <span class="ident">SpaceImmune</span>(<span class="ident">SafeParameterizedPathSpaceImmune</span>),
         <span class="ident">Parenthesized</span>(<span class="ident">SafeParameterizedPathParenthesized</span>),
     }
 
     <span class="doccomment">/// A parameterized path that spans a single token tree group.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SafeParameterizedPathSpaceImmune</span> {
         <span class="kw">pub</span> <span class="ident">path</span>: <span class="ident">Path</span>,
         <span class="kw">pub</span> <span class="ident">args</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AngleBracketedGenericArguments</span><span class="op">&gt;</span>,
     }
 
     <span class="doccomment">/// An arbitrary parameterized path enclosed in parentheses.</span>
-    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
+    <span class="attribute">#[<span class="macro">cfg_derive</span><span class="macro">!</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SafeParameterizedPathParenthesized</span> {
         <span class="kw">pub</span> <span class="ident">paren_token</span>: <span class="ident">Paren</span>,
         <span class="kw">pub</span> <span class="ident">parameterized_path</span>: <span class="ident">ParameterizedPath</span>,

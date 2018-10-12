@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `nom` crate."><meta name="keywords" content="rust, rustlang, rust-lang, nom"><title>nom - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate nom</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'nom', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/nom/lib.rs.html#1-469' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>nom</a></span></h1><div class='docblock'><h1 id="nom-eating-data-byte-by-byte" class="section-header"><a href="#nom-eating-data-byte-by-byte">nom, eating data byte by byte</a></h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `nom` crate."><meta name="keywords" content="rust, rustlang, rust-lang, nom"><title>nom - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate nom</p><a id='all-types' href='all.html'><p>See all nom's items</p></a><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'nom', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/nom/lib.rs.html#1-468' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>nom</a></span></h1><div class='docblock'><h1 id="nom-eating-data-byte-by-byte" class="section-header"><a href="#nom-eating-data-byte-by-byte">nom, eating data byte by byte</a></h1>
 <p>nom is a parser combinator library with a focus on safe parsing,
 streaming patterns, and as much as possible zero copy.</p>
 <h2 id="example" class="section-header"><a href="#example">Example</a></h2>
@@ -18,8 +18,7 @@ streaming patterns, and as much as possible zero copy.</p>
 }
 
 <span class="kw">fn</span> <span class="ident">is_hex_digit</span>(<span class="ident">c</span>: <span class="ident">char</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-  <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">c</span> <span class="kw">as</span> <span class="ident">u8</span>;
-  (<span class="ident">c</span> <span class="op">&gt;=</span> <span class="number">0x30</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="number">0x39</span>) <span class="op">||</span> (<span class="ident">c</span> <span class="op">&gt;=</span> <span class="number">0x41</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="number">0x46</span>) <span class="op">||</span> (<span class="ident">c</span> <span class="op">&gt;=</span> <span class="number">0x61</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="number">0x66</span>)
+  <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="number">16</span>)
 }
 
 <span class="macro">named</span><span class="macro">!</span>(<span class="ident">hex_primary</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">u8</span><span class="op">&gt;</span>,
@@ -131,7 +130,7 @@ and an optional error type <code>E</code>, will have the following signature:</p
 <p>It can have the following values:</p>
 <ul>
 <li>a correct result <code>Ok((I,O))</code> with the first element being the remaining of the input (not parsed yet), and the second the output value;</li>
-<li>an error <code>Err(Err::Error(c))</code> with <code>c</code> an enum that contians an error code with its position in the input, and optionally a chain of accumulated errors;</li>
+<li>an error <code>Err(Err::Error(c))</code> with <code>c</code> an enum that contains an error code with its position in the input, and optionally a chain of accumulated errors;</li>
 <li>an error <code>Err(Err::Incomplete(Needed))</code> indicating that more input is necessary. <code>Needed</code> can indicate how much data is needed</li>
 <li>an error <code>Err(Err::Failure(c))</code>. It works like the <code>Error</code> case, except it indicates an unrecoverable error: we cannot backtrack and test another parser</li>
 </ul>
@@ -649,6 +648,15 @@ otherwise a little endian i64 integer</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="macro" href="macro.i128.html"
+                                  title='macro nom::i128'>i128</a></td>
+                           <td class='docblock-short'>
+                                <p>if the parameter is nom::Endianness::Big, parse a big endian i64 integer,
+otherwise a little endian i64 integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="macro" href="macro.is_a.html"
                                   title='macro nom::is_a'>is_a</a></td>
                            <td class='docblock-short'>
@@ -781,6 +789,15 @@ maps a function returning an Option on the output of a parser</p>
                            <td class='docblock-short'>
                                 <p><code>map_res!(I -&gt; IResult&lt;I,O&gt;, O -&gt; Result&lt;P&gt;) =&gt; I -&gt; IResult&lt;I, P&gt;</code>
 maps a function returning a Result on the output of a parser</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.map_res_err.html"
+                                  title='macro nom::map_res_err'>map_res_err</a></td>
+                           <td class='docblock-short'>
+                                <p><code>map_res_err!(I -&gt; IResult&lt;I,O&gt;, O -&gt; Result&lt;P&gt;) =&gt; I -&gt; IResult&lt;I, P&gt;</code>
+maps a function returning a Result on the output of a parser, preserving the returned error</p>
 
                            </td>
                        </tr>
@@ -1305,6 +1322,15 @@ otherwise a little endian u64 integer</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="macro" href="macro.u128.html"
+                                  title='macro nom::u128'>u128</a></td>
+                           <td class='docblock-short'>
+                                <p>if the parameter is nom::Endianness::Big, parse a big endian u128 integer,
+otherwise a little endian u128 integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="macro" href="macro.value.html"
                                   title='macro nom::value'>value</a></td>
                            <td class='docblock-short'>
@@ -1518,7 +1544,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alpha.html"
                                   title='fn nom::alpha'>alpha</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z</p>
+                                <p>Recognizes one or more lowercase and uppercase alphabetic characters.
+For ASCII strings: a-zA-Z
+For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1526,7 +1554,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alpha0.html"
                                   title='fn nom::alpha0'>alpha0</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes zero or more lowercase and uppercase alphabetic characters: a-zA-Z</p>
+                                <p>Recognizes zero or more lowercase and uppercase alphabetic characters.
+For ASCII strings: a-zA-Z
+For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1534,7 +1564,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alpha1.html"
                                   title='fn nom::alpha1'>alpha1</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z</p>
+                                <p>Recognizes one or more lowercase and uppercase alphabetic characters
+For ASCII strings: a-zA-Z
+For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1542,7 +1574,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alphanumeric.html"
                                   title='fn nom::alphanumeric'>alphanumeric</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z</p>
+                                <p>Recognizes one or more numerical and alphabetic characters
+For ASCII strings: 0-9a-zA-Z
+For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1550,7 +1584,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alphanumeric0.html"
                                   title='fn nom::alphanumeric0'>alphanumeric0</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes zero or more numerical and alphabetic characters: 0-9a-zA-Z</p>
+                                <p>Recognizes zero or more numerical and alphabetic characters.
+For ASCII strings: 0-9a-zA-Z
+For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1558,7 +1594,9 @@ if more data was needed</p>
                            <td><a class="fn" href="fn.alphanumeric1.html"
                                   title='fn nom::alphanumeric1'>alphanumeric1</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z</p>
+                                <p>Recognizes one or more numerical and alphabetic characters.
+For ASCII strings: 0-9a-zA-Z
+For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</p>
 
                            </td>
                        </tr>
@@ -1628,6 +1666,14 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.be_i128.html"
+                                  title='fn nom::be_i128'>be_i128</a></td>
+                           <td class='docblock-short'>
+                                <p>Recognizes big endian signed 16 bytes integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.be_u8.html"
                                   title='fn nom::be_u8'>be_u8</a></td>
                            <td class='docblock-short'>
@@ -1664,6 +1710,14 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                                   title='fn nom::be_u64'>be_u64</a></td>
                            <td class='docblock-short'>
                                 <p>Recognizes big endian unsigned 8 bytes integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.be_u128.html"
+                                  title='fn nom::be_u128'>be_u128</a></td>
+                           <td class='docblock-short'>
+                                <p>Recognizes big endian unsigned 16 bytes integer</p>
 
                            </td>
                        </tr>
@@ -1724,7 +1778,7 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            <td><a class="fn" href="fn.double_s.html"
                                   title='fn nom::double_s'>double_s</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes floating point number in a string and returns a f64</p>
+                               [<div class='stab deprecated'>Deprecating in 4.1.0</div>] <p>Recognizes floating point number in a string and returns a f64</p>
 
                            </td>
                        </tr>
@@ -1754,7 +1808,7 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            <td><a class="fn" href="fn.float_s.html"
                                   title='fn nom::float_s'>float_s</a></td>
                            <td class='docblock-short'>
-                                <p>Recognizes floating point number in a string and returns a f32</p>
+                               [<div class='stab deprecated'>Deprecating in 4.1.0</div>] <p>Recognizes floating point number in a string and returns a f32</p>
 
                            </td>
                        </tr>
@@ -1895,6 +1949,14 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.le_i128.html"
+                                  title='fn nom::le_i128'>le_i128</a></td>
+                           <td class='docblock-short'>
+                                <p>Recognizes little endian signed 16 bytes integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.le_u8.html"
                                   title='fn nom::le_u8'>le_u8</a></td>
                            <td class='docblock-short'>
@@ -1931,6 +1993,14 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                                   title='fn nom::le_u64'>le_u64</a></td>
                            <td class='docblock-short'>
                                 <p>Recognizes little endian unsigned 8 bytes integer</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.le_u128.html"
+                                  title='fn nom::le_u128'>le_u128</a></td>
+                           <td class='docblock-short'>
+                                <p>Recognizes little endian unsigned 16 bytes integer</p>
 
                            </td>
                        </tr>
@@ -2060,6 +2130,14 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                                   title='fn nom::rest'>rest</a></td>
                            <td class='docblock-short'>
                                 <p>Return the remaining input.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.rest_len.html"
+                                  title='fn nom::rest_len'>rest_len</a></td>
+                           <td class='docblock-short'>
+                                <p>Return the length of the remaining input.</p>
 
                            </td>
                        </tr>
