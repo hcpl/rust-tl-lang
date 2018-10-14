@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.1.0/src/multi.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>multi.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.0.0/src/multi.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>multi.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1672,13 +1672,6 @@
 <span id="1672">1672</span>
 <span id="1673">1673</span>
 <span id="1674">1674</span>
-<span id="1675">1675</span>
-<span id="1676">1676</span>
-<span id="1677">1677</span>
-<span id="1678">1678</span>
-<span id="1679">1679</span>
-<span id="1680">1680</span>
-<span id="1681">1681</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Parsers for applying parsers multiple times</span>
 
@@ -1977,7 +1970,6 @@
 <span class="doccomment">/// # #[macro_use] extern crate nom;</span>
 <span class="doccomment">/// # use nom::Err;</span>
 <span class="doccomment">/// # use nom::ErrorKind;</span>
-<span class="doccomment">/// # use nom::types::CompleteByteSlice;</span>
 <span class="doccomment">/// # fn main() {</span>
 <span class="doccomment">///  named!(multi&lt;&amp;[u8], Vec&lt;&amp;[u8]&gt; &gt;, many1!( tag!( &quot;abcd&quot; ) ) );</span>
 <span class="doccomment">///</span>
@@ -1985,14 +1977,8 @@
 <span class="doccomment">///  let b = b&quot;azerty&quot;;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///  let res = vec![&amp;b&quot;abcd&quot;[..], &amp;b&quot;abcd&quot;[..]];</span>
-<span class="doccomment">///  assert_eq!(multi(&amp;a[..]), Ok((&amp;b&quot;efgh&quot;[..], res)));</span>
+<span class="doccomment">///  assert_eq!(multi(&amp;a[..]),Ok((&amp;b&quot;efgh&quot;[..], res)));</span>
 <span class="doccomment">///  assert_eq!(multi(&amp;b[..]), Err(Err::Error(error_position!(&amp;b[..], ErrorKind::Many1))));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///  named!(multi_complete&lt;CompleteByteSlice, Vec&lt;CompleteByteSlice&gt; &gt;, many1!( tag!( &quot;abcd&quot; ) ) );</span>
-<span class="doccomment">///  let c = CompleteByteSlice(b&quot;abcdabcd&quot;);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///  let res = vec![CompleteByteSlice(b&quot;abcd&quot;), CompleteByteSlice(b&quot;abcd&quot;)];</span>
-<span class="doccomment">///  assert_eq!(multi_complete(c), Ok((CompleteByteSlice(b&quot;&quot;), res)));</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
@@ -2260,7 +2246,7 @@
   (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident</span><span class="macro">!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> ), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>: <span class="ident">expr</span>) <span class="op">=&gt;</span> (
     {
       <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span>::<span class="kw-2">*</span>;
-      <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="prelude-val">Err</span>;
+      <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="prelude-val">Err</span>};
 
       <span class="kw">let</span> <span class="macro-nonterminal">ret</span>;
       <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>.<span class="ident">clone</span>();
@@ -2328,7 +2314,7 @@
   (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">submac</span>:<span class="macro">ident</span><span class="macro">!</span>( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="op">*</span> ), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>: <span class="ident">expr</span>) <span class="op">=&gt;</span> (
     {
       <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span>::<span class="kw-2">*</span>;
-      <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="prelude-val">Err</span>;
+      <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="prelude-val">Err</span>};
 
       <span class="kw">let</span> <span class="macro-nonterminal">ret</span>;
       <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>.<span class="ident">clone</span>();
@@ -2615,7 +2601,7 @@
           }
 
           <span class="kw">match</span> <span class="ident">failure</span> {
-            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">option</span>::<span class="prelude-ty">Option</span>::<span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="prelude-val">Err</span>::<span class="ident">Failure</span>(<span class="ident">e</span>)),
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">option</span>::<span class="prelude-ty">Option</span>::<span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="prelude-val">Err</span>::<span class="ident">Error</span>(<span class="ident">e</span>)),
             <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">option</span>::<span class="prelude-ty">Option</span>::<span class="prelude-val">None</span>    <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">incomplete</span> {
               <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">option</span>::<span class="prelude-ty">Option</span>::<span class="prelude-val">Some</span>(<span class="ident">i</span>) <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">need_more</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>, <span class="ident">i</span>),
               <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">lib</span>::<span class="ident">std</span>::<span class="ident">option</span>::<span class="prelude-ty">Option</span>::<span class="prelude-val">None</span>    <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">input</span>, <span class="ident">acc</span>))

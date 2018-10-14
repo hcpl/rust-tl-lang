@@ -318,6 +318,13 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! A region of source text.</span>
 <span class="doccomment">//!</span>
@@ -348,6 +355,13 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Span</span> {
     <span class="ident">begin</span>: <span class="ident">usize</span>,
     <span class="ident">end</span>: <span class="ident">usize</span>,
+}
+
+<span class="comment">// Safer to be explicit</span>
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Span</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">Span</span> {
+        <span class="ident">Span</span>::<span class="ident">zeroed</span>()
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">Span</span> {
