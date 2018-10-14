@@ -1,6 +1,7 @@
 //! A punctuated sequence of syntax tree nodes separated by punctuation.
 
 use std::iter;
+use std::ops;
 use std::option;
 use std::slice;
 use std::vec;
@@ -218,6 +219,34 @@ where
             self.push(value);
         } else {
             self.inner.insert(index, (value, Default::default()));
+        }
+    }
+}
+
+impl<T, P> ops::Index<usize> for Punctuated<T, P> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        if index == self.len() - 1 {
+            match self.last {
+                Some(ref t) => t,
+                None => &self.inner[index].0,
+            }
+        } else {
+            &self.inner[index].0
+        }
+    }
+}
+
+impl<T, P> ops::IndexMut<usize> for Punctuated<T, P> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        if index == self.len() - 1 {
+            match self.last {
+                Some(ref mut t) => t,
+                None => &mut self.inner[index].0,
+            }
+        } else {
+            &mut self.inner[index].0
         }
     }
 }

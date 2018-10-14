@@ -29,6 +29,13 @@ pub struct Span {
     end: usize,
 }
 
+// Safer to be explicit
+impl Default for Span {
+    fn default() -> Span {
+        Span::zeroed()
+    }
+}
+
 impl Span {
     /// Create a new `Span` in zeroed state.
     pub fn zeroed() -> Span {

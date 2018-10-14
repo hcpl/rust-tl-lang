@@ -29,6 +29,7 @@ macro_rules! token_punct_def {
         /// [`Token!`]: index.html
         #[cfg_attr(feature = "clone-impls", derive(Clone))]
         #[cfg_attr(feature = "debug-impls", derive(Debug))]
+        #[derive(Default)]
         pub struct $name(pub $crate::span::Span);
 
         #[cfg(feature = "eq-impls")]
