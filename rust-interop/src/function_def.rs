@@ -176,7 +176,7 @@ impl ToTokens for FunctionDef {
                     ::std::clone::Clone +
                     ::serde::Serialize +
                     ::serde_mtproto::MtProtoSized +
-                    'static,
+                    'static
                 ),*>)),
             )
         };
