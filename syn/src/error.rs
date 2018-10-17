@@ -49,6 +49,7 @@ mod parsing {
 
                         ParseError { span, error_kind }
                     },
+                    _ => unreachable!(),
                 }
             }
 

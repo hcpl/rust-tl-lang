@@ -31,7 +31,7 @@ macro_attr_many! {
         pub ident: Ident,
     }
 
-    /// A bare type parameter: `%(Tuple X n)`.
+    /// A bare type: `%(Tuple X n)`.
     #[cfg_derive!(Clone, Debug, Eq, Hash, PartialEq)]
     pub struct TypeBare {
         pub percent_token: TLToken![%],

@@ -40,6 +40,7 @@ script:
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
 
   - cargo build --verbose --manifest-path rust-interop/Cargo.toml
+  - cargo test --verbose --manifest-path rust-interop/Cargo.toml
 
 matrix:
   include:
@@ -52,6 +53,7 @@ matrix:
         - cargo install-update cargo-travis
       script:
         - cargo doc --manifest-path syn/Cargo.toml --all-features
+        - cargo doc --manifest-path rust-interop/Cargo.toml --all-features
         - git clone --depth=1 --branch gh-pages "https://github.com/${TRAVIS_REPO_SLUG}" target/gh-pages
         - |
           if [ -e "target/gh-pages/${TRAVIS_BRANCH}/index.html" ]; then

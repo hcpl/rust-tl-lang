@@ -34,6 +34,12 @@ fn nom_err_to_str<'a, E>(error: nom::Err<Cursor<'a>, E>) -> nom::Err<&'a str, E>
     fn nom_context_to_str<'a, E>(context: nom::Context<Cursor<'a>, E>) -> nom::Context<&'a str, E> {
         match context {
             nom::Context::Code(input, kind) => nom::Context::Code(input.to_str(), kind),
+            nom::Context::List(errors) => nom::Context::List(
+                errors
+                    .into_iter()
+                    .map(|(input, kind)| (input.to_str(), kind))
+                    .collect()
+            ),
         }
     }
 
