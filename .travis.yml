@@ -39,6 +39,8 @@ script:
   - cargo test --verbose --manifest-path syn/Cargo.toml --features "debug-impls parsing printing"
   - cargo test --verbose --manifest-path syn/Cargo.toml --all-features
 
+  - cargo build --verbose --manifest-path rust-interop/Cargo.toml
+
 matrix:
   include:
     # Host documentation on <https://hcpl.github.com/rust-tl-lang>

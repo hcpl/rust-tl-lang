@@ -1,0 +1,28 @@
+[package]
+name = "tl-lang-rust-interop"
+version = "0.0.1"
+description = "Interoperability layer between TL language and Rust"
+authors = ["Nguyen Duc My <hcpl.prog@gmail.com>"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://docs.rs/tl-lang-rust-interop"
+repository = "https://github.com/hcpl/rust-tl-lang"
+keywords = ["telegram"]
+categories = []
+
+[badges]
+travis-ci = { repository = "hcpl/rust-tl-lang" }
+
+
+[dependencies]
+either = "1.0"
+# For `proc-macro2`/`quote`/`syn` stack:
+# Depend on versions that use `TokenStream::new` instead of `TokenStream::empty`
+proc-macro2 = "0.4.4"
+quote = "0.6.3"
+syn = { version = "0.15", features = ["full", "extra-traits"] }
+
+[dependencies.tl-lang-syn]
+version = "0.0.1"
+path = "../syn"
+features = ["clone-impls", "debug-impls", "eq-impls", "hash-impls", "parsing"]
