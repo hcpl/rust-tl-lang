@@ -107,7 +107,7 @@ provides some helper methods.</p>
 <p>Additionally, the return value of this function is <a href="type.Result.html"><code>fmt::Result</code></a> which is a
 type alias of <a href="../../std/result/enum.Result.html"><code>Result</code></a><code>&lt;(),</code><a href="struct.Error.html"><code>std::fmt::Error</code></a><code>&gt;</code>. Formatting implementations
 should ensure that they propagate errors from the <a href="struct.Formatter.html"><code>Formatter</code></a> (e.g., when
-calling <a href="../../std/macro.write.html"><code>write!</code></a>) however, they should never return errors spuriously. That
+calling <a href="../../std/macro.write.html"><code>write!</code></a>). However, they should never return errors spuriously. That
 is, a formatting implementation must and may only return an error if the
 passed-in <a href="struct.Formatter.html"><code>Formatter</code></a> returns an error. This is because, contrary to what
 the function signature might suggest, string formatting is an infallible

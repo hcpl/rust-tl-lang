@@ -189,7 +189,7 @@ method calls a closure on each element it iterates over:</p>
 <span class="ident">v</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">x</span>));</pre>
 <p>This will not print any values, as we only created an iterator, rather than
 using it. The compiler will warn us about this kind of behavior:</p>
-<pre><code class="language-text">warning: unused result which must be used: iterator adaptors are lazy and
+<pre><code class="language-text">warning: unused result that must be used: iterator adaptors are lazy and
 do nothing unless consumed
 </code></pre>
 <p>The idiomatic way to write a <a href="trait.Iterator.html#method.map"><code>map</code></a> for its side effects is to use a
