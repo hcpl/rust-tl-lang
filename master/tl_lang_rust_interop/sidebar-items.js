@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Field",""],["Type",""],["TypeBuiltIn",""]],"struct":[["ConstructorDef",""],["ConstructorDefNamespace",""],["ConstructorVariant",""],["FieldNamed",""],["FieldUnnamed",""],["FunctionDef",""],["FunctionDefNamespace",""],["Ident",""],["Path",""],["Schema",""],["TypeDef",""],["TypeDefNamespace",""]]});

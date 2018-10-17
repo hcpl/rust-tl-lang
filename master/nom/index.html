@@ -259,7 +259,7 @@ recognize what we want. There is a way to avoid it, by inserting a space:</p>
 <p>More examples of <a href="macro.do_parse.html"><code>do_parse!</code></a> and <a href="macro.tuple.html"><code>tuple!</code></a> usage can be found in the <a href="tests/ini.rs">INI file parser example</a>.</p>
 <p><strong>Going further:</strong> read the <a href="https://github.com/Geal/nom/tree/master/doc">guides</a>!</p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
-<table><tr><td><code>pub use self::<a class="mod" href="../nom/simple_errors/index.html" title="mod nom::simple_errors">simple_errors</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/methods/index.html" title="mod nom::methods">methods</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/bits/index.html" title="mod nom::bits">bits</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/whitespace/index.html" title="mod nom::whitespace">whitespace</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr><td><code>pub use self::<a class="mod" href="../nom/verbose_errors/index.html" title="mod nom::verbose_errors">verbose_errors</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/methods/index.html" title="mod nom::methods">methods</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/bits/index.html" title="mod nom::bits">bits</a>::*;</code></td></tr><tr><td><code>pub use self::<a class="mod" href="../nom/whitespace/index.html" title="mod nom::whitespace">whitespace</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class="mod" href="bits/index.html"
@@ -287,18 +287,18 @@ it, albeit there it is not public.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="mod" href="simple_errors/index.html"
-                                  title='mod nom::simple_errors'>simple_errors</a></td>
-                           <td class='docblock-short'>
-                                <p>Error management</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
                            <td><a class="mod" href="types/index.html"
                                   title='mod nom::types'>types</a></td>
                            <td class='docblock-short'>
                                 <p>Custom input types</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="verbose_errors/index.html"
+                                  title='mod nom::verbose_errors'>verbose_errors</a></td>
+                           <td class='docblock-short'>
+                                <p>Error management</p>
 
                            </td>
                        </tr>
@@ -1515,6 +1515,13 @@ if more data was needed</p>
                        </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.add_error_pattern.html"
+                                  title='fn nom::add_error_pattern'>add_error_pattern</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.alpha.html"
                                   title='fn nom::alpha'>alpha</a></td>
                            <td class='docblock-short'>
@@ -1682,6 +1689,13 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.compare_error_paths.html"
+                                  title='fn nom::compare_error_paths'>compare_error_paths</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.crlf.html"
                                   title='fn nom::crlf'>crlf</a></td>
                            <td class='docblock-short'>
@@ -1736,6 +1750,13 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.error_to_list.html"
+                                  title='fn nom::error_to_list'>error_to_list</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.error_to_u32.html"
                                   title='fn nom::error_to_u32'>error_to_u32</a></td>
                            <td class='docblock-short'>
@@ -1756,6 +1777,13 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            <td class='docblock-short'>
                                 <p>Recognizes floating point number in a string and returns a f32</p>
 
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.generate_colors.html"
+                                  title='fn nom::generate_colors'>generate_colors</a></td>
+                           <td class='docblock-short'>
+                                
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -2028,6 +2056,13 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.prepare_errors.html"
+                                  title='fn nom::prepare_errors'>prepare_errors</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.print.html"
                                   title='fn nom::print'>print</a></td>
                            <td class='docblock-short'>
@@ -2037,6 +2072,20 @@ accept a <code>str</code>, but not a <code>&amp;[u8]</code>, unlike many other n
                        <tr class=' module-item'>
                            <td><a class="fn" href="fn.print_codes.html"
                                   title='fn nom::print_codes'>print_codes</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.print_error.html"
+                                  title='fn nom::print_error'>print_error</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.print_offsets.html"
+                                  title='fn nom::print_offsets'>print_offsets</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
