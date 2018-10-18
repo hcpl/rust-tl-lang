@@ -1,25 +1,23 @@
 use either::Either;
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::ident::Ident;
-use ::token_generator::TokenGenerator;
 use ::ty::Type;
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Field {
     Named(FieldNamed),
     Unnamed(FieldUnnamed),
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FieldNamed {
     pub name: Ident,
     pub ty: Type,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FieldUnnamed {
     pub index: usize,
     pub ty: Type,

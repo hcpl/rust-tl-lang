@@ -1,15 +1,13 @@
 use std::collections::HashMap;
 
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::field::Field;
 use ::ident::Ident;
-use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ConstructorDefNamespace {
     pub name: Ident,
     pub constructor_defs: Vec<ConstructorDef>,
@@ -101,7 +99,7 @@ impl ConstructorDefNamespace {
 }
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ConstructorDef {
     pub name: Ident,
     pub fields: Vec<Field>,

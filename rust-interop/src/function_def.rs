@@ -1,16 +1,14 @@
 use std::collections::HashMap;
 
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::field::Field;
 use ::ident::Ident;
 use ::path::Path;
-use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FunctionDefNamespace {
     pub name: Ident,
     pub function_defs: Vec<FunctionDef>,
@@ -91,7 +89,7 @@ impl FunctionDefNamespace {
 }
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FunctionDef {
     pub name: Ident,
     pub id: u32,

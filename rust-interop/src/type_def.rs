@@ -1,16 +1,14 @@
 use std::collections::HashMap;
 
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::constructor_variant::ConstructorVariant;
 use ::ident::Ident;
-use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TypeDefNamespace {
     pub name: Ident,
     pub type_defs: HashMap<tlsn::Ident, TypeDef>,
@@ -126,7 +124,7 @@ impl TypeDefNamespace {
 }
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TypeDef {
     pub name: Ident,
     pub constructor_variants: Vec<ConstructorVariant>,

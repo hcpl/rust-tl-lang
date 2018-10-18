@@ -4,30 +4,37 @@ use proc_macro2;
 use quote::ToTokens;
 
 
-pub struct TokenGenerator<'a, T: 'a> {
-    pub(crate) ref_value: &'a T,
-    pub(crate) function: fn(&T, &mut proc_macro2::TokenStream),
+pub struct TokenGenerator<T> {
+    value: T,
+    function: fn(T, &mut proc_macro2::TokenStream),
 }
 
-impl<'a, T> TokenGenerator<'a, T> {
-    pub fn new(ref_value: &'a T, function: fn(&T, &mut proc_macro2::TokenStream)) -> Self {
-        Self { ref_value, function }
+impl<T> TokenGenerator<T> {
+    pub fn new(value: T, function: fn(T, &mut proc_macro2::TokenStream)) -> Self {
+        Self { value, function }
+    }
+
+    pub fn value(&self) -> &T {
+        &self.value
     }
 }
 
-impl<'a, T> fmt::Debug for TokenGenerator<'a, T>
+impl<T> fmt::Debug for TokenGenerator<T>
 where
     T: fmt::Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("TokenGenerator")
-            .field("ref_value", &self.ref_value)
+            .field("ref_value", &self.value)
             .finish()
     }
 }
 
-impl<'a, T> ToTokens for TokenGenerator<'a, T> {
+impl<T> ToTokens for TokenGenerator<T>
+where
+    T: Clone,
+{
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        (self.function)(self.ref_value, tokens)
+        (self.function)(self.value.clone(), tokens)
     }
 }

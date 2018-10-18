@@ -1,15 +1,13 @@
 use std::iter;
 
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::ident::Ident;
 use ::path::Path;
-use ::token_generator::TokenGenerator;
 use ::utils;
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ConstructorVariant {
     pub name: Ident,
     pub id: u32,

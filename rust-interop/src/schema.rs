@@ -1,13 +1,11 @@
-use proc_macro2;
 use tl_lang_syn as tlsn;
 
 use ::constructor_def::ConstructorDefNamespace;
 use ::function_def::FunctionDefNamespace;
-use ::token_generator::TokenGenerator;
 use ::type_def::TypeDefNamespace;
 
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Schema {
     pub layer: u32,
     pub type_def_ns: TypeDefNamespace,
