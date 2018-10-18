@@ -1,12 +1,11 @@
 use std::iter;
 
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
 use tl_lang_syn as tlsn;
 
 use ::ident::Ident;
 use ::path::Path;
+use ::token_generator::TokenGenerator;
 use ::utils;
 
 
@@ -82,20 +81,6 @@ impl Type {
             tlsn::SafeParameterizedPath::Parenthesized(ref parenthesized) => {
                 Self::from_tl_parameterized_path(&parenthesized.parameterized_path)
             },
-        }
-    }
-
-    pub fn to_syn_type(&self) -> syn::Type {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for Type {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        match *self {
-            Type::BuiltIn(ref built_in) => built_in.to_tokens(tokens),
-            Type::Path(ref path) => path.to_tokens(tokens),
-            Type::Generic(ref type_param) => type_param.to_tokens(tokens),
         }
     }
 }
@@ -213,27 +198,5 @@ impl TypeBuiltIn {
         };
 
         Some(built_in)
-    }
-
-    pub fn to_syn_type(&self) -> syn::Type {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for TypeBuiltIn {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        tokens.append_all(match *self {
-            TypeBuiltIn::Bool   => quote!(bool),
-            TypeBuiltIn::True   => quote!(()),
-            TypeBuiltIn::Int    => quote!(i32),
-            TypeBuiltIn::Long   => quote!(i64),
-            TypeBuiltIn::Int128 => quote!(i128),
-            TypeBuiltIn::Int256 => quote!(::manual_types::i256::I256),
-            TypeBuiltIn::Double => quote!(f64),
-            TypeBuiltIn::Bytes  => quote!(::serde_bytes::ByteBuf),
-            TypeBuiltIn::String => quote!(String),
-            TypeBuiltIn::Vector(ref args) => quote!(Vec<#(#args),*>),
-            TypeBuiltIn::VectorBoxed(ref args) => quote!(::serde_mtproto::Boxed<Vec<#(#args),*>>),
-        });
     }
 }

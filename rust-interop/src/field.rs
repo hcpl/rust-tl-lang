@@ -1,11 +1,9 @@
 use either::Either;
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
-use syn::parse::Parser;
 use tl_lang_syn as tlsn;
 
 use ::ident::Ident;
+use ::token_generator::TokenGenerator;
 use ::ty::Type;
 
 
@@ -69,25 +67,5 @@ impl Field {
                 Either::Left(Self::from_index_tl_ty(index, &type_only.ty).into_iter())
             },
         }).collect()
-    }
-
-    pub fn to_syn_field(&self) -> syn::Field {
-        syn::Field::parse_named.parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for Field {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        tokens.append_all(match *self {
-            Field::Named(FieldNamed { ref name, ref ty }) => quote!(pub #name: #ty),
-            Field::Unnamed(FieldUnnamed { index, ref ty }) => {
-                let ident = syn::Ident::new(
-                    &format!("_field_{}", index),
-                    proc_macro2::Span::call_site(),
-                );
-
-                quote!(pub #ident: #ty)
-            },
-        });
     }
 }

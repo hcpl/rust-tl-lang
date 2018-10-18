@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
 use tl_lang_syn as tlsn;
 
 use ::field::Field;
 use ::ident::Ident;
 use ::path::Path;
+use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
@@ -89,24 +88,6 @@ impl FunctionDefNamespace {
 
         function_def_ns
     }
-
-    pub fn to_syn_mod(&self) -> syn::ItemMod {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for FunctionDefNamespace {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let FunctionDefNamespace { ref name, ref function_defs, ref namespaces } = *self;
-        let namespaces = namespaces.values();
-
-        tokens.append_all(quote! {
-            pub mod #name {
-                #(#function_defs)*
-                #(#namespaces)*
-            }
-        });
-    }
 }
 
 
@@ -155,53 +136,5 @@ impl FunctionDef {
         let return_type = Path(result_type.clone());
 
         Self { name, id, generics, fields, return_type }
-    }
-
-    pub fn to_syn_struct(&self) -> syn::ItemStruct {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for FunctionDef {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let FunctionDef { ref name, id, ref generics, ref fields, .. } = *self;
-
-        let id_hex_string = format!("{:#x}", id);
-        let (generics, impl_generics) = if generics.is_empty() {
-            (None, None)
-        } else {
-            (
-                Some(quote!(<#(#generics),*>)),
-                Some(quote!(<#(#generics:
-                    ::std::clone::Clone +
-                    ::serde::Serialize +
-                    ::serde_mtproto::MtProtoSized +
-                    'static
-                ),*>)),
-            )
-        };
-        let fields = if fields.is_empty() {
-            quote!(;)
-        } else {
-            quote! {
-                { #(#fields,)* }
-            }
-        };
-
-        tokens.append_all(quote! {
-            #[derive(
-                Clone, Debug,
-                Serialize, Deserialize,
-                MtProtoIdentifiable, MtProtoSized,
-            )]
-            #[mtproto_identifiable(id = #id_hex_string)]
-            pub struct #name #generics #fields
-
-            impl #impl_generics ::tl::TLObject for #name #generics {
-                fn object_type() -> ::tl::dynamic::ObjectType {
-                    ::tl::dynamic::ObjectType::Function
-                }
-            }
-        });
     }
 }

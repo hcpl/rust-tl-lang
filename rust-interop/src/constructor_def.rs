@@ -1,12 +1,11 @@
 use std::collections::HashMap;
 
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
 use tl_lang_syn as tlsn;
 
 use ::field::Field;
 use ::ident::Ident;
+use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
@@ -99,24 +98,6 @@ impl ConstructorDefNamespace {
 
         constructor_def_ns
     }
-
-    pub fn to_syn_mod(&self) -> syn::ItemMod {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for ConstructorDefNamespace {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let ConstructorDefNamespace { ref name, ref constructor_defs, ref namespaces } = *self;
-        let namespaces = namespaces.values();
-
-        tokens.append_all(quote! {
-            pub mod #name {
-                #(#constructor_defs)*
-                #(#namespaces)*
-            }
-        });
-    }
 }
 
 
@@ -138,32 +119,5 @@ impl ConstructorDef {
         let fields = Field::from_tl_params(params);
 
         Self { name, fields }
-    }
-
-    pub fn to_syn_struct(&self) -> syn::ItemStruct {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for ConstructorDef {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let ConstructorDef { ref name, ref fields } = *self;
-
-        let fields = if fields.is_empty() {
-            quote!(;)
-        } else {
-            quote! {
-                { #(#fields,)* }
-            }
-        };
-
-        tokens.append_all(quote! {
-            #[derive(
-                Clone, Debug,
-                Serialize, Deserialize,
-                MtProtoSized,
-            )]
-            pub struct #name #fields
-        });
     }
 }

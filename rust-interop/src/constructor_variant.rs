@@ -1,12 +1,11 @@
 use std::iter;
 
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
 use tl_lang_syn as tlsn;
 
 use ::ident::Ident;
 use ::path::Path;
+use ::token_generator::TokenGenerator;
 use ::utils;
 
 
@@ -41,22 +40,5 @@ impl ConstructorVariant {
         });
 
         Self { name: cs_name, id, struct_path }
-    }
-
-    pub fn to_syn_variant(&self) -> syn::Variant {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for ConstructorVariant {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let ConstructorVariant { ref name, id, ref struct_path } = *self;
-
-        let id_hex_string = format!("{:#x}", id);
-
-        tokens.append_all(quote! {
-            #[mtproto_identifiable(id = #id_hex_string)]
-            #name(#struct_path)
-        });
     }
 }

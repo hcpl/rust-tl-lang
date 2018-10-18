@@ -1,12 +1,11 @@
 use std::collections::HashMap;
 
 use proc_macro2;
-use quote::{ToTokens, TokenStreamExt};
-use syn;
 use tl_lang_syn as tlsn;
 
 use ::constructor_variant::ConstructorVariant;
 use ::ident::Ident;
+use ::token_generator::TokenGenerator;
 use ::utils::TraversalMode;
 
 
@@ -124,25 +123,6 @@ impl TypeDefNamespace {
 
         type_def_ns
     }
-
-    pub fn to_syn_mod(&self) -> syn::ItemMod {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for TypeDefNamespace {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let TypeDefNamespace { ref name, ref type_defs, ref namespaces } = *self;
-        let type_defs = type_defs.values();
-        let namespaces = namespaces.values();
-
-        tokens.append_all(quote! {
-            pub mod #name {
-                #(#type_defs)*
-                #(#namespaces)*
-            }
-        });
-    }
 }
 
 
@@ -150,33 +130,4 @@ impl ToTokens for TypeDefNamespace {
 pub struct TypeDef {
     pub name: Ident,
     pub constructor_variants: Vec<ConstructorVariant>,
-}
-
-impl TypeDef {
-    pub fn to_syn_enum(&self) -> syn::ItemEnum {
-        syn::parse2(self.into_token_stream()).unwrap()
-    }
-}
-
-impl ToTokens for TypeDef {
-    fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let TypeDef { ref name, ref constructor_variants } = *self;
-
-        tokens.append_all(quote! {
-            #[derive(
-                Clone, Debug,
-                Serialize, Deserialize,
-                MtProtoIdentifiable, MtProtoSized,
-            )]
-            pub enum #name {
-                #(#constructor_variants,)*
-            }
-
-            impl ::tl::TLObject for #name {
-                fn object_type() -> ::tl::dynamic::ObjectType {
-                    ::tl::dynamic::ObjectType::Type
-                }
-            }
-        });
-    }
 }

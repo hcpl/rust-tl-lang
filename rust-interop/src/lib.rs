@@ -1,13 +1,13 @@
 extern crate either;
 extern crate proc_macro2;
-#[macro_use]
 extern crate quote;
-extern crate syn;
 extern crate tl_lang_syn;
 
 
 #[macro_use]
 pub(crate) mod utils;
+
+pub mod token_generator;
 
 
 mod constructor_def;
