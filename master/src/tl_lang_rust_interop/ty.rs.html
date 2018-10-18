@@ -198,21 +198,17 @@
 <span id="198">198</span>
 <span id="199">199</span>
 <span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>;
 
-<span class="kw">use</span> <span class="ident">proc_macro2</span>;
 <span class="kw">use</span> <span class="ident">tl_lang_syn</span> <span class="kw">as</span> <span class="ident">tlsn</span>;
 
 <span class="kw">use</span> ::<span class="ident">ident</span>::<span class="ident">Ident</span>;
 <span class="kw">use</span> ::<span class="ident">path</span>::<span class="ident">Path</span>;
-<span class="kw">use</span> ::<span class="ident">token_generator</span>::<span class="ident">TokenGenerator</span>;
 <span class="kw">use</span> ::<span class="ident">utils</span>;
 
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span> ,<span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span> ,<span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Type</span> {
     <span class="ident">BuiltIn</span>(<span class="ident">TypeBuiltIn</span>),
     <span class="ident">Path</span>(<span class="ident">Path</span>),
@@ -289,7 +285,7 @@
 }
 
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span> ,<span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span> ,<span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeBuiltIn</span> {
     <span class="ident">Bool</span>,
     <span class="ident">True</span>,

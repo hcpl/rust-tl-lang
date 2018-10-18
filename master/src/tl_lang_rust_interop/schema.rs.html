@@ -35,19 +35,15 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">proc_macro2</span>;
 <span class="kw">use</span> <span class="ident">tl_lang_syn</span> <span class="kw">as</span> <span class="ident">tlsn</span>;
 
 <span class="kw">use</span> ::<span class="ident">constructor_def</span>::<span class="ident">ConstructorDefNamespace</span>;
 <span class="kw">use</span> ::<span class="ident">function_def</span>::<span class="ident">FunctionDefNamespace</span>;
-<span class="kw">use</span> ::<span class="ident">token_generator</span>::<span class="ident">TokenGenerator</span>;
 <span class="kw">use</span> ::<span class="ident">type_def</span>::<span class="ident">TypeDefNamespace</span>;
 
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Schema</span> {
     <span class="kw">pub</span> <span class="ident">layer</span>: <span class="ident">u32</span>,
     <span class="kw">pub</span> <span class="ident">type_def_ns</span>: <span class="ident">TypeDefNamespace</span>,

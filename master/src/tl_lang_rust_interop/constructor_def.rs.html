@@ -119,21 +119,17 @@
 <span id="119">119</span>
 <span id="120">120</span>
 <span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
 
-<span class="kw">use</span> <span class="ident">proc_macro2</span>;
 <span class="kw">use</span> <span class="ident">tl_lang_syn</span> <span class="kw">as</span> <span class="ident">tlsn</span>;
 
 <span class="kw">use</span> ::<span class="ident">field</span>::<span class="ident">Field</span>;
 <span class="kw">use</span> ::<span class="ident">ident</span>::<span class="ident">Ident</span>;
-<span class="kw">use</span> ::<span class="ident">token_generator</span>::<span class="ident">TokenGenerator</span>;
 <span class="kw">use</span> ::<span class="ident">utils</span>::<span class="ident">TraversalMode</span>;
 
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConstructorDefNamespace</span> {
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Ident</span>,
     <span class="kw">pub</span> <span class="ident">constructor_defs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ConstructorDef</span><span class="op">&gt;</span>,
@@ -225,7 +221,7 @@
 }
 
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConstructorDef</span> {
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Ident</span>,
     <span class="kw">pub</span> <span class="ident">fields</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Field</span><span class="op">&gt;</span>,
