@@ -42,34 +42,15 @@
 <span id="42">42</span>
 <span id="43">43</span>
 <span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>;
 
 <span class="kw">use</span> <span class="ident">proc_macro2</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">ToTokens</span>, <span class="ident">TokenStreamExt</span>};
-<span class="kw">use</span> <span class="ident">syn</span>;
 <span class="kw">use</span> <span class="ident">tl_lang_syn</span> <span class="kw">as</span> <span class="ident">tlsn</span>;
 
 <span class="kw">use</span> ::<span class="ident">ident</span>::<span class="ident">Ident</span>;
 <span class="kw">use</span> ::<span class="ident">path</span>::<span class="ident">Path</span>;
+<span class="kw">use</span> ::<span class="ident">token_generator</span>::<span class="ident">TokenGenerator</span>;
 <span class="kw">use</span> ::<span class="ident">utils</span>;
 
 
@@ -104,23 +85,6 @@
         });
 
         <span class="self">Self</span> { <span class="ident">name</span>: <span class="ident">cs_name</span>, <span class="ident">id</span>, <span class="ident">struct_path</span> }
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_syn_variant</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">syn</span>::<span class="ident">Variant</span> {
-        <span class="ident">syn</span>::<span class="ident">parse2</span>(<span class="self">self</span>.<span class="ident">into_token_stream</span>()).<span class="ident">unwrap</span>()
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">ConstructorVariant</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">proc_macro2</span>::<span class="ident">TokenStream</span>) {
-        <span class="kw">let</span> <span class="ident">ConstructorVariant</span> { <span class="kw-2">ref</span> <span class="ident">name</span>, <span class="ident">id</span>, <span class="kw-2">ref</span> <span class="ident">struct_path</span> } <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span>;
-
-        <span class="kw">let</span> <span class="ident">id_hex_string</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:#x}&quot;</span>, <span class="ident">id</span>);
-
-        <span class="ident">tokens</span>.<span class="ident">append_all</span>(<span class="macro">quote</span><span class="macro">!</span> {
-            <span class="attribute">#[<span class="ident">mtproto_identifiable</span>(<span class="ident">id</span> <span class="op">=</span> #<span class="ident">id_hex_string</span>)]</span>
-            #<span class="ident">name</span>(#<span class="ident">struct_path</span>)
-        });
     }
 }
 </pre>

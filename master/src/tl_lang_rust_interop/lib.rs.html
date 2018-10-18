@@ -39,14 +39,14 @@
 </pre><pre class="rust ">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">either</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro2</span>;
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">quote</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">syn</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tl_lang_syn</span>;
 
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">utils</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">token_generator</span>;
 
 
 <span class="kw">mod</span> <span class="ident">constructor_def</span>;
