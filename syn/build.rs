@@ -13,6 +13,5 @@ fn query_print_cfg(version: &str, flag: &str) {
 }
 
 fn main() {
-    query_print_cfg("1.24.0", "char_stable_inherent_ascii_methods");
     query_print_cfg("1.28.0", "stable_nonzero_types");
 }

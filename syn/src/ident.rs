@@ -144,61 +144,45 @@ mod printing {
 }
 
 
-// Valid identifier chars must be:
-// - uppercase Latin letter
-// - lowercase Latin letter
-// - decimal digit
-// - underscore
+// A valid identifier char must be either of:
+// * uppercase Latin letter
+// * lowercase Latin letter
+// * decimal digit
+// * underscore
 fn is_ident_char(c: char) -> bool {
-    is_ascii_alphanumeric(c) || c == '_'
+    match c {
+        'A' ... 'Z' |
+        'a' ... 'z' |
+        '0' ... '9' |
+        '_'         => true,
+        _           => false,
+    }
 }
 
-// Valid identifiers must:
-// - be non-empty
-// - begin with either an uppercase or a lowercase Latin letter
-// - contain an uppercase or a lowercase Latin letter, a decimal digit or an underscore in other
+// A valid identifier beginning char must be either of:
+// * uppercase Latin letter
+// * lowercase Latin letter
+fn is_ident_beginning_char(c: char) -> bool {
+    match c {
+        'A' ... 'Z' |
+        'a' ... 'z' => true,
+        _           => false,
+    }
+}
+
+// A valid identifier must:
+// + be non-empty
+// + begin with either an uppercase or a lowercase Latin letter
+// + contain an uppercase or a lowercase Latin letter, a decimal digit or an underscore in other
 //   positions
 fn is_valid_ident(s: &str) -> bool {
     let mut chars = s.chars();
 
     match chars.next() {
-        Some(c) => is_ascii_alphabetic(c) && chars.all(is_ident_char),
+        Some(c) => is_ident_beginning_char(c) && chars.all(is_ident_char),
         None    => false,
     }
 }
-
-
-// ========== COMPATIBILITY SHIMS ========== //
-
-// If more efficient implementations are available, use them!
-// Affected Rust versions: >= 1.24.0
-#[cfg(char_stable_inherent_ascii_methods)]
-mod ascii_shim {
-    pub(super) fn is_ascii_alphanumeric(c: char) -> bool {
-        char::is_ascii_alphanumeric(&c)
-    }
-
-    pub(super) fn is_ascii_alphabetic(c: char) -> bool {
-        char::is_ascii_alphabetic(&c)
-    }
-}
-
-// Otherwise, implement slower fallbacks.
-// Affected Rust versions: <= 1.23.0
-#[cfg(not(char_stable_inherent_ascii_methods))]
-mod ascii_shim {
-    use std::ascii::AsciiExt;
-
-    pub(super) fn is_ascii_alphanumeric(c: char) -> bool {
-        AsciiExt::is_ascii(&c) && char::is_alphanumeric(c)
-    }
-
-    pub(super) fn is_ascii_alphabetic(c: char) -> bool {
-        AsciiExt::is_ascii(&c) && char::is_alphabetic(c)
-    }
-}
-
-use self::ascii_shim::{is_ascii_alphanumeric, is_ascii_alphabetic};
 
 
 #[cfg(test)]
