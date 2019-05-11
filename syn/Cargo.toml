@@ -19,7 +19,7 @@ macro-attr = "0.2"
 # We use `match` with `nom::Context` directly so we need to make sure that
 # compilation of this crate doesn't break when used as a dependency when some
 # other dependency decides to enable `nom`s "verbose-errors"
-nom = { version = "=4.0.0", features = ["verbose-errors"], optional = true }
+nom = { version = "4", features = ["verbose-errors"], optional = true }
 
 [build-dependencies]
 version_check = "0.1"
