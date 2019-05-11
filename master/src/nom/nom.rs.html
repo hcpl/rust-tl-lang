@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.0.0/src/nom.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>nom.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/nom-4.2.3/src/nom.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>nom.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../nom/index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1578,6 +1578,202 @@
 <span id="1578">1578</span>
 <span id="1579">1579</span>
 <span id="1580">1580</span>
+<span id="1581">1581</span>
+<span id="1582">1582</span>
+<span id="1583">1583</span>
+<span id="1584">1584</span>
+<span id="1585">1585</span>
+<span id="1586">1586</span>
+<span id="1587">1587</span>
+<span id="1588">1588</span>
+<span id="1589">1589</span>
+<span id="1590">1590</span>
+<span id="1591">1591</span>
+<span id="1592">1592</span>
+<span id="1593">1593</span>
+<span id="1594">1594</span>
+<span id="1595">1595</span>
+<span id="1596">1596</span>
+<span id="1597">1597</span>
+<span id="1598">1598</span>
+<span id="1599">1599</span>
+<span id="1600">1600</span>
+<span id="1601">1601</span>
+<span id="1602">1602</span>
+<span id="1603">1603</span>
+<span id="1604">1604</span>
+<span id="1605">1605</span>
+<span id="1606">1606</span>
+<span id="1607">1607</span>
+<span id="1608">1608</span>
+<span id="1609">1609</span>
+<span id="1610">1610</span>
+<span id="1611">1611</span>
+<span id="1612">1612</span>
+<span id="1613">1613</span>
+<span id="1614">1614</span>
+<span id="1615">1615</span>
+<span id="1616">1616</span>
+<span id="1617">1617</span>
+<span id="1618">1618</span>
+<span id="1619">1619</span>
+<span id="1620">1620</span>
+<span id="1621">1621</span>
+<span id="1622">1622</span>
+<span id="1623">1623</span>
+<span id="1624">1624</span>
+<span id="1625">1625</span>
+<span id="1626">1626</span>
+<span id="1627">1627</span>
+<span id="1628">1628</span>
+<span id="1629">1629</span>
+<span id="1630">1630</span>
+<span id="1631">1631</span>
+<span id="1632">1632</span>
+<span id="1633">1633</span>
+<span id="1634">1634</span>
+<span id="1635">1635</span>
+<span id="1636">1636</span>
+<span id="1637">1637</span>
+<span id="1638">1638</span>
+<span id="1639">1639</span>
+<span id="1640">1640</span>
+<span id="1641">1641</span>
+<span id="1642">1642</span>
+<span id="1643">1643</span>
+<span id="1644">1644</span>
+<span id="1645">1645</span>
+<span id="1646">1646</span>
+<span id="1647">1647</span>
+<span id="1648">1648</span>
+<span id="1649">1649</span>
+<span id="1650">1650</span>
+<span id="1651">1651</span>
+<span id="1652">1652</span>
+<span id="1653">1653</span>
+<span id="1654">1654</span>
+<span id="1655">1655</span>
+<span id="1656">1656</span>
+<span id="1657">1657</span>
+<span id="1658">1658</span>
+<span id="1659">1659</span>
+<span id="1660">1660</span>
+<span id="1661">1661</span>
+<span id="1662">1662</span>
+<span id="1663">1663</span>
+<span id="1664">1664</span>
+<span id="1665">1665</span>
+<span id="1666">1666</span>
+<span id="1667">1667</span>
+<span id="1668">1668</span>
+<span id="1669">1669</span>
+<span id="1670">1670</span>
+<span id="1671">1671</span>
+<span id="1672">1672</span>
+<span id="1673">1673</span>
+<span id="1674">1674</span>
+<span id="1675">1675</span>
+<span id="1676">1676</span>
+<span id="1677">1677</span>
+<span id="1678">1678</span>
+<span id="1679">1679</span>
+<span id="1680">1680</span>
+<span id="1681">1681</span>
+<span id="1682">1682</span>
+<span id="1683">1683</span>
+<span id="1684">1684</span>
+<span id="1685">1685</span>
+<span id="1686">1686</span>
+<span id="1687">1687</span>
+<span id="1688">1688</span>
+<span id="1689">1689</span>
+<span id="1690">1690</span>
+<span id="1691">1691</span>
+<span id="1692">1692</span>
+<span id="1693">1693</span>
+<span id="1694">1694</span>
+<span id="1695">1695</span>
+<span id="1696">1696</span>
+<span id="1697">1697</span>
+<span id="1698">1698</span>
+<span id="1699">1699</span>
+<span id="1700">1700</span>
+<span id="1701">1701</span>
+<span id="1702">1702</span>
+<span id="1703">1703</span>
+<span id="1704">1704</span>
+<span id="1705">1705</span>
+<span id="1706">1706</span>
+<span id="1707">1707</span>
+<span id="1708">1708</span>
+<span id="1709">1709</span>
+<span id="1710">1710</span>
+<span id="1711">1711</span>
+<span id="1712">1712</span>
+<span id="1713">1713</span>
+<span id="1714">1714</span>
+<span id="1715">1715</span>
+<span id="1716">1716</span>
+<span id="1717">1717</span>
+<span id="1718">1718</span>
+<span id="1719">1719</span>
+<span id="1720">1720</span>
+<span id="1721">1721</span>
+<span id="1722">1722</span>
+<span id="1723">1723</span>
+<span id="1724">1724</span>
+<span id="1725">1725</span>
+<span id="1726">1726</span>
+<span id="1727">1727</span>
+<span id="1728">1728</span>
+<span id="1729">1729</span>
+<span id="1730">1730</span>
+<span id="1731">1731</span>
+<span id="1732">1732</span>
+<span id="1733">1733</span>
+<span id="1734">1734</span>
+<span id="1735">1735</span>
+<span id="1736">1736</span>
+<span id="1737">1737</span>
+<span id="1738">1738</span>
+<span id="1739">1739</span>
+<span id="1740">1740</span>
+<span id="1741">1741</span>
+<span id="1742">1742</span>
+<span id="1743">1743</span>
+<span id="1744">1744</span>
+<span id="1745">1745</span>
+<span id="1746">1746</span>
+<span id="1747">1747</span>
+<span id="1748">1748</span>
+<span id="1749">1749</span>
+<span id="1750">1750</span>
+<span id="1751">1751</span>
+<span id="1752">1752</span>
+<span id="1753">1753</span>
+<span id="1754">1754</span>
+<span id="1755">1755</span>
+<span id="1756">1756</span>
+<span id="1757">1757</span>
+<span id="1758">1758</span>
+<span id="1759">1759</span>
+<span id="1760">1760</span>
+<span id="1761">1761</span>
+<span id="1762">1762</span>
+<span id="1763">1763</span>
+<span id="1764">1764</span>
+<span id="1765">1765</span>
+<span id="1766">1766</span>
+<span id="1767">1767</span>
+<span id="1768">1768</span>
+<span id="1769">1769</span>
+<span id="1770">1770</span>
+<span id="1771">1771</span>
+<span id="1772">1772</span>
+<span id="1773">1773</span>
+<span id="1774">1774</span>
+<span id="1775">1775</span>
+<span id="1776">1776</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Useful parser combinators</span>
 <span class="doccomment">//!</span>
@@ -1586,6 +1782,7 @@
 <span class="doccomment">//! Hopefully, the syntax will converge to onely one way in the future,</span>
 <span class="doccomment">//! but the macros system makes no promises.</span>
 <span class="doccomment">//!</span>
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">lib</span>::<span class="ident">std</span>::<span class="ident">boxed</span>::<span class="ident">Box</span>;
@@ -1594,7 +1791,7 @@
 <span class="kw">use</span> <span class="ident">lib</span>::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>;
 <span class="kw">use</span> <span class="ident">internal</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">AsChar</span>, <span class="ident">InputIter</span>, <span class="ident">InputLength</span>, <span class="ident">InputTakeAtPosition</span>};
-<span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">need_more</span>, <span class="ident">need_more_err</span>, <span class="ident">AtEof</span>};
+<span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">need_more</span>, <span class="ident">need_more_err</span>, <span class="ident">AtEof</span>, <span class="ident">ParseTo</span>};
 <span class="kw">use</span> <span class="ident">lib</span>::<span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Range</span>, <span class="ident">RangeFrom</span>, <span class="ident">RangeTo</span>};
 <span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">Compare</span>, <span class="ident">CompareResult</span>, <span class="ident">Offset</span>, <span class="ident">Slice</span>};
 <span class="kw">use</span> <span class="ident">util</span>::<span class="ident">ErrorKind</span>;
@@ -1758,7 +1955,9 @@
 <span class="comment">//pub filter!(oct_digit is_oct_digit)</span>
 <span class="comment">//pub filter!(alphanumeric is_alphanumeric)</span>
 
-<span class="doccomment">/// Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z</span>
+<span class="doccomment">/// Recognizes one or more lowercase and uppercase alphabetic characters.</span>
+<span class="doccomment">/// For ASCII strings: a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alpha</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">u32</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -1767,7 +1966,9 @@
   <span class="ident">alpha1</span>(<span class="ident">input</span>)
 }
 
-<span class="doccomment">/// Recognizes zero or more lowercase and uppercase alphabetic characters: a-zA-Z</span>
+<span class="doccomment">/// Recognizes zero or more lowercase and uppercase alphabetic characters.</span>
+<span class="doccomment">/// For ASCII strings: a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alpha0</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">u32</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -1776,7 +1977,9 @@
   <span class="ident">input</span>.<span class="ident">split_at_position</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="op">!</span><span class="ident">item</span>.<span class="ident">is_alpha</span>())
 }
 
-<span class="doccomment">/// Recognizes one or more lowercase and uppercase alphabetic characters: a-zA-Z</span>
+<span class="doccomment">/// Recognizes one or more lowercase and uppercase alphabetic characters</span>
+<span class="doccomment">/// For ASCII strings: a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alpha1</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">u32</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -1865,7 +2068,9 @@
   <span class="ident">input</span>.<span class="ident">split_at_position1</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="op">!</span><span class="ident">item</span>.<span class="ident">is_oct_digit</span>(), <span class="ident">ErrorKind</span>::<span class="ident">OctDigit</span>)
 }
 
-<span class="doccomment">/// Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z</span>
+<span class="doccomment">/// Recognizes one or more numerical and alphabetic characters</span>
+<span class="doccomment">/// For ASCII strings: 0-9a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alphanumeric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -1874,7 +2079,9 @@
   <span class="ident">alphanumeric1</span>(<span class="ident">input</span>)
 }
 
-<span class="doccomment">/// Recognizes zero or more numerical and alphabetic characters: 0-9a-zA-Z</span>
+<span class="doccomment">/// Recognizes zero or more numerical and alphabetic characters.</span>
+<span class="doccomment">/// For ASCII strings: 0-9a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alphanumeric0</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -1882,7 +2089,9 @@
 {
   <span class="ident">input</span>.<span class="ident">split_at_position</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="op">!</span><span class="ident">item</span>.<span class="ident">is_alphanum</span>())
 }
-<span class="doccomment">/// Recognizes one or more numerical and alphabetic characters: 0-9a-zA-Z</span>
+<span class="doccomment">/// Recognizes one or more numerical and alphabetic characters.</span>
+<span class="doccomment">/// For ASCII strings: 0-9a-zA-Z</span>
+<span class="doccomment">/// For UTF8 strings, 0-9 and any alphabetic code point (ie, not only the ASCII ones)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">alphanumeric1</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
   <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
@@ -2030,6 +2239,33 @@
   }
 }
 
+<span class="doccomment">/// Recognizes big endian unsigned 16 bytes integer</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_u128</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u128</span>, <span class="ident">u32</span><span class="op">&gt;</span> {
+  <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">16</span> {
+    <span class="ident">need_more</span>(<span class="ident">i</span>, <span class="ident">Needed</span>::<span class="ident">Size</span>(<span class="number">16</span>))
+  } <span class="kw">else</span> {
+    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> ((<span class="ident">i</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">120</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">1</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">112</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">2</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">104</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">3</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">96</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">4</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">88</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">5</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">80</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">6</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">72</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">7</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">64</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">8</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">56</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">9</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">48</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">10</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">40</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">11</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">32</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">12</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">24</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">13</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">16</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">14</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">8</span>)
+      <span class="op">+</span> <span class="ident">i</span>[<span class="number">15</span>] <span class="kw">as</span> <span class="ident">u128</span>;
+    <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="number">16</span>..], <span class="ident">res</span>))
+  }
+}
+
 <span class="doccomment">/// Recognizes a signed 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
@@ -2063,6 +2299,13 @@
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i64</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i64</span><span class="op">&gt;</span> {
   <span class="macro">map</span><span class="macro">!</span>(<span class="ident">i</span>, <span class="ident">be_u64</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i64</span>)
+}
+
+<span class="doccomment">/// Recognizes big endian signed 16 bytes integer</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_i128</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i128</span><span class="op">&gt;</span> {
+  <span class="macro">map</span><span class="macro">!</span>(<span class="ident">i</span>, <span class="ident">be_u128</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i128</span>)
 }
 
 <span class="doccomment">/// Recognizes an unsigned 1 byte integer (equivalent to take!(1)</span>
@@ -2120,6 +2363,33 @@
   }
 }
 
+<span class="doccomment">/// Recognizes little endian unsigned 16 bytes integer</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_u128</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">u128</span>, <span class="ident">u32</span><span class="op">&gt;</span> {
+  <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">16</span> {
+    <span class="ident">need_more</span>(<span class="ident">i</span>, <span class="ident">Needed</span>::<span class="ident">Size</span>(<span class="number">16</span>))
+  } <span class="kw">else</span> {
+    <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> ((<span class="ident">i</span>[<span class="number">15</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">120</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">14</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">112</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">13</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">104</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">12</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">96</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">11</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">88</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">10</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">80</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">9</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">72</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">8</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">64</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">7</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">56</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">6</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">48</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">5</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">40</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">4</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">32</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">3</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">24</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">2</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">16</span>)
+      <span class="op">+</span> ((<span class="ident">i</span>[<span class="number">1</span>] <span class="kw">as</span> <span class="ident">u128</span>) <span class="op">&lt;&lt;</span> <span class="number">8</span>)
+      <span class="op">+</span> <span class="ident">i</span>[<span class="number">0</span>] <span class="kw">as</span> <span class="ident">u128</span>;
+    <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="ident">i</span>[<span class="number">16</span>..], <span class="ident">res</span>))
+  }
+}
+
 <span class="doccomment">/// Recognizes a signed 1 byte integer (equivalent to take!(1)</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i8</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i8</span><span class="op">&gt;</span> {
@@ -2155,6 +2425,13 @@
   <span class="macro">map</span><span class="macro">!</span>(<span class="ident">i</span>, <span class="ident">le_u64</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i64</span>)
 }
 
+<span class="doccomment">/// Recognizes little endian signed 16 bytes integer</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_i128</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">i128</span><span class="op">&gt;</span> {
+  <span class="macro">map</span><span class="macro">!</span>(<span class="ident">i</span>, <span class="ident">le_u128</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span> <span class="kw">as</span> <span class="ident">i128</span>)
+}
+
 <span class="doccomment">/// Configurable endianness</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Endianness</span> {
@@ -2164,36 +2441,46 @@
 
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u16 integer,</span>
 <span class="doccomment">/// otherwise a little endian u16 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_u16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u32 integer,</span>
 <span class="doccomment">/// otherwise a little endian u32 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_u32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u64 integer,</span>
 <span class="doccomment">/// otherwise a little endian u64 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_u64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian u128 integer,</span>
+<span class="doccomment">/// otherwise a little endian u128 integer</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">u128</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_u128</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_u128</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i16 integer,</span>
 <span class="doccomment">/// otherwise a little endian i16 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i16</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_i16</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i32 integer,</span>
 <span class="doccomment">/// otherwise a little endian i32 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i32</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_i32</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 <span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i64 integer,</span>
 <span class="doccomment">/// otherwise a little endian i64 integer</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="ident">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="ident">be_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="ident">le_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i64</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_i64</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
+<span class="doccomment">/// if the parameter is nom::Endianness::Big, parse a big endian i64 integer,</span>
+<span class="doccomment">/// otherwise a little endian i64 integer</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">i128</span> ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> ( {<span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Endianness</span>::<span class="ident">Big</span> <span class="op">==</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">e</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">be_i128</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } <span class="kw">else</span> { <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">le_i128</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>) } } ););
 
 <span class="doccomment">/// Recognizes big endian 4 bytes floating point number</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">be_u32</span>(<span class="ident">input</span>) {
     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">f32</span><span class="op">&gt;</span>(<span class="ident">o</span>))) },
+    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">f32</span>::<span class="ident">from_bits</span>(<span class="ident">o</span>))),
   }
 }
 
@@ -2202,7 +2489,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">be_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">be_u64</span>(<span class="ident">input</span>) {
     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">f64</span><span class="op">&gt;</span>(<span class="ident">o</span>))) },
+    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">f64</span>::<span class="ident">from_bits</span>(<span class="ident">o</span>))),
   }
 }
 
@@ -2211,7 +2498,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f32</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">le_u32</span>(<span class="ident">input</span>) {
     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">f32</span><span class="op">&gt;</span>(<span class="ident">o</span>))) },
+    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">f32</span>::<span class="ident">from_bits</span>(<span class="ident">o</span>))),
   }
 }
 
@@ -2220,7 +2507,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">le_f64</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
   <span class="kw">match</span> <span class="ident">le_u64</span>(<span class="ident">input</span>) {
     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
-    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">f64</span><span class="op">&gt;</span>(<span class="ident">o</span>))) },
+    <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">o</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">i</span>, <span class="ident">f64</span>::<span class="ident">from_bits</span>(<span class="ident">o</span>))),
   }
 }
 
@@ -2276,6 +2563,17 @@
   <span class="prelude-val">Ok</span>((<span class="ident">input</span>.<span class="ident">slice</span>(<span class="ident">input</span>.<span class="ident">input_len</span>()..), <span class="ident">input</span>))
 }
 
+<span class="doccomment">/// Return the length of the remaining input.</span>
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest_len</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">usize</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+  <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>,
+  <span class="ident">T</span>: <span class="ident">InputLength</span>,
+{
+  <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">input_len</span>();
+  <span class="prelude-val">Ok</span>((<span class="ident">input</span>, <span class="ident">len</span>))
+}
+
 <span class="doccomment">/// Return the remaining input, for strings.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rest_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
@@ -2312,25 +2610,60 @@
 
 <span class="doccomment">/// Recognizes floating point number in a byte string and returns a f32</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="comment">//pub fn float(input: &amp;[u8]) -&gt; IResult&lt;&amp;[u8], f32&gt; {</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">f32</span>, <span class="ident">u32</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+  <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>,
+  <span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Offset</span>,
+  <span class="ident">T</span>: <span class="ident">InputIter</span> <span class="op">+</span> <span class="ident">InputLength</span> <span class="op">+</span> <span class="ident">ParseTo</span><span class="op">&lt;</span><span class="ident">f32</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AtEof</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>,
+  <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputTakeAtPosition</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>
+{
   <span class="macro">flat_map</span><span class="macro">!</span>(<span class="ident">input</span>, <span class="ident">recognize_float</span>, <span class="macro">parse_to</span><span class="macro">!</span>(<span class="ident">f32</span>))
 }
 
 <span class="doccomment">/// Recognizes floating point number in a string and returns a f32</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">f32</span><span class="op">&gt;</span> {
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.1.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Please use `float` instead&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">float_s</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">f32</span>, <span class="ident">u32</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+  <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>,
+  <span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Offset</span>,
+  <span class="ident">T</span>: <span class="ident">InputIter</span> <span class="op">+</span> <span class="ident">InputLength</span> <span class="op">+</span> <span class="ident">ParseTo</span><span class="op">&lt;</span><span class="ident">f32</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AtEof</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>,
+  <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputTakeAtPosition</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>
+{
   <span class="macro">flat_map</span><span class="macro">!</span>(<span class="ident">input</span>, <span class="macro">call</span><span class="macro">!</span>(<span class="ident">recognize_float</span>), <span class="macro">parse_to</span><span class="macro">!</span>(<span class="ident">f32</span>))
 }
 
 <span class="doccomment">/// Recognizes floating point number in a byte string and returns a f64</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">f64</span>, <span class="ident">u32</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+  <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>,
+  <span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Offset</span>,
+  <span class="ident">T</span>: <span class="ident">InputIter</span> <span class="op">+</span> <span class="ident">InputLength</span> <span class="op">+</span> <span class="ident">ParseTo</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AtEof</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>,
+  <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputTakeAtPosition</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>
+{
   <span class="macro">flat_map</span><span class="macro">!</span>(<span class="ident">input</span>, <span class="macro">call</span><span class="macro">!</span>(<span class="ident">recognize_float</span>), <span class="macro">parse_to</span><span class="macro">!</span>(<span class="ident">f64</span>))
 }
 
 <span class="doccomment">/// Recognizes floating point number in a string and returns a f64</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double_s</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">f64</span><span class="op">&gt;</span> {
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.1.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Please use `double` instead&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">double_s</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">IResult</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">f64</span>, <span class="ident">u32</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+  <span class="ident">T</span>: <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeFrom</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Slice</span><span class="op">&lt;</span><span class="ident">RangeTo</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>,
+  <span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Offset</span>,
+  <span class="ident">T</span>: <span class="ident">InputIter</span> <span class="op">+</span> <span class="ident">InputLength</span> <span class="op">+</span> <span class="ident">ParseTo</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AtEof</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputIter</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>,
+  <span class="ident">T</span>: <span class="ident">InputTakeAtPosition</span>,
+  <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">InputTakeAtPosition</span><span class="op">&gt;</span>::<span class="ident">Item</span>: <span class="ident">AsChar</span>
+{
   <span class="macro">flat_map</span><span class="macro">!</span>(<span class="ident">input</span>, <span class="macro">call</span><span class="macro">!</span>(<span class="ident">recognize_float</span>), <span class="macro">parse_to</span><span class="macro">!</span>(<span class="ident">f64</span>))
 }
 
@@ -2744,6 +3077,27 @@
   }
 
   <span class="attribute">#[<span class="ident">test</span>]</span>
+  <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+  <span class="kw">fn</span> <span class="ident">i128_tests</span>() {
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">be_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">0</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">be_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0x7f</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">170_141_183_460_469_231_731_687_303_715_884_105_727_i128</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">be_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="op">-</span><span class="number">1</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">be_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0x80</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="op">-</span><span class="number">170_141_183_460_469_231_731_687_303_715_884_105_728_i128</span>))
+    );
+  }
+
+  <span class="attribute">#[<span class="ident">test</span>]</span>
   <span class="kw">fn</span> <span class="ident">le_i8_tests</span>() {
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">le_i8</span>(<span class="kw-2">&amp;</span>[<span class="number">0x00</span>]), <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">0</span>)));
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">le_i8</span>(<span class="kw-2">&amp;</span>[<span class="number">0x7f</span>]), <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">127</span>)));
@@ -2804,6 +3158,27 @@
     <span class="macro">assert_eq</span><span class="macro">!</span>(
       <span class="ident">le_i64</span>(<span class="kw-2">&amp;</span>[<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x80</span>]),
       <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="op">-</span><span class="number">9_223_372_036_854_775_808_i64</span>))
+    );
+  }
+
+  <span class="attribute">#[<span class="ident">test</span>]</span>
+  <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">stable_i128</span>)]</span>
+  <span class="kw">fn</span> <span class="ident">le_i128_tests</span>() {
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">le_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">0</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">le_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0x7f</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="number">170_141_183_460_469_231_731_687_303_715_884_105_727_i128</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">le_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="op">-</span><span class="number">1</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+      <span class="ident">le_i128</span>(<span class="kw-2">&amp;</span>[<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x80</span>]),
+      <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..], <span class="op">-</span><span class="number">170_141_183_460_469_231_731_687_303_715_884_105_728_i128</span>))
     );
   }
 
@@ -2895,6 +3270,12 @@
     <span class="kw">let</span> <span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Hello, world!&quot;</span>;
     <span class="kw">let</span> <span class="ident">empty</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>;
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rest</span>(<span class="ident">input</span>), <span class="prelude-val">Ok</span>((<span class="ident">empty</span>, <span class="ident">input</span>)));
+  }
+
+  <span class="attribute">#[<span class="ident">test</span>]</span>
+  <span class="kw">fn</span> <span class="ident">rest_len_on_slices</span>() {
+    <span class="kw">let</span> <span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="kw-2">&amp;</span><span class="string">b&quot;Hello, world!&quot;</span>[..];
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rest_len</span>(<span class="ident">input</span>), <span class="prelude-val">Ok</span>((<span class="ident">input</span>, <span class="ident">input</span>.<span class="ident">len</span>())));
   }
 
   <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -3141,10 +3522,21 @@
       <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">recognize_float</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">test</span>)));
 
       <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float</span>(<span class="ident">larger</span>.<span class="ident">as_bytes</span>()), <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;;&quot;</span>[..], <span class="ident">expected32</span>)));
-      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float_s</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected32</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected32</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float</span>(<span class="ident">CompleteByteSlice</span>(<span class="ident">test</span>.<span class="ident">as_bytes</span>())), <span class="prelude-val">Ok</span>((<span class="ident">CompleteByteSlice</span>(<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..]), <span class="ident">expected32</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float</span>(<span class="ident">CompleteStr</span>(<span class="ident">test</span>)), <span class="prelude-val">Ok</span>((<span class="ident">CompleteStr</span>(<span class="string">&quot;&quot;</span>), <span class="ident">expected32</span>)));
 
       <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double</span>(<span class="ident">larger</span>.<span class="ident">as_bytes</span>()), <span class="prelude-val">Ok</span>((<span class="kw-2">&amp;</span><span class="string">b&quot;;&quot;</span>[..], <span class="ident">expected64</span>)));
-      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double_s</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected64</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected64</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double</span>(<span class="ident">CompleteByteSlice</span>(<span class="ident">test</span>.<span class="ident">as_bytes</span>())), <span class="prelude-val">Ok</span>((<span class="ident">CompleteByteSlice</span>(<span class="kw-2">&amp;</span><span class="string">b&quot;&quot;</span>[..]), <span class="ident">expected64</span>)));
+      <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double</span>(<span class="ident">CompleteStr</span>(<span class="ident">test</span>)), <span class="prelude-val">Ok</span>((<span class="ident">CompleteStr</span>(<span class="string">&quot;&quot;</span>), <span class="ident">expected64</span>)));
+
+      <span class="comment">//deprecated functions</span>
+      <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
+      {
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">float_s</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected32</span>)));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">double_s</span>(<span class="kw-2">&amp;</span><span class="ident">larger</span>[..]), <span class="prelude-val">Ok</span>((<span class="string">&quot;;&quot;</span>, <span class="ident">expected64</span>)));
+      }
     }
 
     <span class="kw">let</span> <span class="ident">remaining_exponent</span> <span class="op">=</span> <span class="string">&quot;-1.234E-&quot;</span>;
@@ -3160,4 +3552,4 @@
   }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "nom";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "nom";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

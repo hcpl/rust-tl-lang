@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/quote-0.6.8/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/quote-0.6.12/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../quote/index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -856,6 +856,9 @@
 <span id="856">856</span>
 <span id="857">857</span>
 <span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! This crate provides the [`quote!`] macro for turning Rust syntax tree data</span>
 <span class="doccomment">//! structures into tokens of source code.</span>
@@ -888,13 +891,6 @@
 <span class="doccomment">//! quote = &quot;0.6&quot;</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! #[macro_use]</span>
-<span class="doccomment">//! extern crate quote;</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! # fn main() {}</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
 <span class="doccomment">//! # Example</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The following quasi-quoted block of code is something you might find in [a]</span>
@@ -907,22 +903,20 @@
 <span class="doccomment">//! [a]: https://serde.rs/</span>
 <span class="doccomment">//! [`quote_spanned!`]: macro.quote_spanned.html</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! # #[macro_use]</span>
-<span class="doccomment">//! # extern crate quote;</span>
+<span class="doccomment">//! ```edition2018</span>
+<span class="doccomment">//! # use quote::quote;</span>
 <span class="doccomment">//! #</span>
-<span class="doccomment">//! # fn main() {</span>
-<span class="doccomment">//! #     let generics = &quot;&quot;;</span>
-<span class="doccomment">//! #     let where_clause = &quot;&quot;;</span>
-<span class="doccomment">//! #     let field_ty = &quot;&quot;;</span>
-<span class="doccomment">//! #     let item_ty = &quot;&quot;;</span>
-<span class="doccomment">//! #     let path = &quot;&quot;;</span>
-<span class="doccomment">//! #     let value = &quot;&quot;;</span>
+<span class="doccomment">//! # let generics = &quot;&quot;;</span>
+<span class="doccomment">//! # let where_clause = &quot;&quot;;</span>
+<span class="doccomment">//! # let field_ty = &quot;&quot;;</span>
+<span class="doccomment">//! # let item_ty = &quot;&quot;;</span>
+<span class="doccomment">//! # let path = &quot;&quot;;</span>
+<span class="doccomment">//! # let value = &quot;&quot;;</span>
 <span class="doccomment">//! #</span>
 <span class="doccomment">//! let tokens = quote! {</span>
 <span class="doccomment">//!     struct SerializeWith #generics #where_clause {</span>
 <span class="doccomment">//!         value: &amp;&#39;a #field_ty,</span>
-<span class="doccomment">//!         phantom: ::std::marker::PhantomData&lt;#item_ty&gt;,</span>
+<span class="doccomment">//!         phantom: core::marker::PhantomData&lt;#item_ty&gt;,</span>
 <span class="doccomment">//!     }</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     impl #generics serde::Serialize for SerializeWith #generics #where_clause {</span>
@@ -936,14 +930,12 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     SerializeWith {</span>
 <span class="doccomment">//!         value: #value,</span>
-<span class="doccomment">//!         phantom: ::std::marker::PhantomData::&lt;#item_ty&gt;,</span>
+<span class="doccomment">//!         phantom: core::marker::PhantomData::&lt;#item_ty&gt;,</span>
 <span class="doccomment">//!     }</span>
 <span class="doccomment">//! };</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## Recursion limit</span>
+<span class="doccomment">//! # Recursion limit</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The `quote!` macro relies on deep recursion so some large invocations may</span>
 <span class="doccomment">//! fail with &quot;recursion limit reached&quot; when you compile. If it fails, bump up</span>
@@ -951,7 +943,7 @@
 <span class="doccomment">//! An even higher limit may be necessary for especially large invocations.</span>
 
 <span class="comment">// Quote types in rustdoc of other crates get linked to here.</span>
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/quote/0.6.8&quot;</span>)]</span>
+<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/quote/0.6.12&quot;</span>)]</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(
     <span class="ident">not</span>(<span class="ident">all</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>, <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)),
@@ -968,130 +960,8 @@
 
 <span class="comment">// Not public API.</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">__rt</span> {
-    <span class="kw">use</span> <span class="ident">ext</span>::<span class="ident">TokenStreamExt</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">proc_macro2</span>::<span class="kw-2">*</span>;
-
-    <span class="kw">fn</span> <span class="ident">is_ident_start</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-        (<span class="string">b&#39;a&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;z&#39;</span>) <span class="op">||</span> (<span class="string">b&#39;A&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;Z&#39;</span>) <span class="op">||</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">b&#39;_&#39;</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">is_ident_continue</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-        (<span class="string">b&#39;a&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;z&#39;</span>)
-            <span class="op">||</span> (<span class="string">b&#39;A&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;Z&#39;</span>)
-            <span class="op">||</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">b&#39;_&#39;</span>
-            <span class="op">||</span> (<span class="string">b&#39;0&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;9&#39;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">is_ident</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="ident">token</span>.<span class="ident">bytes</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">digit</span><span class="op">|</span> <span class="ident">digit</span> <span class="op">&gt;=</span> <span class="string">b&#39;0&#39;</span> <span class="op">&amp;&amp;</span> <span class="ident">digit</span> <span class="op">&lt;=</span> <span class="string">b&#39;9&#39;</span>) {
-            <span class="kw">return</span> <span class="bool-val">false</span>;
-        }
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">token</span>.<span class="ident">bytes</span>();
-        <span class="kw">let</span> <span class="ident">first</span> <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">is_ident_start</span>(<span class="ident">first</span>) {
-            <span class="kw">return</span> <span class="bool-val">false</span>;
-        }
-        <span class="kw">for</span> <span class="ident">ch</span> <span class="kw">in</span> <span class="ident">bytes</span> {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">is_ident_continue</span>(<span class="ident">ch</span>) {
-                <span class="kw">return</span> <span class="bool-val">false</span>;
-            }
-        }
-        <span class="bool-val">true</span>
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream</span>, <span class="ident">span</span>: <span class="ident">Span</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-        <span class="kw">if</span> <span class="ident">is_ident</span>(<span class="ident">s</span>) {
-            <span class="comment">// Fast path, since idents are the most common token.</span>
-            <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">Ident</span>::<span class="ident">new</span>(<span class="ident">s</span>, <span class="ident">span</span>));
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">s</span>: <span class="ident">TokenStream</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">parse</span>().<span class="ident">expect</span>(<span class="string">&quot;invalid token stream&quot;</span>);
-            <span class="ident">tokens</span>.<span class="ident">extend</span>(<span class="ident">s</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">t</span><span class="op">|</span> {
-                <span class="ident">t</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">t</span>
-            }));
-        }
-    }
-
-    <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">push_punct</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>:<span class="ident">tt</span>) <span class="op">=&gt;</span> {
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream</span>, <span class="ident">span</span>: <span class="ident">Span</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>, <span class="ident">Spacing</span>::<span class="ident">Alone</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-            }
-        };
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char2</span>:<span class="ident">tt</span>) <span class="op">=&gt;</span> {
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream</span>, <span class="ident">span</span>: <span class="ident">Span</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>, <span class="ident">Spacing</span>::<span class="ident">Joint</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char2</span>, <span class="ident">Spacing</span>::<span class="ident">Alone</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-            }
-        };
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char2</span>:<span class="ident">tt</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">char3</span>:<span class="ident">tt</span>) <span class="op">=&gt;</span> {
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>(<span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TokenStream</span>, <span class="ident">span</span>: <span class="ident">Span</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char1</span>, <span class="ident">Spacing</span>::<span class="ident">Joint</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char2</span>, <span class="ident">Spacing</span>::<span class="ident">Joint</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">punct</span> <span class="op">=</span> <span class="ident">Punct</span>::<span class="ident">new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">char3</span>, <span class="ident">Spacing</span>::<span class="ident">Alone</span>);
-                <span class="ident">punct</span>.<span class="ident">set_span</span>(<span class="ident">span</span>);
-                <span class="ident">tokens</span>.<span class="ident">append</span>(<span class="ident">punct</span>);
-            }
-        };
-    }
-
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_add</span> <span class="string">&#39;+&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_add_eq</span> <span class="string">&#39;+&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_and</span> <span class="string">&#39;&amp;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_and_and</span> <span class="string">&#39;&amp;&#39;</span> <span class="string">&#39;&amp;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_and_eq</span> <span class="string">&#39;&amp;&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_at</span> <span class="string">&#39;@&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_bang</span> <span class="string">&#39;!&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_caret</span> <span class="string">&#39;^&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_caret_eq</span> <span class="string">&#39;^&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_colon</span> <span class="string">&#39;:&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_colon2</span> <span class="string">&#39;:&#39;</span> <span class="string">&#39;:&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_comma</span> <span class="string">&#39;,&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_div</span> <span class="string">&#39;/&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_div_eq</span> <span class="string">&#39;/&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_dot</span> <span class="string">&#39;.&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_dot2</span> <span class="string">&#39;.&#39;</span> <span class="string">&#39;.&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_dot3</span> <span class="string">&#39;.&#39;</span> <span class="string">&#39;.&#39;</span> <span class="string">&#39;.&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_dot_dot_eq</span> <span class="string">&#39;.&#39;</span> <span class="string">&#39;.&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_eq</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_eq_eq</span> <span class="string">&#39;=&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_ge</span> <span class="string">&#39;&gt;&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_gt</span> <span class="string">&#39;&gt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_le</span> <span class="string">&#39;&lt;&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_lt</span> <span class="string">&#39;&lt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_mul_eq</span> <span class="string">&#39;*&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_ne</span> <span class="string">&#39;!&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_or</span> <span class="string">&#39;|&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_or_eq</span> <span class="string">&#39;|&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_or_or</span> <span class="string">&#39;|&#39;</span> <span class="string">&#39;|&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_pound</span> <span class="string">&#39;#&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_question</span> <span class="string">&#39;?&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_rarrow</span> <span class="string">&#39;-&#39;</span> <span class="string">&#39;&gt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_larrow</span> <span class="string">&#39;&lt;&#39;</span> <span class="string">&#39;-&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_rem</span> <span class="string">&#39;%&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_rem_eq</span> <span class="string">&#39;%&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_fat_arrow</span> <span class="string">&#39;=&#39;</span> <span class="string">&#39;&gt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_semi</span> <span class="string">&#39;;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_shl</span> <span class="string">&#39;&lt;&#39;</span> <span class="string">&#39;&lt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_shl_eq</span> <span class="string">&#39;&lt;&#39;</span> <span class="string">&#39;&lt;&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_shr</span> <span class="string">&#39;&gt;&#39;</span> <span class="string">&#39;&gt;&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_shr_eq</span> <span class="string">&#39;&gt;&#39;</span> <span class="string">&#39;&gt;&#39;</span> <span class="string">&#39;=&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_star</span> <span class="string">&#39;*&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_sub</span> <span class="string">&#39;-&#39;</span>);
-    <span class="macro">push_punct</span><span class="macro">!</span>(<span class="ident">push_sub_eq</span> <span class="string">&#39;-&#39;</span> <span class="string">&#39;=&#39;</span>);
-}
+<span class="attribute">#[<span class="ident">path</span> <span class="op">=</span> <span class="string">&quot;runtime.rs&quot;</span>]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">__rt</span>;
 
 <span class="doccomment">/// The whole point.</span>
 <span class="doccomment">///</span>
@@ -1124,6 +994,20 @@
 <span class="doccomment">/// - `#( struct #var; )*` — the repetition can contain other tokens</span>
 <span class="doccomment">/// - `#( #k =&gt; println!(&quot;{}&quot;, #v), )*` — even multiple interpolations</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// There are two limitations around interpolations in a repetition:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Every interpolation inside of a repetition must be a distinct variable.</span>
+<span class="doccomment">///   That is, `#(#a #a)*` is not allowed. Work around this by collecting `a`</span>
+<span class="doccomment">///   into a vector and taking references `a1 = &amp;a` and `a2 = &amp;a` which you use</span>
+<span class="doccomment">///   inside the repetition: `#(#a1 #a2)*`. Where possible, use meaningful names</span>
+<span class="doccomment">///   that indicate the distinct role of each copy.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - Every interpolation inside of a repetition must be iterable. If we have</span>
+<span class="doccomment">///   `vec` which is a vector and `ident` which is a single identifier,</span>
+<span class="doccomment">///   `#(#ident #vec)*` is not allowed. Work around this by using</span>
+<span class="doccomment">///   `std::iter::repeat(ident)` to produce an iterable that can be used from</span>
+<span class="doccomment">///   within the repetition.</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Hygiene</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Any interpolated tokens preserve the `Span` information provided by their</span>
@@ -1136,17 +1020,43 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`quote_spanned!`]: macro.quote_spanned.html</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// # Return type</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
+<span class="doccomment">/// The macro evaluates to an expression of type `proc_macro2::TokenStream`.</span>
+<span class="doccomment">/// Meanwhile Rust procedural macros are expected to return the type</span>
+<span class="doccomment">/// `proc_macro::TokenStream`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The difference between the two types is that `proc_macro` types are entirely</span>
+<span class="doccomment">/// specific to procedural macros and cannot ever exist in code outside of a</span>
+<span class="doccomment">/// procedural macro, while `proc_macro2` types may exist anywhere including</span>
+<span class="doccomment">/// tests and non-macro code like main.rs and build.rs. This is why even the</span>
+<span class="doccomment">/// procedural macro ecosystem is largely built around `proc_macro2`, because</span>
+<span class="doccomment">/// that ensures the libraries are unit testable and accessible in non-macro</span>
+<span class="doccomment">/// contexts.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// There is a [`From`]-conversion in both directions so returning the output of</span>
+<span class="doccomment">/// `quote!` from a procedural macro usually looks like `tokens.into()` or</span>
+<span class="doccomment">/// `proc_macro::TokenStream::from(tokens)`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`From`]: https://doc.rust-lang.org/std/convert/trait.From.html</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Procedural macro</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The structure of a basic procedural macro is as follows. Refer to the [Syn]</span>
+<span class="doccomment">/// crate for further useful guidance on using `quote!` as part of a procedural</span>
+<span class="doccomment">/// macro.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [Syn]: https://github.com/dtolnay/syn</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
 <span class="doccomment">/// # #[cfg(any())]</span>
 <span class="doccomment">/// extern crate proc_macro;</span>
-<span class="doccomment">/// # extern crate proc_macro2 as proc_macro;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[macro_use]</span>
-<span class="doccomment">/// extern crate quote;</span>
+<span class="doccomment">/// # use proc_macro2 as proc_macro;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// use proc_macro::TokenStream;</span>
+<span class="doccomment">/// use quote::quote;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # const IGNORE_TOKENS: &amp;&#39;static str = stringify! {</span>
 <span class="doccomment">/// #[proc_macro_derive(HeapSize)]</span>
@@ -1163,7 +1073,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">///     let expanded = quote! {</span>
 <span class="doccomment">///         // The generated impl.</span>
-<span class="doccomment">///         impl ::heapsize::HeapSize for #name {</span>
+<span class="doccomment">///         impl heapsize::HeapSize for #name {</span>
 <span class="doccomment">///             fn heap_size_of_children(&amp;self) -&gt; usize {</span>
 <span class="doccomment">///                 #expr</span>
 <span class="doccomment">///             }</span>
@@ -1171,14 +1081,123 @@
 <span class="doccomment">///     };</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///     // Hand the output tokens back to the compiler.</span>
-<span class="doccomment">///     expanded.into()</span>
+<span class="doccomment">///     TokenStream::from(expanded)</span>
 <span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Combining quoted fragments</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Usually you don&#39;t end up constructing an entire final `TokenStream` in one</span>
+<span class="doccomment">/// piece. Different parts may come from different helper functions. The tokens</span>
+<span class="doccomment">/// produced by `quote!` themselves implement `ToTokens` and so can be</span>
+<span class="doccomment">/// interpolated into later `quote!` invocations to build up a final result.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use quote::quote;</span>
 <span class="doccomment">/// #</span>
-<span class="doccomment">/// # fn main() {}</span>
+<span class="doccomment">/// let type_definition = quote! {...};</span>
+<span class="doccomment">/// let methods = quote! {...};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let tokens = quote! {</span>
+<span class="doccomment">///     #type_definition</span>
+<span class="doccomment">///     #methods</span>
+<span class="doccomment">/// };</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Constructing identifiers</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Suppose we have an identifier `ident` which came from somewhere in a macro</span>
+<span class="doccomment">/// input and we need to modify it in some way for the macro output. Let&#39;s</span>
+<span class="doccomment">/// consider prepending the identifier with an underscore.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Simply interpolating the identifier next to an underscore will not have the</span>
+<span class="doccomment">/// behavior of concatenating them. The underscore and the identifier will</span>
+<span class="doccomment">/// continue to be two separate tokens as if you had written `_ x`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use proc_macro2::{self as syn, Span};</span>
+<span class="doccomment">/// # use quote::quote;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # let ident = syn::Ident::new(&quot;i&quot;, Span::call_site());</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// // incorrect</span>
+<span class="doccomment">/// quote! {</span>
+<span class="doccomment">///     let mut _#ident = 0;</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # ;</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The solution is to perform token-level manipulations using the APIs provided</span>
+<span class="doccomment">/// by Syn and proc-macro2.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use proc_macro2::{self as syn, Span};</span>
+<span class="doccomment">/// # use quote::quote;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # let ident = syn::Ident::new(&quot;i&quot;, Span::call_site());</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// let concatenated = format!(&quot;_{}&quot;, ident);</span>
+<span class="doccomment">/// let varname = syn::Ident::new(&amp;concatenated, ident.span());</span>
+<span class="doccomment">/// quote! {</span>
+<span class="doccomment">///     let mut #varname = 0;</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # ;</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Making method calls</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Let&#39;s say our macro requires some type specified in the macro input to have</span>
+<span class="doccomment">/// a constructor called `new`. We have the type in a variable called</span>
+<span class="doccomment">/// `field_type` of type `syn::Type` and want to invoke the constructor.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use quote::quote;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # let field_type = quote!(...);</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// // incorrect</span>
+<span class="doccomment">/// quote! {</span>
+<span class="doccomment">///     let value = #field_type::new();</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # ;</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This works only sometimes. If `field_type` is `String`, the expanded code</span>
+<span class="doccomment">/// contains `String::new()` which is fine. But if `field_type` is something</span>
+<span class="doccomment">/// like `Vec&lt;i32&gt;` then the expanded code is `Vec&lt;i32&gt;::new()` which is invalid</span>
+<span class="doccomment">/// syntax. Ordinarily in handwritten Rust we would write `Vec::&lt;i32&gt;::new()`</span>
+<span class="doccomment">/// but for macros often the following is more convenient.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use quote::quote;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # let field_type = quote!(...);</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// quote! {</span>
+<span class="doccomment">///     let value = &lt;#field_type&gt;::new();</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # ;</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This expands to `&lt;Vec&lt;i32&gt;&gt;::new()` which behaves correctly.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A similar pattern is appropriate for trait methods.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use quote::quote;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # let field_type = quote!(...);</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// quote! {</span>
+<span class="doccomment">///     let value = &lt;#field_type as core::default::Default&gt;::default();</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # ;</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">quote</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> (<span class="macro">quote_spanned</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">__rt</span>::<span class="ident">Span</span>::<span class="ident">call_site</span>()<span class="op">=&gt;</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>));
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
+        <span class="macro">quote_spanned</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">__rt</span>::<span class="ident">Span</span>::<span class="ident">call_site</span>()<span class="op">=&gt;</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>)
+    };
 }
 
 <span class="doccomment">/// Same as `quote!`, but applies a given span to all tokens originating within</span>
@@ -1192,14 +1211,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`Span`]: https://docs.rs/proc-macro2/0.4/proc_macro2/struct.Span.html</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #[macro_use]</span>
-<span class="doccomment">/// # extern crate quote;</span>
-<span class="doccomment">/// # extern crate proc_macro2;</span>
-<span class="doccomment">/// #</span>
+<span class="doccomment">/// ```edition2018</span>
 <span class="doccomment">/// # use proc_macro2::Span;</span>
+<span class="doccomment">/// # use quote::quote_spanned;</span>
 <span class="doccomment">/// #</span>
-<span class="doccomment">/// # fn main() {</span>
 <span class="doccomment">/// # const IGNORE_TOKENS: &amp;&#39;static str = stringify! {</span>
 <span class="doccomment">/// let span = /* ... */;</span>
 <span class="doccomment">/// # };</span>
@@ -1213,7 +1228,6 @@
 <span class="doccomment">/// let tokens = quote_spanned! {span=&gt;</span>
 <span class="doccomment">///     Box::into_raw(Box::new(#init))</span>
 <span class="doccomment">/// };</span>
-<span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The lack of space before the `=&gt;` should look jarring to Rust programmers</span>
@@ -1236,12 +1250,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`Sync`]: https://doc.rust-lang.org/std/marker/trait.Sync.html</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #[macro_use]</span>
-<span class="doccomment">/// # extern crate quote;</span>
-<span class="doccomment">/// # extern crate proc_macro2;</span>
-<span class="doccomment">/// #</span>
-<span class="doccomment">/// # use quote::{TokenStreamExt, ToTokens};</span>
+<span class="doccomment">/// ```edition2018</span>
+<span class="doccomment">/// # use quote::{quote_spanned, TokenStreamExt, ToTokens};</span>
 <span class="doccomment">/// # use proc_macro2::{Span, TokenStream};</span>
 <span class="doccomment">/// #</span>
 <span class="doccomment">/// # struct Type;</span>
@@ -1256,7 +1266,6 @@
 <span class="doccomment">/// #     fn to_tokens(&amp;self, _tokens: &amp;mut TokenStream) {}</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// #</span>
-<span class="doccomment">/// # fn main() {</span>
 <span class="doccomment">/// # let ty = Type;</span>
 <span class="doccomment">/// # let call_site = Span::call_site();</span>
 <span class="doccomment">/// #</span>
@@ -1264,7 +1273,6 @@
 <span class="doccomment">/// let assert_sync = quote_spanned! {ty_span=&gt;</span>
 <span class="doccomment">///     struct _AssertSync where #ty: Sync;</span>
 <span class="doccomment">/// };</span>
-<span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the assertion fails, the user will see an error like the following. The</span>
@@ -1287,14 +1295,12 @@
 <span class="doccomment">/// named `Sync` that is implemented for their type.</span>
 <span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">quote_spanned</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span><span class="op">=&gt;</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
-        {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">_s</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">__rt</span>::<span class="ident">TokenStream</span>::<span class="ident">new</span>();
-            <span class="kw">let</span> <span class="ident">_span</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>;
-            <span class="macro">quote_each_token</span><span class="macro">!</span>(<span class="ident">_s</span> <span class="ident">_span</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>);
-            <span class="ident">_s</span>
-        }
-    };
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span><span class="op">=&gt;</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {{
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">_s</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">__rt</span>::<span class="ident">TokenStream</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="ident">_span</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>;
+        <span class="macro">quote_each_token</span><span class="macro">!</span>(<span class="ident">_s</span> <span class="ident">_span</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>);
+        <span class="ident">_s</span>
+    }};
 }
 
 <span class="comment">// Extract the names of all #metavariables and pass them to the $finish macro.</span>
@@ -1716,4 +1722,4 @@
     };
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "quote";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "quote";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
